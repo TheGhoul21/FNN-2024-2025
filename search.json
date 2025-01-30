@@ -364,6 +364,209 @@
     "text": "The Brain-Inspired Analogy\nThe analogy between artificial neural networks and the brain is a crucial source of inspiration. However, it’s important to recognize the limitations. Artificial neural networks are still primitive compared to the brain’s complexity. “The artificial neurons we use to build our neural networks are truly primitive in comparison with those found in the brain.” They lack the intricate structure, diverse cell types, and complex signaling mechanisms found in biological brains.\nDespite this, the field is making remarkable progress, driven by neurobiological inspiration and advancements in theoretical and computational tools. The ongoing research in neuroscience continues to inform the development of artificial neural networks, leading to more sophisticated and powerful models. As we learn more about the brain, we can expect to see further advancements in artificial intelligence, potentially bridging the gap between artificial and biological intelligence."
   },
   {
+    "objectID": "Note_-_FNN_24-25_(05-06).pdf.html",
+    "href": "Note_-_FNN_24-25_(05-06).pdf.html",
+    "title": "Lecture Notes on Vector Spaces and Subspaces",
+    "section": "",
+    "text": "In this lecture, we will embark on an exploration of linear algebra, focusing on the fundamental concepts of vector spaces and subspaces. These abstract mathematical structures are essential tools in various fields, including computer science, physics, and engineering. We will begin by defining vector spaces and their axioms, then delve into subspaces, linear combinations, span, linear dependence, linear independence, basis, and dimension. Finally, we will touch upon the concept of rank and the Rank-Nullity Theorem. Understanding these concepts is crucial for building a solid foundation in linear algebra and its applications."
+  },
+  {
+    "objectID": "Note_-_FNN_24-25_(05-06).pdf.html#definition",
+    "href": "Note_-_FNN_24-25_(05-06).pdf.html#definition",
+    "title": "Lecture Notes on Vector Spaces and Subspaces",
+    "section": "Definition",
+    "text": "Definition\n\n\nDefinition 1 (Vector Space). A vector space \\(\\mathcal{V}\\) is a set of objects, called vectors, on which two operations are defined:\n\nVector Addition: For any two vectors \\(\\mathbf{u}, \\mathbf{v} \\in \\mathcal{V}\\), there is a unique vector \\(\\mathbf{u} + \\mathbf{v} \\in \\mathcal{V}\\) called the sum of \\(\\mathbf{u}\\) and \\(\\mathbf{v}\\).\nScalar Multiplication: For any scalar \\(c \\in \\mathbb{R}\\) and any vector \\(\\mathbf{u} \\in \\mathcal{V}\\), there is a unique vector \\(c\\mathbf{u} \\in \\mathcal{V}\\) called the scalar product of \\(c\\) and \\(\\mathbf{u}\\).\n\nThese operations must satisfy the following axioms."
+  },
+  {
+    "objectID": "Note_-_FNN_24-25_(05-06).pdf.html#axioms",
+    "href": "Note_-_FNN_24-25_(05-06).pdf.html#axioms",
+    "title": "Lecture Notes on Vector Spaces and Subspaces",
+    "section": "Axioms",
+    "text": "Axioms\nThe operations of vector addition and scalar multiplication in a vector space must satisfy a set of axioms. These axioms are divided into those governing vector addition and those governing scalar multiplication.\n\nVector Addition\nFor all vectors \\(\\mathbf{u}, \\mathbf{v}, \\mathbf{w} \\in \\mathcal{V}\\):\n\nClosure\n\nClosure under Addition: For any \\(\\mathbf{u}, \\mathbf{v} \\in \\mathcal{V}\\), the sum \\(\\mathbf{u} + \\mathbf{v}\\) is also in \\(\\mathcal{V}\\).\n\n\n\nCommutativity\n\nCommutativity of Addition: \\(\\mathbf{u} + \\mathbf{v} = \\mathbf{v} + \\mathbf{u}\\).\n\n\n\nAssociativity\n\nAssociativity of Addition: \\((\\mathbf{u} + \\mathbf{v}) + \\mathbf{w} = \\mathbf{u} + (\\mathbf{v} + \\mathbf{w})\\).\n\n\n\nZero Vector\n\nExistence of a Zero Vector: There exists a vector \\(\\mathbf{0} \\in \\mathcal{V}\\), called the zero vector, such that for all \\(\\mathbf{u} \\in \\mathcal{V}\\), \\(\\mathbf{u} + \\mathbf{0} = \\mathbf{u}\\).\n\n\n\nAdditive Inverses\n\nExistence of Additive Inverses: For each \\(\\mathbf{u} \\in \\mathcal{V}\\), there exists a vector \\(-\\mathbf{u} \\in \\mathcal{V}\\), called the additive inverse of \\(\\mathbf{u}\\), such that \\(\\mathbf{u} + (-\\mathbf{u}) = \\mathbf{0}\\).\n\n\n\n\nScalar Multiplication\nFor all vectors \\(\\mathbf{u}, \\mathbf{v} \\in \\mathcal{V}\\) and scalars \\(c, d \\in \\mathbb{R}\\):\n\nClosure\n\nClosure under Scalar Multiplication: For any scalar \\(c \\in \\mathbb{R}\\) and vector \\(\\mathbf{u} \\in \\mathcal{V}\\), the scalar product \\(c\\mathbf{u}\\) is also in \\(\\mathcal{V}\\).\n\n\n\nDistributivity over Vector Addition\n\nDistributivity of Scalar Multiplication over Vector Addition: \\(c(\\mathbf{u} + \\mathbf{v}) = c\\mathbf{u} + c\\mathbf{v}\\).\n\n\n\nDistributivity over Scalar Addition\n\nDistributivity of Scalar Multiplication over Scalar Addition: \\((c + d)\\mathbf{u} = c\\mathbf{u} + d\\mathbf{u}\\).\n\n\n\nScalar Multiplication Identity\n\nScalar Multiplication Identity: \\(1\\mathbf{u} = \\mathbf{u}\\)."
+  },
+  {
+    "objectID": "Note_-_FNN_24-25_(05-06).pdf.html#definition-1",
+    "href": "Note_-_FNN_24-25_(05-06).pdf.html#definition-1",
+    "title": "Lecture Notes on Vector Spaces and Subspaces",
+    "section": "Definition",
+    "text": "Definition\n\n\nDefinition 2 (Subspace). A subspace \\(H\\) of a vector space \\(\\mathcal{V}\\) is a subset of \\(\\mathcal{V}\\) that is itself a vector space under the same operations of vector addition and scalar multiplication defined on \\(\\mathcal{V}\\).\n\n\nTo verify if a subset is a subspace, we can use the following theorem:\n\n\nTheorem 1 (Subspace Test). This theorem provides a set of conditions to verify if a subset of a vector space is a subspace. A subset \\(H\\) of a vector space \\(\\mathcal{V}\\) is a subspace of \\(\\mathcal{V}\\) if and only if it satisfies the following three conditions:\n\nZero Vector: The zero vector of \\(\\mathcal{V}\\) is in \\(H\\) (\\(\\mathbf{0} \\in H\\)).\nClosure under Addition: For each \\(\\mathbf{u}, \\mathbf{v} \\in H\\), the sum \\(\\mathbf{u} + \\mathbf{v}\\) is also in \\(H\\).\nClosure under Scalar Multiplication: For each \\(\\mathbf{u} \\in H\\) and scalar \\(c \\in \\mathbb{R}\\), the scalar product \\(c\\mathbf{u}\\) is also in \\(H\\)."
+  },
+  {
+    "objectID": "Note_-_FNN_24-25_(05-06).pdf.html#properties",
+    "href": "Note_-_FNN_24-25_(05-06).pdf.html#properties",
+    "title": "Lecture Notes on Vector Spaces and Subspaces",
+    "section": "Properties",
+    "text": "Properties\nThe subspace test provides a practical way to determine if a subset is indeed a subspace by checking for the presence of the zero vector and closure under the two vector space operations.\n\nZero Vector\nA subspace must contain the zero vector of the parent vector space. This ensures that the subspace is not empty and has an additive identity.\n\n\nClosure under Addition\nIf we take any two vectors within a subspace and add them, the resulting vector must also remain within the subspace. This ensures that the addition operation is well-defined within the subspace.\n\n\nClosure under Scalar Multiplication\nIf we take any vector within a subspace and multiply it by any scalar, the resulting vector must also remain within the subspace. This ensures that the scalar multiplication operation is well-defined within the subspace."
+  },
+  {
+    "objectID": "Note_-_FNN_24-25_(05-06).pdf.html#examples",
+    "href": "Note_-_FNN_24-25_(05-06).pdf.html#examples",
+    "title": "Lecture Notes on Vector Spaces and Subspaces",
+    "section": "Examples",
+    "text": "Examples\n\nTrivial Subspaces\n\n\nExample 1 (Trivial Subspaces). For any vector space \\(\\mathcal{V}\\), there are always at least two subspaces, known as trivial subspaces:\n\nThe zero subspace \\(\\{\\mathbf{0}\\}\\), which contains only the zero vector.\nThe vector space \\(\\mathcal{V}\\) itself.\n\n\n\n\n\nSubspace of \\(\\mathbb{R}^2\\)\n\n\nExample 2 (Subspace of \\(\\mathbb{R}^2\\) - The x-axis). Let \\(\\mathcal{V}= \\mathbb{R}^2\\), and let \\(H = \\{(x, 0) \\in \\mathbb{R}^2 \\mid x \\in \\mathbb{R}\\}\\). \\(H\\) is the set of all vectors lying on the x-axis in \\(\\mathbb{R}^2\\). Let’s check if \\(H\\) is a subspace of \\(\\mathbb{R}^2\\):\n\nZero Vector: Is \\(\\mathbf{0} = (0, 0) \\in H\\)? Yes, when \\(x=0\\), we have \\((0, 0) \\in H\\).\nClosure under Addition: Let \\(\\mathbf{u} = (x_1, 0) \\in H\\) and \\(\\mathbf{v} = (x_2, 0) \\in H\\). Then \\(\\mathbf{u} + \\mathbf{v} = (x_1 + x_2, 0)\\). Since \\(x_1 + x_2\\) is a real number, \\(\\mathbf{u} + \\mathbf{v} \\in H\\).\nClosure under Scalar Multiplication: Let \\(\\mathbf{u} = (x, 0) \\in H\\) and \\(c \\in \\mathbb{R}\\). Then \\(c\\mathbf{u} = c(x, 0) = (cx, 0)\\). Since \\(cx\\) is a real number, \\(c\\mathbf{u} \\in H\\).\n\nSince \\(H\\) satisfies all three conditions, \\(H\\) is a subspace of \\(\\mathbb{R}^2\\)."
+  },
+  {
+    "objectID": "Note_-_FNN_24-25_(05-06).pdf.html#non-examples",
+    "href": "Note_-_FNN_24-25_(05-06).pdf.html#non-examples",
+    "title": "Lecture Notes on Vector Spaces and Subspaces",
+    "section": "Non-Examples",
+    "text": "Non-Examples\n\n\nExample 3 (Non-Subspace of \\(\\mathbb{R}^2\\)). Let \\(\\mathcal{V}= \\mathbb{R}^2\\), and let \\(K = \\{(x, 1) \\in \\mathbb{R}^2 \\mid x \\in \\mathbb{R}\\}\\). \\(K\\) is the set of all vectors with a y-coordinate of 1. Let’s check if \\(K\\) is a subspace of \\(\\mathbb{R}^2\\):\n\nZero Vector: Is \\(\\mathbf{0} = (0, 0) \\in K\\)? No, because vectors in \\(K\\) must have a y-coordinate of 1.\n\nSince \\(K\\) fails to contain the zero vector, \\(K\\) is not a subspace of \\(\\mathbb{R}^2\\). (We don’t need to check the other conditions once one condition fails)."
+  },
+  {
+    "objectID": "Note_-_FNN_24-25_(05-06).pdf.html#linear-combinations",
+    "href": "Note_-_FNN_24-25_(05-06).pdf.html#linear-combinations",
+    "title": "Lecture Notes on Vector Spaces and Subspaces",
+    "section": "Linear Combinations",
+    "text": "Linear Combinations\n\n\nDefinition 3 (Linear Combination). Given a set of vectors \\(\\{\\mathbf{v}_1, \\mathbf{v}_2, \\dots, \\mathbf{v}_k\\}\\) in a vector space \\(\\mathcal{V}\\), a linear combination of these vectors is a vector \\(\\mathbf{y}\\) of the form: \\(\\mathbf{y} = c_1\\mathbf{v}_1 + c_2\\mathbf{v}_2 + \\dots + c_k\\mathbf{v}_k\\) where \\(c_1, c_2, \\dots, c_k\\) are scalars."
+  },
+  {
+    "objectID": "Note_-_FNN_24-25_(05-06).pdf.html#span",
+    "href": "Note_-_FNN_24-25_(05-06).pdf.html#span",
+    "title": "Lecture Notes on Vector Spaces and Subspaces",
+    "section": "Span",
+    "text": "Span\n\n\nDefinition 4 (Span). The span of a set of vectors \\(S = \\{\\mathbf{v}_1, \\mathbf{v}_2, \\dots, \\mathbf{v}_k\\}\\) in a vector space \\(\\mathcal{V}\\), denoted by \\(\\text{span}(S)\\) or \\(\\text{span}\\{\\mathbf{v}_1, \\mathbf{v}_2, \\dots, \\mathbf{v}_k\\}\\), is the set of all possible linear combinations of \\(\\mathbf{v}_1, \\mathbf{v}_2, \\dots, \\mathbf{v}_k\\). That is, \\(\\text{span}(S) = \\{c_1\\mathbf{v}_1 + c_2\\mathbf{v}_2 + \\dots + c_k\\mathbf{v}_k \\mid c_1, c_2, \\dots, c_k \\in \\mathbb{R} \\}\\)"
+  },
+  {
+    "objectID": "Note_-_FNN_24-25_(05-06).pdf.html#span-as-a-subspace",
+    "href": "Note_-_FNN_24-25_(05-06).pdf.html#span-as-a-subspace",
+    "title": "Lecture Notes on Vector Spaces and Subspaces",
+    "section": "Span as a Subspace",
+    "text": "Span as a Subspace\n\n\nTheorem 2. This theorem states that the span of any set of vectors within a vector space is always a subspace of that vector space. For any set \\(S = \\{\\mathbf{v}_1, \\mathbf{v}_2, \\dots, \\mathbf{v}_k\\}\\) in a vector space \\(\\mathcal{V}\\), \\(\\text{span}(S)\\) is a subspace of \\(\\mathcal{V}\\).\n\n\n\n\nExample 4. In \\(\\mathbb{R}^2\\), the span of two non-collinear vectors is \\(\\mathbb{R}^2\\) itself (a plane). The span of two collinear vectors is a line through the origin (a line). The span of the zero vector is just the zero vector itself (the origin)."
+  },
+  {
+    "objectID": "Note_-_FNN_24-25_(05-06).pdf.html#linear-dependence",
+    "href": "Note_-_FNN_24-25_(05-06).pdf.html#linear-dependence",
+    "title": "Lecture Notes on Vector Spaces and Subspaces",
+    "section": "Linear Dependence",
+    "text": "Linear Dependence\n\n\nDefinition 5 (Linear Dependence). A set of vectors \\(\\{\\mathbf{v}_1, \\mathbf{v}_2, \\dots, \\mathbf{v}_k\\}\\) in a vector space \\(\\mathcal{V}\\) is said to be linearly dependent if there exist scalars \\(c_1, c_2, \\dots, c_k\\), not all zero, such that \\(c_1\\mathbf{v}_1 + c_2\\mathbf{v}_2 + \\dots + c_k\\mathbf{v}_k = \\mathbf{0}\\) This is called a non-trivial linear combination that equals the zero vector."
+  },
+  {
+    "objectID": "Note_-_FNN_24-25_(05-06).pdf.html#linear-independence",
+    "href": "Note_-_FNN_24-25_(05-06).pdf.html#linear-independence",
+    "title": "Lecture Notes on Vector Spaces and Subspaces",
+    "section": "Linear Independence",
+    "text": "Linear Independence\n\n\nDefinition 6 (Linear Independence). A set of vectors \\(\\{\\mathbf{v}_1, \\mathbf{v}_2, \\dots, \\mathbf{v}_k\\}\\) in a vector space \\(\\mathcal{V}\\) is said to be linearly independent if the only scalars \\(c_1, c_2, \\dots, c_k\\) that satisfy \\(c_1\\mathbf{v}_1 + c_2\\mathbf{v}_2 + \\dots + c_k\\mathbf{v}_k = \\mathbf{0}\\) are \\(c_1 = c_2 = \\dots = c_k = 0\\). This is called the trivial solution."
+  },
+  {
+    "objectID": "Note_-_FNN_24-25_(05-06).pdf.html#examples-in-mathbbr2",
+    "href": "Note_-_FNN_24-25_(05-06).pdf.html#examples-in-mathbbr2",
+    "title": "Lecture Notes on Vector Spaces and Subspaces",
+    "section": "Examples in \\(\\mathbb{R}^2\\)",
+    "text": "Examples in \\(\\mathbb{R}^2\\)\n\n\nExample 5 (Linear Dependence in \\(\\mathbb{R}^2\\)). Let \\(\\mathbf{v}_1 = (1, 2)\\) and \\(\\mathbf{v}_2 = (2, 4)\\) in \\(\\mathbb{R}^2\\). These vectors are linearly dependent because we can see that \\(\\mathbf{v}_2 = 2\\mathbf{v}_1\\), or \\(2\\mathbf{v}_1 - \\mathbf{v}_2 = \\mathbf{0}\\). Here, \\(c_1 = 2\\) and \\(c_2 = -1\\), which are not both zero.\n\n\n\n\nExample 6 (Linear Independence in \\(\\mathbb{R}^2\\)). Let \\(\\mathbf{v}_1 = (1, 0)\\) and \\(\\mathbf{v}_2 = (0, 1)\\) in \\(\\mathbb{R}^2\\). These vectors are linearly independent. To show this, consider the equation \\(c_1\\mathbf{v}_1 + c_2\\mathbf{v}_2 = \\mathbf{0}\\), which becomes \\(c_1(1, 0) + c_2(0, 1) = (0, 0)\\), or \\((c_1, c_2) = (0, 0)\\). This implies \\(c_1 = 0\\) and \\(c_2 = 0\\). Since the only solution is the trivial solution, \\(\\mathbf{v}_1\\) and \\(\\mathbf{v}_2\\) are linearly independent."
+  },
+  {
+    "objectID": "Note_-_FNN_24-25_(05-06).pdf.html#definition-of-a-basis",
+    "href": "Note_-_FNN_24-25_(05-06).pdf.html#definition-of-a-basis",
+    "title": "Lecture Notes on Vector Spaces and Subspaces",
+    "section": "Definition of a Basis",
+    "text": "Definition of a Basis\n\n\nDefinition 7 (Basis). A basis for a vector space \\(\\mathcal{V}\\) is a set of vectors \\(\\mathcal{B} = \\{\\mathbf{b}_1, \\mathbf{b}_2, \\dots, \\mathbf{b}_n\\}\\) in \\(\\mathcal{V}\\) such that:\n\n\\(\\mathcal{B}\\) is linearly independent.\n\\(\\mathcal{B}\\) spans \\(\\mathcal{V}\\). That is, \\(\\text{span}(\\mathcal{B}) = \\mathcal{V}\\)."
+  },
+  {
+    "objectID": "Note_-_FNN_24-25_(05-06).pdf.html#finite-dimensional-spaces",
+    "href": "Note_-_FNN_24-25_(05-06).pdf.html#finite-dimensional-spaces",
+    "title": "Lecture Notes on Vector Spaces and Subspaces",
+    "section": "Finite-Dimensional Spaces",
+    "text": "Finite-Dimensional Spaces\n\n\nDefinition 8 (Finite-Dimensional Vector Space). A vector space \\(\\mathcal{V}\\) is said to be finite-dimensional if it has a basis consisting of a finite number of vectors. If a vector space is not finite-dimensional, it is said to be infinite-dimensional."
+  },
+  {
+    "objectID": "Note_-_FNN_24-25_(05-06).pdf.html#definition-of-dimension",
+    "href": "Note_-_FNN_24-25_(05-06).pdf.html#definition-of-dimension",
+    "title": "Lecture Notes on Vector Spaces and Subspaces",
+    "section": "Definition of Dimension",
+    "text": "Definition of Dimension\n\n\nDefinition 9 (Dimension). The dimension of a finite-dimensional vector space \\(\\mathcal{V}\\), denoted by \\(\\text{dim}(\\mathcal{V})\\), is the number of vectors in a basis for \\(\\mathcal{V}\\). It is a fundamental property of a vector space, indicating its \"size\"."
+  },
+  {
+    "objectID": "Note_-_FNN_24-25_(05-06).pdf.html#examples-1",
+    "href": "Note_-_FNN_24-25_(05-06).pdf.html#examples-1",
+    "title": "Lecture Notes on Vector Spaces and Subspaces",
+    "section": "Examples",
+    "text": "Examples\n\n\\(\\mathbb{R}^2\\)\n\n\nExample 7 (Basis and Dimension of \\(\\mathbb{R}^2\\)). The standard basis for \\(\\mathbb{R}^2\\) is \\(\\{\\mathbf{e}_1, \\mathbf{e}_2\\} = \\{(1, 0), (0, 1)\\}\\). This set is linearly independent and spans \\(\\mathbb{R}^2\\). Therefore, it is a basis for \\(\\mathbb{R}^2\\). The dimension of \\(\\mathbb{R}^2\\) is 2, i.e., \\(\\text{dim}(\\mathbb{R}^2) = 2\\).\n\n\n\n\n\\(\\mathbb{R}^3\\)\n\n\nExample 8 (Basis and Dimension of \\(\\mathbb{R}^3\\)). The standard basis for \\(\\mathbb{R}^3\\) is \\(\\{\\mathbf{e}_1, \\mathbf{e}_2, \\mathbf{e}_3\\} = \\{(1, 0, 0), (0, 1, 0), (0, 0, 1)\\}\\). This set is linearly independent and spans \\(\\mathbb{R}^3\\). Therefore, it is a basis for \\(\\mathbb{R}^3\\). The dimension of \\(\\mathbb{R}^3\\) is 3, i.e., \\(\\text{dim}(\\mathbb{R}^3) = 3\\).\n\n\n\n\n\\(\\mathbb{R}^n\\)\n\n\nExample 9 (Basis and Dimension of \\(\\mathbb{R}^n\\)). Generalizing from \\(\\mathbb{R}^2\\) and \\(\\mathbb{R}^3\\), the standard basis for \\(\\mathbb{R}^n\\) is \\(\\{\\mathbf{e}_1, \\mathbf{e}_2, \\dots, \\mathbf{e}_n\\}\\), where \\(\\mathbf{e}_i\\) is the vector with a 1 in the \\(i\\)-th position and 0 elsewhere. This set is linearly independent and spans \\(\\mathbb{R}^n\\). Therefore, it is a basis for \\(\\mathbb{R}^n\\). The dimension of \\(\\mathbb{R}^n\\) is \\(n\\), i.e., \\(\\text{dim}(\\mathbb{R}^n) = n\\)."
+  },
+  {
+    "objectID": "Note_-_FNN_24-25_(05-06).pdf.html#finding-a-basis",
+    "href": "Note_-_FNN_24-25_(05-06).pdf.html#finding-a-basis",
+    "title": "Lecture Notes on Vector Spaces and Subspaces",
+    "section": "Finding a Basis",
+    "text": "Finding a Basis\n\nRow Reduction\nRow reduction is a method used to find a basis for the column space of a matrix, which is the span of its column vectors. Given a set of vectors that span a subspace, we can form a matrix with these vectors as columns and then use row reduction to find a basis.\n\nForm a matrix \\(A\\) whose columns are the given vectors.\nReduce the matrix \\(A\\) to row-echelon form using elementary row operations.\nIdentify the pivot columns in the row-echelon form.\nThe columns in the original matrix \\(A\\) that correspond to the pivot columns in the row-echelon form constitute a basis for the column space of \\(A\\)."
+  },
+  {
+    "objectID": "Note_-_FNN_24-25_(05-06).pdf.html#definition-of-rank",
+    "href": "Note_-_FNN_24-25_(05-06).pdf.html#definition-of-rank",
+    "title": "Lecture Notes on Vector Spaces and Subspaces",
+    "section": "Definition of Rank",
+    "text": "Definition of Rank\n\n\nDefinition 10 (Rank of a Matrix). The rank of a matrix \\(A\\), denoted by \\(\\text{rank}(A)\\), is the dimension of the column space of \\(A\\). It is also equal to the dimension of the row space of \\(A\\). The rank of a matrix represents the number of linearly independent columns (or rows) in the matrix."
+  },
+  {
+    "objectID": "Note_-_FNN_24-25_(05-06).pdf.html#rank-nullity-theorem",
+    "href": "Note_-_FNN_24-25_(05-06).pdf.html#rank-nullity-theorem",
+    "title": "Lecture Notes on Vector Spaces and Subspaces",
+    "section": "Rank-Nullity Theorem",
+    "text": "Rank-Nullity Theorem\n\n\nTheorem 3 (Rank-Nullity Theorem). This theorem establishes a relationship between the dimensions of the kernel (null space) and the image (range) of a linear transformation. Let \\(\\Phi: \\mathcal{V}\\to \\mathcal{W}\\) be a linear transformation from a finite-dimensional vector space \\(\\mathcal{V}\\) to a vector space \\(\\mathcal{W}\\). Then, \\(\\text{dim}(\\text{ker}(\\Phi)) + \\text{dim}(\\text{Im}(\\Phi)) = \\text{dim}(\\mathcal{V})\\) where \\(\\text{ker}(\\Phi)\\) is the kernel (null space) of \\(\\Phi\\) and \\(\\text{Im}(\\Phi)\\) is the image (range) of \\(\\Phi\\). In matrix terms, for an \\(m \\times n\\) matrix \\(A\\), \\(\\text{dim}(\\text{Nul}(A)) + \\text{rank}(A) = n\\) where \\(\\text{Nul}(A)\\) is the null space of \\(A\\)."
+  },
+  {
+    "objectID": "Note_-_FNN_24-25_(07-08).pdf.html",
+    "href": "Note_-_FNN_24-25_(07-08).pdf.html",
+    "title": "General Inner Products",
+    "section": "",
+    "text": "In this lecture, we delve into the concept of general inner products, extending our understanding of vector spaces beyond the familiar Euclidean space. We will explore how inner products generalize the notions of length, angle, and orthogonality, which are fundamental in various areas of mathematics, physics, and engineering, especially in machine learning. Key concepts we will cover include bilinear mappings, symmetric and positive definite conditions, the formal definition of an inner product, and its representation using basis vectors and matrices. Understanding inner products provides a powerful framework for abstracting geometric concepts and solving a wide range of problems in vector spaces."
+  },
+  {
+    "objectID": "Note_-_FNN_24-25_(07-08).pdf.html#motivation",
+    "href": "Note_-_FNN_24-25_(07-08).pdf.html#motivation",
+    "title": "General Inner Products",
+    "section": "Motivation",
+    "text": "Motivation\n\nGeneralizing Length and Angle\nWe begin by recalling the concept of the Euclidean norm and its close relationship with the dot product. As previously discussed, the Euclidean norm is indeed derived from the dot product. In fact, the dot product is a specific instance of a more general structure known as an inner product. Inner products are instrumental in extending the concepts of length and angle from Euclidean space to more abstract vector spaces.\n\n\nDefining Orthogonality\nA primary application of inner products is to define and determine orthogonality between vectors. Orthogonality, or perpendicularity, is a cornerstone concept in linear algebra and geometry. Inner products furnish us with the means to define and verify orthogonality in a broad and versatile manner, applicable to various vector spaces beyond the standard Euclidean setting."
+  },
+  {
+    "objectID": "Note_-_FNN_24-25_(07-08).pdf.html#bilinear-mappings",
+    "href": "Note_-_FNN_24-25_(07-08).pdf.html#bilinear-mappings",
+    "title": "General Inner Products",
+    "section": "Bilinear Mappings",
+    "text": "Bilinear Mappings\n\nDefinition\nTo formally define an inner product, we first introduce the concept of a bilinear mapping. The term \"bilinear\" signifies linearity in two arguments. A bilinear mapping takes two vectors as input and exhibits linearity with respect to each input separately.\n\n\nDefinition 1 (Bilinear Mapping). Let \\(\\mathcal{V}\\) be a vector space over \\(\\mathbb{R}\\). A mapping \\(\\Omega: \\mathcal{V}\\times \\mathcal{V}\\to \\mathbb{R}\\) is called a bilinear mapping if for all vectors \\(x, y, z \\in \\mathcal{V}\\) and scalars \\(\\lambda, \\psi \\in \\mathbb{R}\\), it satisfies the following properties:\n\nLinearity in the first argument: \\[\\Omega(\\lambda x + \\psi y, z) = \\lambda \\Omega(x, z) + \\psi \\Omega(y, z)\\]\nLinearity in the second argument: \\[\\Omega(x, \\lambda y + \\psi z) = \\lambda \\Omega(x, y) + \\psi \\Omega(x, z)\\]\n\n\n\nIn essence, bilinearity means that the mapping distributes linearly over each component when dealing with linear combinations of vectors. We can view bilinear mappings as a specific subset of functions between pairs of vectors that possess this desirable linearity property.\n\n\nProperties of Bilinearity\nBilinear mappings generalize the concept of linear transformations to two arguments. They are fundamental in defining inner products and other important structures in linear algebra."
+  },
+  {
+    "objectID": "Note_-_FNN_24-25_(07-08).pdf.html#symmetric-and-positive-definite-mappings",
+    "href": "Note_-_FNN_24-25_(07-08).pdf.html#symmetric-and-positive-definite-mappings",
+    "title": "General Inner Products",
+    "section": "Symmetric and Positive Definite Mappings",
+    "text": "Symmetric and Positive Definite Mappings\nAmong bilinear mappings, we are particularly interested in those that are also symmetric and positive definite. These additional conditions endow them with properties that are crucial for generalizing geometric notions like length and angle.\n\nSymmetry Condition\n\n\nDefinition 2 (Symmetric Bilinear Mapping). A bilinear mapping \\(\\Omega: \\mathcal{V}\\times \\mathcal{V}\\to \\mathbb{R}\\) is called symmetric if for all \\(x, y \\in \\mathcal{V}\\): \\[\\Omega(x, y) = \\Omega(y, x)\\]\n\n\nSymmetry implies that the order of the arguments does not affect the result of the mapping. Swapping the input vectors \\(x\\) and \\(y\\) yields the same output value.\n\n\nPositive Definite Condition\n\n\nDefinition 3 (Positive Definite Bilinear Mapping). A bilinear mapping \\(\\Omega: \\mathcal{V}\\times \\mathcal{V}\\to \\mathbb{R}\\) is called positive definite if it satisfies two conditions:\n\nFor all non-zero vectors \\(x \\in \\mathcal{V}\\setminus \\{0\\}\\): \\[\\Omega(x, x) &gt; 0\\]\nFor the zero vector \\(0 \\in \\mathcal{V}\\): \\[\\Omega(0, 0) = 0\\]\n\nThis can be compactly written as: \\[\\forall x \\in \\mathcal{V}\\setminus \\{0\\} : \\Omega(x,x) &gt; 0, \\quad \\text{and} \\quad \\Omega(0, 0) = 0\\]\n\n\nPositive definiteness ensures that when the mapping is applied to a vector and itself, the result is always positive, except when the vector is the zero vector, in which case the result is zero. This property is essential for defining notions of length and distance, as we will see later."
+  },
+  {
+    "objectID": "Note_-_FNN_24-25_(07-08).pdf.html#definition-of-an-inner-product",
+    "href": "Note_-_FNN_24-25_(07-08).pdf.html#definition-of-an-inner-product",
+    "title": "General Inner Products",
+    "section": "Definition of an Inner Product",
+    "text": "Definition of an Inner Product\nThe properties of bilinearity, symmetry, and positive definiteness are precisely what we need to formally define an inner product.\n\nInner Product Space\n\n\nDefinition 4 (Inner Product). Let \\(\\mathcal{V}\\) be a vector space over \\(\\mathbb{R}\\). A bilinear mapping \\(\\langle \\cdot, \\cdot \\rangle : \\mathcal{V}\\times \\mathcal{V}\\to \\mathbb{R}\\) is called an inner product on \\(\\mathcal{V}\\) if it is both symmetric and positive definite. We often use the notation \\(\\langle x, y \\rangle\\) instead of \\(\\Omega(x, y)\\) to denote the inner product of vectors \\(x\\) and \\(y\\).\n\n\n\n\nDefinition 5 (Inner Product Space). A pair \\((\\mathcal{V}, \\langle \\cdot, \\cdot \\rangle)\\) consisting of a vector space \\(\\mathcal{V}\\) and an inner product \\(\\langle \\cdot, \\cdot \\rangle\\) defined on it is called an inner product space or a real vector space with inner product.\n\n\nThus, an inner product is essentially a positive definite, symmetric bilinear mapping.\n\n\nEuclidean Vector Space as a Special Case\n\n\nDefinition 6 (Euclidean Vector Space). If the inner product used on a vector space \\(\\mathcal{V}\\) is the dot product (as defined in previous lectures, e.g., equation (3.5) in the textbook), then \\((\\mathcal{V}, \\langle \\cdot, \\cdot \\rangle)\\) is called a Euclidean vector space.\n\n\nThe familiar dot product provides a standard example of an inner product, leading to the concept of Euclidean vector spaces. However, it is crucial to recognize that the dot product is not the only possible inner product."
+  },
+  {
+    "objectID": "Note_-_FNN_24-25_(07-08).pdf.html#example-a-non-standard-inner-product",
+    "href": "Note_-_FNN_24-25_(07-08).pdf.html#example-a-non-standard-inner-product",
+    "title": "General Inner Products",
+    "section": "Example: A Non-Standard Inner Product",
+    "text": "Example: A Non-Standard Inner Product\n\n\nExample 7 (Inner Product That Is Not the Dot Product). Consider the vector space \\(\\mathcal{V}= \\mathbb{R}^2\\). Define a mapping \\(\\langle \\cdot, \\cdot \\rangle : \\mathbb{R}^2 \\times \\mathbb{R}^2 \\to \\mathbb{R}\\) as follows: For \\(x = (x_1, x_2)^T\\) and \\(y = (y_1, y_2)^T\\), \\[\\langle x, y \\rangle := x_1y_1 - (x_1y_2 + x_2y_1) + 2x_2y_2\\] This inner product, defined by equation (3.9) in the transcription, is different from the standard dot product on \\(\\mathbb{R}^2\\). It can be verified as an exercise to show that this mapping is indeed an inner product by proving that it satisfies bilinearity, symmetry, and positive definiteness.\n\n\nThis example illustrates that inner products can be defined in ways that are distinct from the conventional dot product, expanding the scope of inner product spaces."
+  },
+  {
+    "objectID": "Note_-_FNN_24-25_(07-08).pdf.html#representing-vectors-using-a-basis",
+    "href": "Note_-_FNN_24-25_(07-08).pdf.html#representing-vectors-using-a-basis",
+    "title": "General Inner Products",
+    "section": "Representing Vectors Using a Basis",
+    "text": "Representing Vectors Using a Basis\nWe know that a basis for a vector space provides a way to represent any vector in that space as a linear combination of basis vectors. Let \\(\\{b_1, b_2, \\ldots, b_n\\}\\) be a basis for a vector space \\(\\mathcal{V}\\). Then, any vectors \\(x, y \\in \\mathcal{V}\\) can be represented as: \\[\\label{eq:vector_representation_x}\nx = \\sum_{i=1}^{n} \\psi_i b_i\\] \\[\\label{eq:vector_representation_y}\ny = \\sum_{j=1}^{n} \\lambda_j b_j\\] where \\(\\psi_i\\) and \\(\\lambda_j\\) are scalar coefficients."
+  },
+  {
+    "objectID": "Note_-_FNN_24-25_(07-08).pdf.html#expressing-inner-products-with-basis-vectors",
+    "href": "Note_-_FNN_24-25_(07-08).pdf.html#expressing-inner-products-with-basis-vectors",
+    "title": "General Inner Products",
+    "section": "Expressing Inner Products with Basis Vectors",
+    "text": "Expressing Inner Products with Basis Vectors\nGiven a basis, we can express the inner product of two vectors in terms of their coordinates with respect to that basis.\n\nDerivation of the Formula\nLet \\(x\\) and \\(y\\) be represented as in equations [eq:vector_representation_x] and [eq:vector_representation_y]. Using the bilinearity of the inner product, we can expand \\(\\langle x, y \\rangle\\) as: \\[\\begin{aligned}\n\\langle x, y \\rangle &= \\langle \\sum_{i=1}^{n} \\psi_i b_i, \\sum_{j=1}^{n} \\lambda_j b_j \\rangle \\\\\n&= \\sum_{i=1}^{n} \\sum_{j=1}^{n} \\psi_i \\lambda_j \\langle b_i, b_j \\rangle\n\\end{aligned}\\] Rearranging the terms, we get: \\[\\label{eq:inner_product_basis_expansion}\n\\langle x, y \\rangle = \\sum_{i=1}^{n} \\sum_{j=1}^{n} \\psi_i  \\langle b_i, b_j \\rangle \\lambda_j\\]"
+  },
+  {
+    "objectID": "Note_-_FNN_24-25_(07-08).pdf.html#matrix-representation-of-inner-products",
+    "href": "Note_-_FNN_24-25_(07-08).pdf.html#matrix-representation-of-inner-products",
+    "title": "General Inner Products",
+    "section": "Matrix Representation of Inner Products",
+    "text": "Matrix Representation of Inner Products\n\nThe Matrix A and its Entries\nDefine a matrix \\(A\\) of size \\(n \\times n\\) where the entry \\(A_{ij}\\) is given by the inner product of the basis vectors \\(b_i\\) and \\(b_j\\): \\[\\label{eq:matrix_A_definition}\nA_{ij} = \\langle b_i, b_j \\rangle\\] The matrix \\(A\\) is determined by the choice of basis \\(\\{b_1, \\ldots, b_n\\}\\) and the inner product \\(\\langle \\cdot, \\cdot \\rangle\\).\n\n\nInner Product as a Matrix Product: \\(\\psi^T A \\lambda\\)\nUsing the matrix \\(A\\), we can express the inner product \\(\\langle x, y \\rangle\\) in matrix form. Let \\(\\psi = \\begin{pmatrix} \\psi_1 \\\\ \\vdots \\\\ \\psi_n \\end{pmatrix}\\) and \\(\\lambda = \\begin{pmatrix} \\lambda_1 \\\\ \\vdots \\\\ \\lambda_n \\end{pmatrix}\\) be the column vectors of coefficients of \\(x\\) and \\(y\\) respectively. Then, the inner product can be written as a matrix product: \\[\\label{eq:inner_product_matrix_form}\n\\langle x, y \\rangle = \\psi^T A \\lambda\\] where \\(\\psi^T\\) is the transpose of \\(\\psi\\). This formula shows that once we have a basis and the matrix \\(A\\) (whose entries are inner products of basis vectors), we can compute the inner product of any two vectors \\(x\\) and \\(y\\) by knowing their coordinate vectors \\(\\psi\\) and \\(\\lambda\\) with respect to the basis.\n\n\nRemark. Remark 8. The inner product is fully described by the coordinates with respect to a chosen basis and the matrix \\(A\\). This matrix \\(A\\) has special properties due to the properties of the inner product itself (symmetry and positive definiteness). Specifically, \\(A\\) will be a symmetric and positive definite matrix."
+  },
+  {
     "objectID": "index.html",
     "href": "index.html",
     "title": "Home",
@@ -375,6 +578,6 @@
     "href": "index.html#lectures",
     "title": "Home",
     "section": "Lectures",
-    "text": "Lectures\n\nIntroduction to Neural Networks\nLecture Notes on Perceptrons and Feedforward Neural Networks"
+    "text": "Lectures\n\nIntroduction to Neural Networks\nLecture Notes on Perceptrons and Feedforward Neural Networks\nLecture Notes on Vector Spaces and Subspaces\nGeneral Inner Products"
   }
 ]
