@@ -1,0 +1,380 @@
+[
+  {
+    "objectID": "Note_-_FNN_24-25_(03-04).pdf.html",
+    "href": "Note_-_FNN_24-25_(03-04).pdf.html",
+    "title": "Lecture Notes on Perceptrons and Feedforward Neural Networks",
+    "section": "",
+    "text": "This lecture introduces the fundamental concepts of perceptrons and feedforward neural networks. We begin with the perceptron algorithm for binary classification and extend it to multi-class classification and multi-layer networks. We will explore the limitations of the perceptron algorithm and motivate the need for more sophisticated approaches, such as feedforward neural networks and gradient-based optimization. Key concepts include hyperparameters, bias, epochs, geometric interpretations of perceptrons, loss functions, gradient descent, and cross-entropy loss. The lecture aims to build a solid foundation for understanding deep learning architectures by focusing on the basic building blocks and their mathematical underpinnings."
+  },
+  {
+    "objectID": "Note_-_FNN_24-25_(03-04).pdf.html#convergence-and-limitations",
+    "href": "Note_-_FNN_24-25_(03-04).pdf.html#convergence-and-limitations",
+    "title": "Lecture Notes on Perceptrons and Feedforward Neural Networks",
+    "section": "Convergence and Limitations",
+    "text": "Convergence and Limitations\nThe Perceptron Algorithm is guaranteed to converge if the data is linearly separable. However, if the data is not linearly separable, the perceptron algorithm may not converge. It might oscillate or get stuck in a loop."
+  },
+  {
+    "objectID": "Note_-_FNN_24-25_(03-04).pdf.html#key-terminology",
+    "href": "Note_-_FNN_24-25_(03-04).pdf.html#key-terminology",
+    "title": "Lecture Notes on Perceptrons and Feedforward Neural Networks",
+    "section": "Key Terminology",
+    "text": "Key Terminology\n\nHyperparameters: These are \"second order\" parameters, meaning they are parameters that control the learning process itself, not the model’s weights directly.\n\n\nThe number of iterations ‘N’ in the perceptron algorithm is a hyperparameter.\n\n\nBias: The bias term ‘b’ can be seen as fixed or external knowledge. It’s like a weight that’s always \"on,\" like the weight of a continuously firing neuron. By using bias, we can sometimes avoid long computations or infinite loops in certain cases.\nEpoch: An epoch is a single run through the entire training dataset. We often train for multiple epochs.\n\nWhy train for multiple epochs? Well, because one pass through the data might not be enough to learn all the patterns. We need to iterate and refine the weights over multiple epochs. This is especially important for more complex models like Feed Forward Neural Networks."
+  },
+  {
+    "objectID": "Note_-_FNN_24-25_(03-04).pdf.html#perceptron-as-a-single-unit",
+    "href": "Note_-_FNN_24-25_(03-04).pdf.html#perceptron-as-a-single-unit",
+    "title": "Lecture Notes on Perceptrons and Feedforward Neural Networks",
+    "section": "Perceptron as a Single Unit",
+    "text": "Perceptron as a Single Unit\nThe perceptron is a single computing unit."
+  },
+  {
+    "objectID": "Note_-_FNN_24-25_(03-04).pdf.html#geometric-interpretation",
+    "href": "Note_-_FNN_24-25_(03-04).pdf.html#geometric-interpretation",
+    "title": "Lecture Notes on Perceptrons and Feedforward Neural Networks",
+    "section": "Geometric Interpretation",
+    "text": "Geometric Interpretation\nWe can visualize it geometrically as a hyperplane dividing the input space. The perceptron algorithm, in a nutshell, is about finding the right hyperplane.\nMathematically, for a given input vector \\(\\vect{x} = [x_1, x_2, \\dots, x_n]^T\\), weight vector \\(\\vect{w} = [w_1, w_2, \\dots, w_n]^T\\), and bias \\(b\\), the output of a perceptron \\(f_{\\params}(\\vect{x})\\) is given by:\n\n\\[f_{\\params}(\\vect{x}) = \\begin{cases}\n    1 & \\text{if } b + \\sum_{i=1}^{n} x_i w_i &gt; 0 \\\\\n    0 & \\text{otherwise}\n\\end{cases}\n\\label{eq:perceptron_output}\\]\n\nwhere \\(\\params = \\{\\vect{w}, b\\}\\) represents the parameters of the perceptron.\nThe equation \\(b + \\sum_{i=1}^{n} x_i w_i = 0\\) defines this hyperplane. The weight vector \\(\\vect{w}\\) is normal to the hyperplane, and the bias \\(b\\) determines the hyperplane’s position relative to the origin.\n\nUnderstanding the geometric interpretation of the perceptron involves concepts from linear algebra, such as vectors, dot products, and hyperplanes. The expression \\(\\sum_{i=1}^{n} x_i w_i\\) is the dot product of the input vector \\(\\vect{x}\\) and the weight vector \\(\\vect{w}\\), denoted as \\(\\vect{w} \\cdot \\vect{x}\\) or \\(\\vect{w}^T \\vect{x}\\). The condition \\(b + \\vect{w} \\cdot \\vect{x} &gt; 0\\) defines a half-space on one side of the hyperplane.\n\n\nScalar Product (Dot Product): The scalar product of two vectors \\(\\vect{x}\\) and \\(\\vect{y}\\) is defined as:\n\n\\[\\vect{x} \\cdot \\vect{y} = \\sum_{i=1}^{n} x_i y_i = \\|\\vect{x}\\| \\|\\vect{y}\\| \\cos \\theta\n\\label{eq:dot_product}\\]\n\nwhere \\(\\|\\vect{x}\\|\\) and \\(\\|\\vect{y}\\|\\) are the magnitudes (or norms) of vectors \\(\\vect{x}\\) and \\(\\vect{y}\\) respectively, and \\(\\theta\\) is the angle between them.\nCosine Theorem: In a triangle with sides of lengths \\(a, b, c\\) and angle \\(\\theta\\) opposite to side \\(c\\), the cosine theorem states:\n\n\\[c^2 = a^2 + b^2 - 2ab \\cos \\theta\n\\label{eq:cosine_theorem}\\]\n\nThis theorem can be derived using vector algebra and the scalar product, linking geometric concepts with algebraic formulations. The norm of a vector \\(\\vect{v}\\) can be defined as \\(\\|\\vect{v}\\| = \\sqrt{\\vect{v} \\cdot \\vect{v}}\\).\nNorm as Length: The norm of a vector can be interpreted as its length. The cosine theorem and scalar product are related through the norm, providing a geometric measure of the scalar product."
+  },
+  {
+    "objectID": "Note_-_FNN_24-25_(03-04).pdf.html#multiple-perceptrons-for-multiple-classes",
+    "href": "Note_-_FNN_24-25_(03-04).pdf.html#multiple-perceptrons-for-multiple-classes",
+    "title": "Lecture Notes on Perceptrons and Feedforward Neural Networks",
+    "section": "Multiple Perceptrons for Multiple Classes",
+    "text": "Multiple Perceptrons for Multiple Classes\nWe can use multiple perceptrons, multiple computing units. And they can share the same input. For multi-class classification, we can use multiple perceptrons, one for each class. For example, for digit recognition with 10 digits, we can have 10 perceptrons."
+  },
+  {
+    "objectID": "Note_-_FNN_24-25_(03-04).pdf.html#input-output-mapping",
+    "href": "Note_-_FNN_24-25_(03-04).pdf.html#input-output-mapping",
+    "title": "Lecture Notes on Perceptrons and Feedforward Neural Networks",
+    "section": "Input-Output Mapping",
+    "text": "Input-Output Mapping\nThese perceptrons can operate in parallel. Each perceptron will be responsible for detecting one digit. We can think of this as mapping a 784-dimensional input vector (the pixels) to a 10-dimensional output vector."
+  },
+  {
+    "objectID": "Note_-_FNN_24-25_(03-04).pdf.html#interpreting-outputs",
+    "href": "Note_-_FNN_24-25_(03-04).pdf.html#interpreting-outputs",
+    "title": "Lecture Notes on Perceptrons and Feedforward Neural Networks",
+    "section": "Interpreting Outputs",
+    "text": "Interpreting Outputs\nThese output values can be interpreted as scores or confidences for each digit class."
+  },
+  {
+    "objectID": "Note_-_FNN_24-25_(03-04).pdf.html#from-scores-to-probabilities",
+    "href": "Note_-_FNN_24-25_(03-04).pdf.html#from-scores-to-probabilities",
+    "title": "Lecture Notes on Perceptrons and Feedforward Neural Networks",
+    "section": "From Scores to Probabilities",
+    "text": "From Scores to Probabilities\nAre these outputs real numbers? Yes. Can we interpret them as probabilities? Not directly, but we can transform them into probabilities."
+  },
+  {
+    "objectID": "Note_-_FNN_24-25_(03-04).pdf.html#training-process",
+    "href": "Note_-_FNN_24-25_(03-04).pdf.html#training-process",
+    "title": "Lecture Notes on Perceptrons and Feedforward Neural Networks",
+    "section": "Training Process",
+    "text": "Training Process\n\nConsider a scenario with 10 perceptrons for digit classification. Given an input image and its true label (e.g., digit ‘5’), we perform the following steps:\n\nFeed the input image to all 10 perceptrons.\nIdentify the perceptron that produces the highest output value.\nCompare the predicted class (based on the perceptron with the highest output) with the true label.\nIf the predicted class is incorrect:\n\nAdjust the weights of the perceptron corresponding to the true class to increase its output for this input.\nAdjust the weights of the perceptron that produced the highest (incorrect) output to decrease its output for this input.\nPerceptrons corresponding to other classes, which were correctly deactivated (i.e., did not produce the highest output), do not need weight adjustments in this step.\n\nIf the predicted class is correct, no weight adjustments are needed for this example."
+  },
+  {
+    "objectID": "Note_-_FNN_24-25_(03-04).pdf.html#independent-perceptron-updates",
+    "href": "Note_-_FNN_24-25_(03-04).pdf.html#independent-perceptron-updates",
+    "title": "Lecture Notes on Perceptrons and Feedforward Neural Networks",
+    "section": "Independent Perceptron Updates",
+    "text": "Independent Perceptron Updates\nThe Perceptron Algorithm runs independently for each perceptron. Each perceptron adjusts its own weights based on the error signal."
+  },
+  {
+    "objectID": "Note_-_FNN_24-25_(03-04).pdf.html#geometric-view-of-training",
+    "href": "Note_-_FNN_24-25_(03-04).pdf.html#geometric-view-of-training",
+    "title": "Lecture Notes on Perceptrons and Feedforward Neural Networks",
+    "section": "Geometric View of Training",
+    "text": "Geometric View of Training\nThink geometrically: what is going on? We are using linear algebra and geometric intuition to understand how the weights are being modified and how the decision boundaries are being adjusted. Geometrically, what are we doing? We are still working with hyperplanes, but now we have multiple hyperplanes, and their combination can create more complex decision regions, potentially related to convex hulls or intersections of half-spaces."
+  },
+  {
+    "objectID": "Note_-_FNN_24-25_(03-04).pdf.html#stopping-criterion",
+    "href": "Note_-_FNN_24-25_(03-04).pdf.html#stopping-criterion",
+    "title": "Lecture Notes on Perceptrons and Feedforward Neural Networks",
+    "section": "Stopping Criterion",
+    "text": "Stopping Criterion\nWhen do we stop training? When we have encoded our ability to learn into the weights. When the weights have converged, and the model is performing well on the training data and ideally also on a validation set. These weights represent the learned knowledge, the \"memory\" of the model."
+  },
+  {
+    "objectID": "Note_-_FNN_24-25_(03-04).pdf.html#the-feedforward-concept",
+    "href": "Note_-_FNN_24-25_(03-04).pdf.html#the-feedforward-concept",
+    "title": "Lecture Notes on Perceptrons and Feedforward Neural Networks",
+    "section": "The Feedforward Concept",
+    "text": "The Feedforward Concept\nWe are feeding forward information through Layers of computing units. We can have MANY computing units per layer. This is the \"feedforward\" part. Information flows in one direction, from input to output."
+  },
+  {
+    "objectID": "Note_-_FNN_24-25_(03-04).pdf.html#multi-layer-networks",
+    "href": "Note_-_FNN_24-25_(03-04).pdf.html#multi-layer-networks",
+    "title": "Lecture Notes on Perceptrons and Feedforward Neural Networks",
+    "section": "Multi-Layer Networks",
+    "text": "Multi-Layer Networks\nVisual representation of a multi-layer network.\n\n\n\nMulti-level perceptrons or multi-layer perceptrons."
+  },
+  {
+    "objectID": "Note_-_FNN_24-25_(03-04).pdf.html#basic-architecture",
+    "href": "Note_-_FNN_24-25_(03-04).pdf.html#basic-architecture",
+    "title": "Lecture Notes on Perceptrons and Feedforward Neural Networks",
+    "section": "Basic Architecture",
+    "text": "Basic Architecture\nThis is The simplest architecture! A feedforward neural network with multiple layers."
+  },
+  {
+    "objectID": "Note_-_FNN_24-25_(03-04).pdf.html#limitations-of-perceptron-algorithm",
+    "href": "Note_-_FNN_24-25_(03-04).pdf.html#limitations-of-perceptron-algorithm",
+    "title": "Lecture Notes on Perceptrons and Feedforward Neural Networks",
+    "section": "Limitations of Perceptron Algorithm",
+    "text": "Limitations of Perceptron Algorithm\nCan we still use the Perceptron Algorithm when there are (many) LAYERS? Not directly. The Perceptron Algorithm is designed for single-layer perceptrons. For multi-layer networks, we need a more sophisticated learning algorithm, like backpropagation."
+  },
+  {
+    "objectID": "Note_-_FNN_24-25_(03-04).pdf.html#introduction-to-loss",
+    "href": "Note_-_FNN_24-25_(03-04).pdf.html#introduction-to-loss",
+    "title": "Lecture Notes on Perceptrons and Feedforward Neural Networks",
+    "section": "Introduction to Loss",
+    "text": "Introduction to Loss\nLet’s lift up our point of view and think about LOSS. We’re going to introduce the concept of Loss Functions for Neural Nets, specifically Cross-entropy Loss. This is a very interesting notion, not just for neural networks, but for data science in general. We need a Loss function to measure how well our model is performing. The loss function provides a measure of the error."
+  },
+  {
+    "objectID": "Note_-_FNN_24-25_(03-04).pdf.html#the-01-loss",
+    "href": "Note_-_FNN_24-25_(03-04).pdf.html#the-01-loss",
+    "title": "Lecture Notes on Perceptrons and Feedforward Neural Networks",
+    "section": "The 0/1 Loss",
+    "text": "The 0/1 Loss\nA simple loss function could be the 0/1 loss, which is trivial in some sense. The 0/1 loss simply counts the number of misclassifications.\n\nThe 0/1 loss function for a single example is defined as: \\[L_{0/1}(y, \\hat{y}) = \\begin{cases}\n    0 & \\text{if } y = \\hat{y} \\\\\n    1 & \\text{if } y \\neq \\hat{y}\n\\end{cases}\\] where \\(y\\) is the true label and \\(\\hat{y}\\) is the predicted label. The total 0/1 loss over a dataset is the number of misclassifications."
+  },
+  {
+    "objectID": "Note_-_FNN_24-25_(03-04).pdf.html#loss-functions-over-real-numbers",
+    "href": "Note_-_FNN_24-25_(03-04).pdf.html#loss-functions-over-real-numbers",
+    "title": "Lecture Notes on Perceptrons and Feedforward Neural Networks",
+    "section": "Loss Functions over Real Numbers",
+    "text": "Loss Functions over Real Numbers\nBut for training neural networks, we often prefer to use loss functions that are defined over the real numbers, R."
+  },
+  {
+    "objectID": "Note_-_FNN_24-25_(03-04).pdf.html#gradient-based-optimization",
+    "href": "Note_-_FNN_24-25_(03-04).pdf.html#gradient-based-optimization",
+    "title": "Lecture Notes on Perceptrons and Feedforward Neural Networks",
+    "section": "Gradient-Based Optimization",
+    "text": "Gradient-Based Optimization\nInstead of the Perceptron Algorithm rule, we’ll use a more general rule based on loss functions."
+  },
+  {
+    "objectID": "Note_-_FNN_24-25_(03-04).pdf.html#general-weight-update-rule",
+    "href": "Note_-_FNN_24-25_(03-04).pdf.html#general-weight-update-rule",
+    "title": "Lecture Notes on Perceptrons and Feedforward Neural Networks",
+    "section": "General Weight Update Rule",
+    "text": "General Weight Update Rule\n\n\\[\\Delta \\Phi_i = - \\alpha \\frac{\\partial L}{\\partial \\Phi_i}\\]\n\nThis is a general form of the weight update rule, using the gradient of the loss function. L is the loss function, \\(\\Phi_i\\) represents the parameters (weights and biases), and \\(\\alpha\\) is the learning rate.\n\nOur unknowns \\(\\Phi\\) are our unknowns, the parameters we want to learn.\n\"Learning rate\" \\(\\alpha\\) is the learning rate, a hyperparameter that controls the step size during optimization.\n\n\nNotice that the 0/1 loss is not differentiable, which makes it difficult to use with gradient-based optimization."
+  },
+  {
+    "objectID": "Note_-_FNN_24-25_(03-04).pdf.html#gradient-descent",
+    "href": "Note_-_FNN_24-25_(03-04).pdf.html#gradient-descent",
+    "title": "Lecture Notes on Perceptrons and Feedforward Neural Networks",
+    "section": "Gradient Descent",
+    "text": "Gradient Descent\nWe can use gradient descent to minimize the loss function and find optimal parameter values. Gradient descent is a procedure or technique for finding the minimum of a function. It generalizes the idea of the Perceptron Algorithm to more complex, multi-dimensional models and loss functions.\n\nDefinition of the Gradient\n\nThe gradient \\(\\nabla f\\) of a scalar-valued function \\(f: \\mathbb{R}^n \\rightarrow \\mathbb{R}\\) is a vector whose components are the partial derivatives.\n\n\n\\[\\nabla f(\\mathbf{p}) = \\left[ \\frac{\\partial f}{\\partial x_1} ; \\dots ; \\frac{\\partial f}{\\partial x_n} \\right] \\text{ vector } (\\nabla f: \\mathbb{R}^n \\rightarrow \\mathbb{R}^n)\\]"
+  },
+  {
+    "objectID": "Note_-_FNN_24-25_(03-04).pdf.html#loss-as-a-function-of-parameters",
+    "href": "Note_-_FNN_24-25_(03-04).pdf.html#loss-as-a-function-of-parameters",
+    "title": "Lecture Notes on Perceptrons and Feedforward Neural Networks",
+    "section": "Loss as a Function of Parameters",
+    "text": "Loss as a Function of Parameters\n\nThe loss function is a function of the parameters \\(L(\\Phi)\\). The loss function must be smooth or differentiable for gradient descent to work effectively."
+  },
+  {
+    "objectID": "Note_-_FNN_24-25_(03-04).pdf.html#revisiting-the-update-rule",
+    "href": "Note_-_FNN_24-25_(03-04).pdf.html#revisiting-the-update-rule",
+    "title": "Lecture Notes on Perceptrons and Feedforward Neural Networks",
+    "section": "Revisiting the Update Rule",
+    "text": "Revisiting the Update Rule\nLet’s revisit the weight update rule:\n\n\\[\\Delta \\Phi_i = - \\alpha \\frac{\\partial L}{\\partial \\Phi_i}\\]\n\nThis represents the change in the values of the parameters. The gradient \\(\\nabla L\\) points in the direction of the steepest increase of the loss function. We want to decrease the loss, so we move in the opposite direction of the gradient, hence the negative sign.\n\nWe are working in many dimensions! The parameter space can be very high-dimensional, especially for deep neural networks with many weights and biases. The number of dimensions is related to the number of features and the complexity of the model.\n\n\nIn multi-layer networks, parameters from any layer must be taken into account when calculating gradients and updating weights."
+  },
+  {
+    "objectID": "Note_-_FNN_24-25_(03-04).pdf.html#cross-entropy-loss",
+    "href": "Note_-_FNN_24-25_(03-04).pdf.html#cross-entropy-loss",
+    "title": "Lecture Notes on Perceptrons and Feedforward Neural Networks",
+    "section": "Cross-Entropy Loss",
+    "text": "Cross-Entropy Loss\nFor classification problems, a common choice for the Loss-function is Cross-entropy. It is smooth (to apply the rule) and a continuous and differentiable function. Cross-entropy is a very popular loss function for classification tasks.\n\nIntermezzo: Entropy\n\nWhen Shannon first derived his famous formula for information, he asked von Neumann what he should call it and von Neumann replied “You should call it entropy for two reasons: first because that is what the formula is in statistical mechanics but second and more important, as nobody knows what entropy is, whenever you use the term you will always be at an advantage!"
+  },
+  {
+    "objectID": "Note_-_FNN_24-25_(03-04).pdf.html#the-softmax-function",
+    "href": "Note_-_FNN_24-25_(03-04).pdf.html#the-softmax-function",
+    "title": "Lecture Notes on Perceptrons and Feedforward Neural Networks",
+    "section": "The Softmax Function",
+    "text": "The Softmax Function\nWe can use the output of our neural network as an estimate of a probability distribution over the classes. A probability distribution is a set of numbers between 0 and 1 that sum up to 1. To obtain a probability distribution from the raw outputs of our network, we can use the softmax function.\n\n\\[\\sigma(\\mathbf{z})_j = \\frac{e^{z_j}}{\\sum_i e^{z_i}}\\]\n\nThe softmax function takes a vector of real numbers ‘z’ and transforms it into a probability distribution.\n\n\nA simple network with a softmax layer\n\n\n\nTerminology: softmax, the inputs to the softmax function are often called logits (the \\(l_i\\)’s).\n\\(p(l_i) = \\frac{e^{l_i}}{\\sum_j e^{l_j}} \\propto e^{l_i}\\)\nThe softmax function converts these logits into probabilities \\(p(l_i)\\)."
+  },
+  {
+    "objectID": "Note_-_FNN_24-25_(03-04).pdf.html#cross-entropy-loss-function",
+    "href": "Note_-_FNN_24-25_(03-04).pdf.html#cross-entropy-loss-function",
+    "title": "Lecture Notes on Perceptrons and Feedforward Neural Networks",
+    "section": "Cross-Entropy Loss Function",
+    "text": "Cross-Entropy Loss Function\n\n\\[X(\\Phi, \\mathbf{x}) = - \\log p(\\hat{a})\\]\n\nThis is the cross-entropy loss function for a single example ‘x’.\n\n\\(\\Phi\\) are the parameters of our model.\n\\(\\hat{a}\\) is the predicted class label for input ‘x’.\n\nObservations on the definition of Cross-entropy loss function:\n\nprobabilities \\(\\in [0, 1] \\Rightarrow\\) minus sign. Since probabilities are between 0 and 1, their logarithm is negative. The minus sign makes the loss positive.\n\\(p(l_i) \\propto e^{l_i} \\Rightarrow\\) logarithm. The softmax function uses exponentials, and the cross-entropy loss uses logarithm. This combination is mathematically convenient and leads to good optimization properties."
+  },
+  {
+    "objectID": "Note_-_FNN_24-25_(03-04).pdf.html#computational-flow",
+    "href": "Note_-_FNN_24-25_(03-04).pdf.html#computational-flow",
+    "title": "Lecture Notes on Perceptrons and Feedforward Neural Networks",
+    "section": "Computational Flow",
+    "text": "Computational Flow\nComputation flow in a neural network with softmax and cross-entropy loss.\n\n\\(l_j = b_j + \\mathbf{x} \\cdot \\mathbf{w}_j\\)\n\\(p(a) = \\sigma_a(\\mathbf{l}) = \\frac{e^{l_a}}{\\sum_i e^{l_i}}\\)\n\\(X(\\Phi, \\mathbf{x}) = - \\ln p(a)\\)\n\nFirst, we compute the logits \\(l_j\\) as a linear combination of inputs and weights, plus bias. Then, we apply the softmax function to get the predicted probability \\(p(a)\\) for the true class ‘a’. Finally, we compute the cross-entropy loss \\(X(\\Phi, \\mathbf{x}) = - \\ln p(a)\\). We want to minimize this loss during training."
+  },
+  {
+    "objectID": "Note_-_FNN_24-25_(01-02).pdf.html",
+    "href": "Note_-_FNN_24-25_(01-02).pdf.html",
+    "title": "Introduction to Neural Networks",
+    "section": "",
+    "text": "This lecture serves as an introduction to the fascinating field of Neural Networks. We will begin by exploring the fundamental question: \"What is a Neural Network?\" and delve into the motivations behind drawing inspiration from the human brain for computational models. We will discuss how neural networks offer a paradigm shift in computation, enabling solutions to problems that are intractable for traditional algorithms. Key questions we will address include the revolutionary nature of neural networks in algorithm design, their biological plausibility, and the role of programmer creativity in their development."
+  },
+  {
+    "objectID": "Note_-_FNN_24-25_(01-02).pdf.html#part-i-fundamentals",
+    "href": "Note_-_FNN_24-25_(01-02).pdf.html#part-i-fundamentals",
+    "title": "Introduction to Neural Networks",
+    "section": "Part I: Fundamentals",
+    "text": "Part I: Fundamentals\nThis part covers the essential building blocks and basic notions required to understand neural networks.\n\nIntroduction\nWe begin with an overview of the field and its core principles.\n\n\nBiological Neural Networks\nInspiration for artificial neural networks comes from their biological counterparts. We will explore the structure and function of biological neural networks to understand the underlying principles.\n\n\nMathematical Background\nA solid mathematical foundation is crucial for understanding neural networks. This section will cover the necessary mathematical concepts, including linear algebra, calculus, and probability theory.\n\n\nTerminology and Formulation\nEstablishing a common vocabulary and formalisms is essential. We will define key terms such as neurons, weights, biases, activation functions, and loss functions. We will also formulate the basic concepts of neural networks, including their architecture and the forward and backward propagation processes.\n\n\nPerceptrons\nThe perceptron is a fundamental building block in neural networks.\nWe will start with the simplest form: single-layer perceptrons. We will cover their architecture, the perceptron learning algorithm, and their limitations in solving linearly separable problems. The complexity of the perceptron learning algorithm is \\(O(nd)\\), where \\(n\\) is the number of training samples and \\(d\\) is the dimensionality of the input.\nThen, we will extend to multi-layer perceptrons (MLPs), which are capable of solving more complex, non-linearly separable problems. We will discuss their architecture, the backpropagation algorithm for training, and techniques for improving their performance, such as regularization and dropout. The complexity of the backpropagation algorithm is \\(O(n|E|)\\), where \\(n\\) is the number of training samples and \\(|E|\\) is the number of edges in the network.\n\n\nConvolutional Networks\nConvolutional Neural Networks (CNNs) are particularly effective for processing grid-like data such as images. We will explore their architecture, including convolutional layers, pooling layers, and fully connected layers. We will also discuss techniques for training CNNs and their applications in image classification, object detection, and image segmentation. The complexity of a convolutional layer is \\(O(n \\cdot m^2 \\cdot k^2 \\cdot c_{in} \\cdot c_{out})\\), where \\(n\\) is the number of training samples, \\(m\\) is the spatial size of the output feature map, \\(k\\) is the kernel size, \\(c_{in}\\) is the number of input channels, and \\(c_{out}\\) is the number of output channels.\n\n\nRecurrent Networks\nRecurrent Neural Networks (RNNs) are designed to handle sequential data, making them suitable for tasks like natural language processing and time series analysis. We will cover their architecture, including recurrent units and the concept of hidden states. We will also discuss different types of RNNs, such as Long Short-Term Memory (LSTM) networks and Gated Recurrent Units (GRUs), and their applications in machine translation, text generation, and speech recognition. The complexity of an RNN layer is \\(O(n \\cdot T \\cdot d^2)\\), where \\(n\\) is the number of training samples, \\(T\\) is the sequence length, and \\(d\\) is the dimensionality of the hidden state.\n\n\nGraph Neural Networks\nGraph Neural Networks (GNNs) extend neural network capabilities to graph-structured data. We will explore their architecture, including graph convolutional layers and message-passing mechanisms. We will also discuss different types of GNNs and their applications in social network analysis, recommendation systems, and drug discovery. The complexity of a GNN layer is typically \\(O(n|E|d)\\), where \\(n\\) is the number of training samples, \\(|E|\\) is the number of edges in the graph, and \\(d\\) is the dimensionality of the node features."
+  },
+  {
+    "objectID": "Note_-_FNN_24-25_(01-02).pdf.html#part-ii-advanced-topics",
+    "href": "Note_-_FNN_24-25_(01-02).pdf.html#part-ii-advanced-topics",
+    "title": "Introduction to Neural Networks",
+    "section": "Part II: Advanced Topics",
+    "text": "Part II: Advanced Topics\nThis part delves into more sophisticated concepts and cutting-edge research areas in neural networks.\n\nProbably Approximately Correct (PAC) Learning\nProbably Approximately Correct (PAC) learning theory provides a theoretical framework for understanding machine learning and generalization. We will introduce the key concepts of PAC learning, including the PAC learning model, sample complexity, and the relationship between model complexity and generalization ability.\n\n\nAlgorithms\nWe will explore advanced algorithms used for training and optimizing neural networks, such as stochastic gradient descent variants (e.g., Adam, RMSprop), second-order optimization methods, and techniques for distributed training.\n\n\nArchitectures\nThis section will cover state-of-the-art neural network architectures.\nTransformers are a revolutionary architecture that has achieved significant success in natural language processing and beyond. We will delve into their architecture, including the self-attention mechanism and the encoder-decoder structure. We will also discuss their applications in machine translation, text summarization, and question answering. The complexity of the self-attention mechanism is \\(O(n \\cdot T^2 \\cdot d)\\), where \\(n\\) is the number of training samples, \\(T\\) is the sequence length, and \\(d\\) is the dimensionality of the input embeddings.\n\n\nLogical Neural Networks\nLogical Neural Networks offer a different perspective on structuring and interpreting neural networks, focusing on logical inference. We will explore how logical rules can be incorporated into neural networks and how these networks can be used for reasoning and knowledge representation."
+  },
+  {
+    "objectID": "Note_-_FNN_24-25_(01-02).pdf.html#applications",
+    "href": "Note_-_FNN_24-25_(01-02).pdf.html#applications",
+    "title": "Introduction to Neural Networks",
+    "section": "Applications",
+    "text": "Applications\nWe will explore key application areas where neural networks have demonstrated remarkable success.\n\nPattern Recognition\nNeural networks excel at pattern recognition tasks, including image and speech recognition. We will examine how CNNs are used for image classification and object detection, and how RNNs are used for speech recognition and speaker identification.\n\n\nText Analysis and Processing\nNatural Language Processing (NLP) is a major application area, leveraging neural networks for text analysis and understanding. We will discuss how RNNs and Transformers are used for tasks such as sentiment analysis, text classification, machine translation, and text generation."
+  },
+  {
+    "objectID": "Note_-_FNN_24-25_(01-02).pdf.html#practical-considerations",
+    "href": "Note_-_FNN_24-25_(01-02).pdf.html#practical-considerations",
+    "title": "Introduction to Neural Networks",
+    "section": "Practical Considerations",
+    "text": "Practical Considerations\nThis section will address the practical aspects of deploying neural networks.\n\nText and Web Applications\nWe will focus on the practical considerations for implementing neural networks in text and web-based applications. This includes topics such as data preprocessing, model deployment, scalability, and real-time inference. We will also discuss tools and frameworks for building and deploying neural network models, such as TensorFlow and PyTorch."
+  },
+  {
+    "objectID": "Note_-_FNN_24-25_(01-02).pdf.html#problems-beyond-traditional-algorithms",
+    "href": "Note_-_FNN_24-25_(01-02).pdf.html#problems-beyond-traditional-algorithms",
+    "title": "Introduction to Neural Networks",
+    "section": "Problems Beyond Traditional Algorithms",
+    "text": "Problems Beyond Traditional Algorithms\nMany real-world problems are characterized by complexity and subtle nuances that defy formulation as explicit algorithms. Consider, for example, estimating the purchase price of real estate. While humans can intuitively assess property value based on numerous factors like location, size, condition, and comparable sales, codifying this process into a deterministic algorithm is exceedingly difficult. A precise algorithmic approach would require a vast number of rules and exceptions, each with carefully tuned weights and thresholds, to capture the intricate interplay of these factors. Even then, the algorithm would likely struggle to adapt to unforeseen market fluctuations or unique property characteristics.\nThese types of problems depend on a multitude of subtle, interconnected factors, making them challenging for traditional algorithmic approaches. As noted in the transcription, “There are problem categories that cannot be formulated as an algorithm.” For such problems, where explicit algorithmic solutions are elusive, neural networks offer a powerful alternative by learning directly from data. They can identify complex patterns and relationships within large datasets, effectively approximating the underlying function that maps inputs (e.g., property features) to outputs (e.g., price) without requiring explicit programming of each rule.\n\nConsider a dataset of real estate transactions, where each data point includes features like location (latitude, longitude), size (square footage), number of bedrooms and bathrooms, age of the property, lot size, and recent renovations, along with the final sale price. A neural network can be trained on this data to learn the complex, non-linear relationships between these features and the sale price. The network would adjust its internal weights and biases during training to minimize the difference between its predicted prices and the actual sale prices in the dataset. Once trained, the network could then be used to estimate the price of a new property based on its features, effectively capturing the nuanced decision-making process of a human appraiser."
+  },
+  {
+    "objectID": "Note_-_FNN_24-25_(01-02).pdf.html#a-broader-view-of-computation",
+    "href": "Note_-_FNN_24-25_(01-02).pdf.html#a-broader-view-of-computation",
+    "title": "Introduction to Neural Networks",
+    "section": "A Broader View of Computation",
+    "text": "A Broader View of Computation\nThe rise of neural networks signals a shift towards a broader understanding of computation. As Edsger Dijkstra famously stated, “Computer science is no more about computers than astronomy is about telescopes.” This perspective emphasizes that computer science is not solely about programming languages or writing code, but fundamentally about understanding computation in a wider sense, encompassing the principles of information processing and intelligence.\nComputation, in this broader view, is a behavior exhibited by many systems, biological and physical, not just machines built by technology companies. Any system transforming inputs to outputs via discrete rules can be considered computational. This includes biological systems like the human brain, which processes sensory information and generates behavior through complex electrochemical interactions, as well as physical systems like the weather, which evolves according to the laws of physics.\nNeural networks embody this broader view, offering a way to explore and harness computation in systems that learn and adapt, moving beyond the limitations of explicitly programmed rules. They demonstrate that computation is not limited to the rigid, step-by-step execution of instructions in traditional computers but can also emerge from the collective behavior of interconnected, adaptive units. This perspective opens up new avenues for solving complex problems by leveraging the principles of learning and adaptation observed in natural systems.\n\nConsider the human brain. It receives sensory inputs (e.g., light, sound, touch) and processes them through a complex network of neurons to generate outputs in the form of thoughts, actions, and emotions. This process is not governed by a fixed set of rules programmed into the brain but rather emerges from the dynamic interactions between neurons, shaped by experience and learning. Similarly, neural networks learn to map inputs to outputs by adjusting the strengths of connections between artificial neurons, mimicking the brain’s ability to adapt and learn from data.\n\n\nRemark. Remark 1. As a challenge, consider exploring the paper mentioned in the transcription which contains an \"imprecise statement on SUDOKU or P vs NP.\" This exercise encourages critical reading and engagement with the nuances of computational theory. Identifying the imprecise statement requires understanding the distinction between the complexity classes P and NP, and the nature of NP-complete problems like SUDOKU."
+  },
+  {
+    "objectID": "Note_-_FNN_24-25_(01-02).pdf.html#core-characteristics",
+    "href": "Note_-_FNN_24-25_(01-02).pdf.html#core-characteristics",
+    "title": "Introduction to Neural Networks",
+    "section": "Core Characteristics",
+    "text": "Core Characteristics\nA neural network is fundamentally a “massively parallel distributed processor made up of simple processing units” (Haykin, 2009). This architecture exhibits a “natural propensity for storing experiential knowledge and making it available for use.” Neural networks draw inspiration from the brain in two key respects:\n\nKnowledge Acquisition through Learning: Neural networks, like brains, acquire knowledge from their environment through a learning process. This contrasts with traditional programming, where knowledge is explicitly encoded as rules and instructions. Instead, neural networks learn from examples, adjusting their internal parameters to capture underlying patterns and relationships in the data.\nKnowledge Storage in Synaptic Weights: Interneuron connection strengths, known as synaptic weights, are used to store the acquired knowledge. These weights represent the strength of the connection between neurons and are adjusted during the learning process. The pattern of synaptic weights across the network encodes the learned information, allowing the network to generalize to new, unseen data.\n\nThe process of learning is facilitated by a learning algorithm, which modifies the synaptic weights in an orderly fashion to achieve a desired design objective. For example, in supervised learning, the objective is to minimize the difference between the network’s output and the desired output for a given input. While weight modification is the traditional method, neural networks can also modify their topology, mirroring the brain’s ability to form new connections and prune existing ones. This approach is related to linear adaptive filter theory, highlighting connections to established signal processing techniques.\n\nImagine a network of interconnected water pipes, where each pipe represents a connection between neurons, and the diameter of each pipe represents the synaptic weight. A larger diameter corresponds to a stronger connection, allowing more water to flow through. During learning, the diameters of the pipes are adjusted based on the flow of water (information) through the network. Over time, the pattern of pipe diameters reflects the learned information, similar to how synaptic weights in a neural network encode learned knowledge."
+  },
+  {
+    "objectID": "Note_-_FNN_24-25_(01-02).pdf.html#specific-benefits",
+    "href": "Note_-_FNN_24-25_(01-02).pdf.html#specific-benefits",
+    "title": "Introduction to Neural Networks",
+    "section": "Specific Benefits",
+    "text": "Specific Benefits\n\nNonlinearity\nNeural networks excel at modeling nonlinear relationships in data, a capability lacking in traditional linear models. This nonlinearity is introduced through activation functions applied to the weighted sum of inputs at each neuron. Common activation functions include sigmoid, tanh, and ReLU (Rectified Linear Unit), each introducing different nonlinear properties. This nonlinearity allows them to capture complex patterns, effectively addressing our \"ignorance\" about the underlying data generating processes. By combining multiple nonlinear transformations across layers, neural networks can approximate virtually any continuous function, making them powerful tools for modeling complex real-world phenomena.\n\nThe XOR (exclusive OR) function is a classic example of a nonlinear relationship that cannot be modeled by a single-layer perceptron. The XOR function returns true if only one of its inputs is true, and false otherwise. A single-layer perceptron, which essentially draws a linear decision boundary, cannot separate the inputs that produce true from those that produce false. However, a multi-layer perceptron with a hidden layer using a nonlinear activation function can easily learn the XOR function by combining multiple linear boundaries to create a nonlinear decision boundary.\n\n\n\nInput-Output Mapping (Learning)\nThe core function of neural networks is to learn mappings from inputs to outputs. This learning process enables them to make predictions and decisions based on input data. Given a set of input-output pairs, a neural network can learn the underlying function that maps inputs to outputs, even if that function is complex and unknown. This ability is fundamental to many applications, such as image classification (mapping images to labels), natural language processing (mapping text to meaning), and control systems (mapping sensor inputs to actions).\n\n\nAdaptability\nNeural networks are adaptive systems. Their synaptic weights can be adjusted (tuned-up or re-trained) to accommodate new data or changing environments, providing flexibility and robustness. This adaptability is crucial in real-world applications where data distributions may change over time. For example, a neural network trained to detect spam emails can be periodically re-trained with new data to adapt to evolving spam techniques.\n\n\nEvidential Response\nBeyond simple predictions, neural networks can provide an \"evidential response,\" offering measures of confidence or uncertainty associated with their outputs. This is often achieved by using probabilistic models or by interpreting the output of certain activation functions (e.g., softmax) as probabilities. This is related to Probably Approximately Correct (PAC) learning, which will be discussed later in the course. Knowing the confidence level of a prediction is crucial in many applications, such as medical diagnosis or autonomous driving, where decisions have significant consequences.\n\n\nContextual Awareness\nNeurons within a neural network operate with contextual awareness. They consider the influence of neighboring neurons, allowing for processing information in a distributed and interconnected manner. Neurons \"look around\" at their neighbors to inform their processing. This is particularly important in architectures like convolutional neural networks (CNNs), where neurons in a convolutional layer process information from a local receptive field, taking into account the spatial context of the input.\n\n\nFault Tolerance\nNeural networks exhibit fault tolerance, also known as graceful degradation. The distributed nature of processing allows the network to continue functioning even if some neurons or connections are damaged, albeit potentially with reduced performance. This is because the knowledge is distributed across the network, rather than being localized in a single unit. This property makes neural networks robust to noise and errors, and it is inspired by the brain’s ability to function even with localized damage.\n\n\nHardware Implementability (VLSI)\nThe massively parallel architecture of neural networks makes them well-suited for hardware implementation, particularly using Very Large Scale Integration (VLSI) circuits. This parallelism mirrors the brain’s architecture, facilitating efficient hardware realizations. Specialized hardware, such as GPUs (Graphics Processing Units) and TPUs (Tensor Processing Units), has been developed to accelerate neural network computations, taking advantage of their inherent parallelism. The question of how neural networks are best implemented in hardware is an active area of research, with ongoing efforts to develop more efficient and specialized architectures.\n\n\nUniformity of Design\nA significant advantage is the uniformity of analysis and design. The same fundamental neural network architectures can be applied across diverse problem domains, from image recognition to natural language processing, offering a unified approach to problem-solving. This allows researchers and practitioners to leverage knowledge and techniques developed in one domain to other domains, accelerating progress in the field.\n\n\nNeurobiological Inspiration\nNeural networks are fundamentally inspired by neurobiology. While artificial networks are simplified models of biological brains, this analogy provides a powerful guiding principle for their development and understanding. The structure and function of biological neurons and synapses have inspired the design of artificial neurons and connections, and the principles of learning and adaptation in the brain have guided the development of learning algorithms for artificial neural networks."
+  },
+  {
+    "objectID": "Note_-_FNN_24-25_(01-02).pdf.html#fundamental-architectural-differences",
+    "href": "Note_-_FNN_24-25_(01-02).pdf.html#fundamental-architectural-differences",
+    "title": "Introduction to Neural Networks",
+    "section": "Fundamental Architectural Differences",
+    "text": "Fundamental Architectural Differences\nA comparison between brains and computers, while simplified, highlights key architectural differences. The following table summarizes these distinctions:\n\n\n\n\nFeature\nBrain\nComputer\n\n\n\n\nNumber of Processing Units\n\\(\\approx 10^{11}\\) neurons\n\\(\\approx 10^9\\) transistors\n\n\nType of Processing Units\nNeurons\nTransistors\n\n\nType of Calculation\nMassively parallel\nPrimarily serial\n\n\nData Storage\nAssociative\nAddress-based\n\n\nSwitching Time\n\\(\\approx 10^{-3}\\) s (milliseconds)\n\\(\\approx 10^{-9}\\) s (nanoseconds)\n\n\nPossible Switching Operations\n\\(\\approx 10^{13}\\) /s\n\\(\\approx 10^{18}\\) /s\n\n\nActual Switching Operations\n\\(\\approx 10^{12}\\) /s\n\\(\\approx 10^{10}\\) /s\n\n\n\n\n\nNumber of Processing Units: Brains have approximately \\(10^{11}\\) neurons, interconnected in a complex network. Computers, on the other hand, typically have around \\(10^9\\) transistors. While computers have fewer processing units, their transistors are generally much faster than neurons.\nType of Processing Units: Brains use neurons as their fundamental processing units. Neurons are complex biological cells that communicate through electrochemical signals. Computers use transistors, which are semiconductor devices that switch electronic signals. These are fundamentally different units operating on distinct principles.\nType of Calculation: Brains operate with massive parallelism. Many neurons process information simultaneously, allowing for rapid and efficient computation, especially for tasks like sensory perception and motor control. Computers, in contrast, typically perform serial processing, executing instructions one after another in a sequential manner, although modern computers do incorporate some degree of parallelism through multi-core processors and specialized hardware like GPUs.\nData Storage: Brain memory is associative, meaning that memories are retrieved based on their content and relationships with other memories. This allows for flexible and efficient recall, even with incomplete or noisy cues. Computer memory, on the other hand, is primarily address-based. Data is stored at specific memory locations (addresses) and retrieved by specifying the corresponding address.\nSwitching Time: Neurons have a switching time of approximately \\(10^{-3}\\) seconds (milliseconds), which is the time it takes for a neuron to fire an action potential and transmit a signal to other neurons. This is significantly slower than transistors, which have a switching time of approximately \\(10^{-9}\\) seconds (nanoseconds).\nPossible Switching Operations: Despite the slower switching time of individual neurons, the brain’s massive parallelism enables it to perform approximately \\(10^{13}\\) switching operations per second. Modern computers, with their faster transistors, can perform up to \\(\\approx 10^{18}\\) switching operations per second.\nActual Switching Operations: In terms of actual operations performed during typical tasks, the brain is estimated to perform around \\(10^{12}\\) operations per second. This is still quite competitive with modern computers, which perform around \\(10^{10}\\) operations per second, highlighting the efficiency of the brain’s parallel architecture.\n\nThis comparison underscores the fundamentally different architectures of brains and computers. While computers excel in speed and precision for serial tasks, brains are remarkably efficient at parallel processing and learning from complex, noisy data."
+  },
+  {
+    "objectID": "Note_-_FNN_24-25_(01-02).pdf.html#leveraging-brain-like-properties",
+    "href": "Note_-_FNN_24-25_(01-02).pdf.html#leveraging-brain-like-properties",
+    "title": "Introduction to Neural Networks",
+    "section": "Leveraging Brain-like Properties",
+    "text": "Leveraging Brain-like Properties\nThe study of artificial neural networks is motivated by leveraging beneficial characteristics of the brain for computer systems. The key aspects we aim to emulate are:\n\nMassive Parallelism: Brains perform computations in parallel, allowing for efficient processing of complex information. This is achieved through the simultaneous activity of billions of interconnected neurons. Artificial neural networks attempt to mimic this parallelism by using interconnected processing units that can operate concurrently.\nLearning Capability: Brains learn from experience, adapting to new information and environments. This is achieved through changes in the strengths of connections between neurons (synaptic plasticity). Artificial neural networks similarly learn by adjusting the weights of connections between artificial neurons, allowing them to improve their performance on a given task over time.\n\nCrucially, “There is no need to explicitly program a neural network.” Instead, neural networks are trained, learning from data examples or through reinforcement, similar to how animals learn. This eliminates the need to manually specify every rule and instruction, allowing neural networks to tackle problems that are difficult or impossible to solve with traditional programming.\n\nConsider the task of recognizing handwritten digits. Instead of writing explicit rules to identify each digit based on its shape, a neural network can be trained on a large dataset of labeled images of handwritten digits. Through the learning process, the network adjusts its internal weights to capture the underlying patterns that distinguish each digit, enabling it to accurately classify new, unseen images."
+  },
+  {
+    "objectID": "Note_-_FNN_24-25_(01-02).pdf.html#integration-within-larger-systems",
+    "href": "Note_-_FNN_24-25_(01-02).pdf.html#integration-within-larger-systems",
+    "title": "Introduction to Neural Networks",
+    "section": "Integration within Larger Systems",
+    "text": "Integration within Larger Systems\nWhile neural networks offer powerful capabilities, they are not standalone solutions. “In practice, however, neural networks cannot provide the solution by working individually. Rather, they need to be integrated into a consistent system engineering approach.” Complex problems should be decomposed into simpler tasks, with neural networks assigned to tasks that align with their strengths. For example, in a self-driving car, neural networks might be used for image recognition (identifying objects in camera images), while other components handle tasks like path planning and control.\nIt is important to acknowledge that we are still far from replicating the full complexity and capabilities of the human brain in computer architectures. Artificial neural networks are simplified models that capture only a fraction of the intricate workings of biological brains. Nevertheless, they represent a significant step towards building more intelligent and adaptable computer systems, inspired by the remarkable processing power of the human brain."
+  },
+  {
+    "objectID": "Note_-_FNN_24-25_(01-02).pdf.html#speed-discrepancy-with-silicon",
+    "href": "Note_-_FNN_24-25_(01-02).pdf.html#speed-discrepancy-with-silicon",
+    "title": "Introduction to Neural Networks",
+    "section": "Speed Discrepancy with Silicon",
+    "text": "Speed Discrepancy with Silicon\nNeurons operate significantly slower than silicon logic gates. “Typically, neurons are five to six orders of magnitude slower than silicon logic gates; events in a silicon chip happen in the nanosecond range, whereas neural events happen in the millisecond range.” This speed difference is substantial. A nanosecond (ns) is one billionth of a second (\\(10^{-9}\\) seconds), while a millisecond (ms) is one thousandth of a second (\\(10^{-3}\\) seconds). This means that silicon logic gates can switch states and perform operations millions of times faster than neurons.\n\n\n1 nanosecond: Time it takes for light to travel approximately 30 centimeters.\n1 millisecond: Time it takes for a hummingbird to flap its wings once.\n\nThis difference in timescales highlights the vast speed disparity between electronic and biological computation."
+  },
+  {
+    "objectID": "Note_-_FNN_24-25_(01-02).pdf.html#the-role-of-massive-interconnectivity",
+    "href": "Note_-_FNN_24-25_(01-02).pdf.html#the-role-of-massive-interconnectivity",
+    "title": "Introduction to Neural Networks",
+    "section": "The Role of Massive Interconnectivity",
+    "text": "The Role of Massive Interconnectivity\nThe brain compensates for the slower speed of individual neurons through massive interconnectivity. The human cortex alone is estimated to contain “10 billion neurons, and 60 trillion synapses or connections.” This intricate network allows for parallel processing on an enormous scale. “The net result is that the brain is an enormously efficient structure.”\nThe brain’s energetic efficiency is approximately \\(10^{-16}\\) joules per operation per second. This is significantly more efficient than even the best computers, which consume orders of magnitude more energy per operation. The brain’s efficiency arises from its massively parallel architecture and the relatively low energy cost of neuronal communication.\n\nImagine a large group of people (neurons) working together to solve a complex problem. Each person can only work relatively slowly, but because they can all work simultaneously and communicate with each other, they can solve the problem much faster than a single person working alone, even if that individual is much faster. This is analogous to the parallel processing in the brain, compared to the primarily serial processing in traditional computers."
+  },
+  {
+    "objectID": "Note_-_FNN_24-25_(01-02).pdf.html#action-potentials-as-communication",
+    "href": "Note_-_FNN_24-25_(01-02).pdf.html#action-potentials-as-communication",
+    "title": "Introduction to Neural Networks",
+    "section": "Action Potentials as Communication",
+    "text": "Action Potentials as Communication\nNeurons communicate using “action potentials, or spikes,” which are brief voltage pulses that travel along the neuron’s axon. These signals propagate at a constant velocity and amplitude, ensuring reliable communication across the neural network.\nThe use of action potentials is rooted in the physical properties of axons, the long, slender projections of neurons that transmit signals to other neurons. Axons have a high electrical resistance and a large capacitance, which influence the speed and efficiency of signal propagation.\n\n\n\nAction potentials are fundamental to neuronal communication and will be explored further in subsequent lectures on biological neurons. They are all-or-none events, meaning that they either occur fully or not at all, ensuring that signals are transmitted reliably over long distances within the brain. The frequency and timing of action potentials encode information, allowing neurons to represent and process complex patterns."
+  },
+  {
+    "objectID": "Note_-_FNN_24-25_(01-02).pdf.html#core-principles-for-adaptation",
+    "href": "Note_-_FNN_24-25_(01-02).pdf.html#core-principles-for-adaptation",
+    "title": "Introduction to Neural Networks",
+    "section": "Core Principles for Adaptation",
+    "text": "Core Principles for Adaptation\nWe aim to adapt several core biological principles in artificial neural networks:\n\nSelf-Organization and Learning\nThe brain’s ability to self-organize and learn from experience is a key principle we seek to replicate. Biological neural networks can rewire themselves, strengthen or weaken connections between neurons, and even generate new neurons in response to stimuli and experiences. This allows the brain to adapt to new situations, learn new skills, and recover from damage. In artificial neural networks, self-organization is reflected in the ability of networks to automatically adjust their weights and biases during training, effectively learning the underlying patterns in the data without explicit programming.\n\n\nGeneralization\nBrains generalize from past experiences to new situations. This means that the brain can apply knowledge learned in one context to a different but related context. For example, a child who learns to recognize a specific type of dog can often generalize that knowledge to recognize other breeds of dogs, even if they have never seen them before. We aim for artificial networks to exhibit similar generalization capabilities, rather than just memorizing training data. Generalization is crucial for the practical application of neural networks, as it allows them to perform well on unseen data, which is essential for real-world tasks.\n\n\nFault Tolerance\nThe brain’s robustness to damage inspires the design of fault-tolerant artificial networks. The brain can continue to function relatively well even if some neurons or connections are damaged, due to its distributed and redundant architecture. Similarly, artificial neural networks can be designed to be fault-tolerant, meaning that they can maintain performance even if some units or connections are lost or corrupted. This is often achieved through redundancy, where multiple units or pathways perform similar computations, and through distributed representations, where information is encoded across multiple units."
+  },
+  {
+    "objectID": "Note_-_FNN_24-25_(01-02).pdf.html#the-100-step-processing-limit",
+    "href": "Note_-_FNN_24-25_(01-02).pdf.html#the-100-step-processing-limit",
+    "title": "Introduction to Neural Networks",
+    "section": "The 100-Step Processing Limit",
+    "text": "The 100-Step Processing Limit\nHuman object recognition is remarkably fast, occurring in approximately 0.1 seconds. Given neuron switching times of about \\(10^{-3}\\) seconds, this suggests that the brain performs recognition in roughly 100 sequential processing steps. “Experiments showed that a human can recognize the picture of a familiar object or person in ≈ 0.1 seconds, which corresponds to a neuron switching time of ≈ \\(10^{-3}\\) seconds in ≈ 100 discrete time steps of parallel processing.”\nThis \"100-step rule\" highlights the efficiency of parallel processing in the brain. Despite the relatively slow speed of individual neurons, the brain can perform complex computations like object recognition incredibly quickly by leveraging its massively parallel architecture. This contrasts with the limitations of traditional von Neumann architectures, which rely on sequential processing and are therefore much slower on tasks like image recognition when restricted to a small number of sequential steps.\n\nThe 100-step rule suggests that the brain does not rely on deep, sequential chains of computation for tasks like object recognition. Instead, it performs computations in a relatively shallow but massively parallel manner. This has inspired the design of artificial neural networks with parallel architectures, such as convolutional neural networks, which have proven to be highly effective for image recognition tasks."
+  },
+  {
+    "objectID": "Note_-_FNN_24-25_(01-02).pdf.html#illustrative-example-robot-navigation",
+    "href": "Note_-_FNN_24-25_(01-02).pdf.html#illustrative-example-robot-navigation",
+    "title": "Introduction to Neural Networks",
+    "section": "Illustrative Example: Robot Navigation",
+    "text": "Illustrative Example: Robot Navigation\nConsider a simple robot with eight sensors and two motors navigating an environment. The sensors provide information about the robot’s surroundings, such as the presence of obstacles or the distance to a target. The motors control the robot’s movement, allowing it to move forward, backward, turn left, or turn right.\nThe goal is to create a mapping from sensor inputs to motor outputs, effectively learning a navigation function \\(f: \\mathbb{R}^8 \\rightarrow \\mathbb{R}^2\\). This function takes an 8-dimensional vector of sensor readings as input and produces a 2-dimensional vector of motor commands as output. Even simple organisms like E. coli perform complex sensory-motor mappings, illustrating the fundamental nature of this problem. E. coli bacteria can sense chemical gradients in their environment and adjust their movement accordingly, allowing them to navigate towards nutrients and away from toxins.\n\n\n\n\nTwo Approaches\nOne approach is to program the robot with explicit rules, such as \"If sensor 1 detects an obstacle within a certain distance, then activate motor 2 to turn left.\" This rule-based approach can work for simple environments and tasks. However, it becomes complex and unwieldy for intricate environments with many possible sensor inputs and desired behaviors. Defining a comprehensive set of rules that covers all possible scenarios is often impractical or even impossible. Furthermore, this approach lacks flexibility and adaptability, as the robot cannot easily adapt to changes in its environment or learn new behaviors.\nAlternatively, a learning-based approach uses neural networks to learn the mapping from sensor inputs to motor outputs. By providing learning samples consisting of (sensor input, desired output) pairs, the robot can learn to navigate without explicit programming.\nFor example, a human operator could manually control the robot in various situations, providing examples of desired behavior. The sensor readings and corresponding motor commands would be recorded as training data. A neural network could then be trained on this data to learn the mapping between sensor inputs and motor outputs.\nThis \"black box\" approach treats the robot’s control system as an unknown entity to be trained through data. The internal workings of the neural network are not directly programmed but rather emerge from the learning process. This is particularly useful when explicit rules are unknown or too complex to define, as is often the case in real-world robotics applications. The neural network can learn complex, nonlinear relationships between sensor inputs and motor outputs, allowing the robot to navigate effectively in a variety of environments."
+  },
+  {
+    "objectID": "Note_-_FNN_24-25_(01-02).pdf.html#the-value-of-imprecision",
+    "href": "Note_-_FNN_24-25_(01-02).pdf.html#the-value-of-imprecision",
+    "title": "Introduction to Neural Networks",
+    "section": "The Value of Imprecision",
+    "text": "The Value of Imprecision\nNeural networks embrace imprecision. They are designed to find \"good enough\" solutions even with noisy or incomplete data, rather than striving for perfect accuracy. This contrasts with traditional algorithms that often require precise inputs and follow deterministic rules. The ability of neural networks to handle uncertainty and noise makes them well-suited for real-world applications where data is often imperfect. This tolerance for imprecision is also related to their ability to generalize, as they can learn underlying patterns from noisy data and apply them to new, unseen situations."
+  },
+  {
+    "objectID": "Note_-_FNN_24-25_(01-02).pdf.html#generalization-and-memory",
+    "href": "Note_-_FNN_24-25_(01-02).pdf.html#generalization-and-memory",
+    "title": "Introduction to Neural Networks",
+    "section": "Generalization and Memory",
+    "text": "Generalization and Memory\nGeneralization is central to neural network learning. They learn to generalize patterns from training data to unseen data, and this ability is intrinsically linked to how they store and retrieve information in their \"memory.\" In neural networks, memory is encoded in the weights of the connections between neurons. These weights are adjusted during training to capture the underlying structure of the data. The learned weights effectively represent a compressed and generalized representation of the training data, allowing the network to make predictions on new, unseen inputs.\n\nThink of a student learning a new concept. They are exposed to various examples and exercises (training data). Through practice and study, they internalize the underlying principles and relationships (weights). This allows them to apply their knowledge to new, unseen problems (generalization). The student’s memory is not a perfect recording of every example they have seen but rather a generalized understanding of the concept."
+  },
+  {
+    "objectID": "Note_-_FNN_24-25_(01-02).pdf.html#the-black-box-perspective",
+    "href": "Note_-_FNN_24-25_(01-02).pdf.html#the-black-box-perspective",
+    "title": "Introduction to Neural Networks",
+    "section": "The Black Box Perspective",
+    "text": "The Black Box Perspective\nWe can effectively use neural networks without fully understanding their internal workings. Treating them as \"black boxes\" is often sufficient to achieve remarkable results, especially when alternative algorithmic solutions are lacking. This is because the learning process automatically adjusts the network’s internal parameters to optimize its performance on a given task. While understanding the internal mechanisms can be helpful for debugging and improving performance, it is not always necessary for practical applications.\n\nCaution: While the black-box approach can be powerful, it also raises concerns about interpretability and explainability. In critical applications, such as medical diagnosis or autonomous driving, it is important to understand why a neural network made a particular decision. This has led to research on explainable AI (XAI), which aims to develop methods for understanding and interpreting the decisions of complex machine learning models."
+  },
+  {
+    "objectID": "Note_-_FNN_24-25_(01-02).pdf.html#a-new-kind-of-algorithm",
+    "href": "Note_-_FNN_24-25_(01-02).pdf.html#a-new-kind-of-algorithm",
+    "title": "Introduction to Neural Networks",
+    "section": "A New Kind of Algorithm",
+    "text": "A New Kind of Algorithm\nNeural networks represent a departure from traditional algorithms. They are \"learning algorithms\" that acquire knowledge from data, contrasting with algorithms explicitly programmed with rules. This shift marks a significant paradigm change in computer science. Instead of manually crafting algorithms for each specific task, we can now train neural networks to learn the appropriate algorithms from data. This has opened up new possibilities for solving complex problems that were previously intractable with traditional programming approaches.\n\nTraditional programming relies on explicitly defining rules and instructions for a computer to follow. This can be a time-consuming and challenging process, especially for complex tasks. Neural networks, on the other hand, learn from data, automatically discovering the underlying patterns and relationships. This shifts the focus from programming to training, enabling us to tackle problems that are difficult or impossible to solve with traditional methods."
+  },
+  {
+    "objectID": "Note_-_FNN_24-25_(01-02).pdf.html#the-brain-inspired-analogy",
+    "href": "Note_-_FNN_24-25_(01-02).pdf.html#the-brain-inspired-analogy",
+    "title": "Introduction to Neural Networks",
+    "section": "The Brain-Inspired Analogy",
+    "text": "The Brain-Inspired Analogy\nThe analogy between artificial neural networks and the brain is a crucial source of inspiration. However, it’s important to recognize the limitations. Artificial neural networks are still primitive compared to the brain’s complexity. “The artificial neurons we use to build our neural networks are truly primitive in comparison with those found in the brain.” They lack the intricate structure, diverse cell types, and complex signaling mechanisms found in biological brains.\nDespite this, the field is making remarkable progress, driven by neurobiological inspiration and advancements in theoretical and computational tools. The ongoing research in neuroscience continues to inform the development of artificial neural networks, leading to more sophisticated and powerful models. As we learn more about the brain, we can expect to see further advancements in artificial intelligence, potentially bridging the gap between artificial and biological intelligence."
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Home",
+    "section": "",
+    "text": "Welcome to the website!"
+  },
+  {
+    "objectID": "index.html#lectures",
+    "href": "index.html#lectures",
+    "title": "Home",
+    "section": "Lectures",
+    "text": "Lectures\n\nIntroduction to Neural Networks\nLecture Notes on Perceptrons and Feedforward Neural Networks"
+  }
+]
