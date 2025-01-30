@@ -182,6 +182,11 @@ window.Quarto = {
             General Inner Products
             </a>
           </li>
+          <li>
+            <a class="dropdown-item quarto-navbar-tools-item" href="./Note_-_FNN_24-25_(09-10).pdf.html">
+            Lecture Notes on the Perceptron Algorithm
+            </a>
+          </li>
       </ul>
     </div>
 </div>
@@ -209,8 +214,8 @@ window.Quarto = {
   <li><a href="#inner-products-and-bases" id="toc-inner-products-and-bases" class="nav-link" data-scroll-target="#inner-products-and-bases">Inner Products and Bases</a>
   <ul class="collapse">
   <li><a href="#representing-vectors-using-a-basis" id="toc-representing-vectors-using-a-basis" class="nav-link" data-scroll-target="#representing-vectors-using-a-basis">Representing Vectors Using a Basis</a></li>
-  <li><a href="#expressing-inner-products-with-basis-vectors" id="toc-expressing-inner-products-with-basis-vectors" class="nav-link" data-scroll-target="#expressing-inner-products-with-basis-vectors">Expressing Inner Products with Basis Vectors</a></li>
-  <li><a href="#matrix-representation-of-inner-products" id="toc-matrix-representation-of-inner-products" class="nav-link" data-scroll-target="#matrix-representation-of-inner-products">Matrix Representation of Inner Products</a></li>
+  <li><a href="#expressing-inner-products-via-basis-vectors" id="toc-expressing-inner-products-via-basis-vectors" class="nav-link" data-scroll-target="#expressing-inner-products-via-basis-vectors">Expressing Inner Products via Basis Vectors</a></li>
+  <li><a href="#matrix-representation" id="toc-matrix-representation" class="nav-link" data-scroll-target="#matrix-representation">Matrix Representation</a></li>
   </ul></li>
   <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
   </ul>
@@ -252,7 +257,13 @@ window.Quarto = {
 
 <section id="introduction" class="level1">
 <h1>Introduction</h1>
-<p>In this lecture, we delve into the concept of general inner products, extending our understanding of vector spaces beyond the familiar Euclidean space. We will explore how inner products generalize the notions of length, angle, and orthogonality, which are fundamental in various areas of mathematics, physics, and engineering, especially in machine learning. Key concepts we will cover include bilinear mappings, symmetric and positive definite conditions, the formal definition of an inner product, and its representation using basis vectors and matrices. Understanding inner products provides a powerful framework for abstracting geometric concepts and solving a wide range of problems in vector spaces.</p>
+<p>This lecture introduces the concept of general inner products, extending the familiar notion of the dot product in Euclidean space. Inner products serve as a powerful tool to generalize the concepts of length, angle, and orthogonality in vector spaces. We will define inner products formally by examining:</p>
+<ul>
+<li><p>Bilinear mappings</p></li>
+<li><p>Symmetry</p></li>
+<li><p>Positive definiteness</p></li>
+</ul>
+<p>Furthermore, we will demonstrate how inner products can be represented using basis vectors and matrices. Understanding inner products provides a robust framework for abstracting geometric concepts and is crucial in various fields, including linear algebra, geometry, and machine learning.</p>
 </section>
 <section id="general-inner-products" class="level1">
 <h1>General Inner Products</h1>
@@ -260,132 +271,127 @@ window.Quarto = {
 <h2 class="anchored" data-anchor-id="motivation">Motivation</h2>
 <section id="generalizing-length-and-angle" class="level3">
 <h3 class="anchored" data-anchor-id="generalizing-length-and-angle">Generalizing Length and Angle</h3>
-<p>We begin by recalling the concept of the Euclidean norm and its close relationship with the dot product. As previously discussed, the Euclidean norm is indeed derived from the dot product. In fact, the dot product is a specific instance of a more general structure known as an inner product. Inner products are instrumental in extending the concepts of length and angle from Euclidean space to more abstract vector spaces.</p>
+<p>The Euclidean norm, closely related to the dot product, motivates the concept of general inner products. The dot product is a specific type of inner product, which allows us to generalize the notions of length and angle from Euclidean space to abstract vector spaces.</p>
 </section>
 <section id="defining-orthogonality" class="level3">
 <h3 class="anchored" data-anchor-id="defining-orthogonality">Defining Orthogonality</h3>
-<p>A primary application of inner products is to define and determine orthogonality between vectors. Orthogonality, or perpendicularity, is a cornerstone concept in linear algebra and geometry. Inner products furnish us with the means to define and verify orthogonality in a broad and versatile manner, applicable to various vector spaces beyond the standard Euclidean setting.</p>
+<p>A key application of inner products is to define orthogonality. Orthogonality, or perpendicularity, is fundamental in linear algebra and geometry. Inner products provide a generalized way to define and determine orthogonality in various vector spaces.</p>
 </section>
 </section>
 <section id="bilinear-mappings" class="level2">
 <h2 class="anchored" data-anchor-id="bilinear-mappings">Bilinear Mappings</h2>
 <section id="definition" class="level3">
 <h3 class="anchored" data-anchor-id="definition">Definition</h3>
-<p>To formally define an inner product, we first introduce the concept of a bilinear mapping. The term "bilinear" signifies linearity in two arguments. A bilinear mapping takes two vectors as input and exhibits linearity with respect to each input separately.</p>
+<p>Inner products are defined based on bilinear mappings. A bilinear mapping takes two vectors as input and is linear in each argument separately.</p>
 <div class="tcolorbox">
 <div class="def:bilinear_mapping definition">
-<p><strong>Definition 1</strong> (Bilinear Mapping). Let <span class="math inline">\(\mathcal{V}\)</span> be a vector space over <span class="math inline">\(\mathbb{R}\)</span>. A mapping <span class="math inline">\(\Omega: \mathcal{V}\times \mathcal{V}\to \mathbb{R}\)</span> is called a <strong>bilinear mapping</strong> if for all vectors <span class="math inline">\(x, y, z \in \mathcal{V}\)</span> and scalars <span class="math inline">\(\lambda, \psi \in \mathbb{R}\)</span>, it satisfies the following properties:</p>
+<p><strong>Definition 1</strong> (Bilinear Mapping). Let <span class="math inline">\(\mathcal{V}\)</span> be a vector space over <span class="math inline">\(\mathbb{R}\)</span>. A mapping <span class="math inline">\(\Omega: \mathcal{V}\times \mathcal{V}\to \mathbb{R}\)</span> is a <strong>bilinear mapping</strong> if for all <span class="math inline">\(x, y, z \in \mathcal{V}\)</span> and scalars <span class="math inline">\(\lambda, \psi \in \mathbb{R}\)</span>:</p>
 <ol type="1">
-<li><p>Linearity in the first argument: <span class="math display">\[\Omega(\lambda x + \psi y, z) = \lambda \Omega(x, z) + \psi \Omega(y, z)\]</span></p></li>
-<li><p>Linearity in the second argument: <span class="math display">\[\Omega(x, \lambda y + \psi z) = \lambda \Omega(x, y) + \psi \Omega(x, z)\]</span></p></li>
+<li><p><span class="math inline">\(\Omega(\lambda x + \psi y, z) = \lambda \Omega(x, z) + \psi \Omega(y, z)\)</span> (Linearity in the first argument)</p></li>
+<li><p><span class="math inline">\(\Omega(x, \lambda y + \psi z) = \lambda \Omega(x, y) + \psi \Omega(x, z)\)</span> (Linearity in the second argument)</p></li>
 </ol>
 </div>
 </div>
-<p>In essence, bilinearity means that the mapping distributes linearly over each component when dealing with linear combinations of vectors. We can view bilinear mappings as a specific subset of functions between pairs of vectors that possess this desirable linearity property.</p>
-</section>
-<section id="properties-of-bilinearity" class="level3">
-<h3 class="anchored" data-anchor-id="properties-of-bilinearity">Properties of Bilinearity</h3>
-<p>Bilinear mappings generalize the concept of linear transformations to two arguments. They are fundamental in defining inner products and other important structures in linear algebra.</p>
+<p>Bilinear mappings are linear in each argument, which is a crucial property for defining inner products.</p>
 </section>
 </section>
 <section id="symmetric-and-positive-definite-mappings" class="level2">
 <h2 class="anchored" data-anchor-id="symmetric-and-positive-definite-mappings">Symmetric and Positive Definite Mappings</h2>
-<p>Among bilinear mappings, we are particularly interested in those that are also symmetric and positive definite. These additional conditions endow them with properties that are crucial for generalizing geometric notions like length and angle.</p>
+<p>For an inner product, a bilinear mapping must also be symmetric and positive definite. These properties are essential for generalizing geometric concepts.</p>
 <section id="symmetry-condition" class="level3">
 <h3 class="anchored" data-anchor-id="symmetry-condition">Symmetry Condition</h3>
 <div class="tcolorbox">
 <div class="def:symmetric_bilinear_mapping definition">
-<p><strong>Definition 2</strong> (Symmetric Bilinear Mapping). A bilinear mapping <span class="math inline">\(\Omega: \mathcal{V}\times \mathcal{V}\to \mathbb{R}\)</span> is called <strong>symmetric</strong> if for all <span class="math inline">\(x, y \in \mathcal{V}\)</span>: <span class="math display">\[\Omega(x, y) = \Omega(y, x)\]</span></p>
+<p><strong>Definition 2</strong> (Symmetric Bilinear Mapping). A bilinear mapping <span class="math inline">\(\Omega: \mathcal{V}\times \mathcal{V}\to \mathbb{R}\)</span> is <strong>symmetric</strong> if for all <span class="math inline">\(x, y \in \mathcal{V}\)</span>: <span class="math display">\[\Omega(x, y) = \Omega(y, x)\]</span></p>
 </div>
 </div>
-<p>Symmetry implies that the order of the arguments does not affect the result of the mapping. Swapping the input vectors <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> yields the same output value.</p>
+<p>Symmetry means the order of vectors in the mapping does not affect the result.</p>
 </section>
 <section id="positive-definite-condition" class="level3">
 <h3 class="anchored" data-anchor-id="positive-definite-condition">Positive Definite Condition</h3>
 <div class="tcolorbox">
 <div class="def:positive_definite_bilinear_mapping definition">
-<p><strong>Definition 3</strong> (Positive Definite Bilinear Mapping). A bilinear mapping <span class="math inline">\(\Omega: \mathcal{V}\times \mathcal{V}\to \mathbb{R}\)</span> is called <strong>positive definite</strong> if it satisfies two conditions:</p>
+<p><strong>Definition 3</strong> (Positive Definite Bilinear Mapping). A bilinear mapping <span class="math inline">\(\Omega: \mathcal{V}\times \mathcal{V}\to \mathbb{R}\)</span> is <strong>positive definite</strong> if:</p>
 <ol type="1">
-<li><p>For all non-zero vectors <span class="math inline">\(x \in \mathcal{V}\setminus \{0\}\)</span>: <span class="math display">\[\Omega(x, x) &gt; 0\]</span></p></li>
-<li><p>For the zero vector <span class="math inline">\(0 \in \mathcal{V}\)</span>: <span class="math display">\[\Omega(0, 0) = 0\]</span></p></li>
+<li><p><span class="math inline">\(\forall x \in \mathcal{V}\setminus \{0\} : \Omega(x, x) &gt; 0\)</span></p></li>
+<li><p><span class="math inline">\(\Omega(0, 0) = 0\)</span></p></li>
 </ol>
-<p>This can be compactly written as: <span class="math display">\[\forall x \in \mathcal{V}\setminus \{0\} : \Omega(x,x) &gt; 0, \quad \text{and} \quad \Omega(0, 0) = 0\]</span></p>
 </div>
 </div>
-<p>Positive definiteness ensures that when the mapping is applied to a vector and itself, the result is always positive, except when the vector is the zero vector, in which case the result is zero. This property is essential for defining notions of length and distance, as we will see later.</p>
+<p>Positive definiteness ensures that <span class="math inline">\(\Omega(x,x)\)</span> is strictly positive for any non-zero vector <span class="math inline">\(x\)</span>, which is vital for defining length and distance.</p>
 </section>
 </section>
 <section id="definition-of-an-inner-product" class="level2">
 <h2 class="anchored" data-anchor-id="definition-of-an-inner-product">Definition of an Inner Product</h2>
-<p>The properties of bilinearity, symmetry, and positive definiteness are precisely what we need to formally define an inner product.</p>
+<p>An inner product is defined as a bilinear mapping that is both symmetric and positive definite.</p>
 <section id="inner-product-space" class="level3">
 <h3 class="anchored" data-anchor-id="inner-product-space">Inner Product Space</h3>
 <div class="tcolorbox">
 <div class="def:inner_product definition">
-<p><strong>Definition 4</strong> (Inner Product). Let <span class="math inline">\(\mathcal{V}\)</span> be a vector space over <span class="math inline">\(\mathbb{R}\)</span>. A bilinear mapping <span class="math inline">\(\langle \cdot, \cdot \rangle : \mathcal{V}\times \mathcal{V}\to \mathbb{R}\)</span> is called an <strong>inner product</strong> on <span class="math inline">\(\mathcal{V}\)</span> if it is both symmetric and positive definite. We often use the notation <span class="math inline">\(\langle x, y \rangle\)</span> instead of <span class="math inline">\(\Omega(x, y)\)</span> to denote the inner product of vectors <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>.</p>
+<p><strong>Definition 4</strong> (Inner Product). Let <span class="math inline">\(\mathcal{V}\)</span> be a vector space over <span class="math inline">\(\mathbb{R}\)</span>. An <strong>inner product</strong> on <span class="math inline">\(\mathcal{V}\)</span> is a mapping <span class="math inline">\((\cdot, \cdot): \mathcal{V}\times \mathcal{V}\to \mathbb{R}\)</span> that is bilinear, symmetric, and positive definite. We denote the inner product of vectors <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> as <span class="math inline">\((x, y)\)</span>.</p>
 </div>
 </div>
 <div class="tcolorbox">
 <div class="def:inner_product_space definition">
-<p><strong>Definition 5</strong> (Inner Product Space). A pair <span class="math inline">\((\mathcal{V}, \langle \cdot, \cdot \rangle)\)</span> consisting of a vector space <span class="math inline">\(\mathcal{V}\)</span> and an inner product <span class="math inline">\(\langle \cdot, \cdot \rangle\)</span> defined on it is called an <strong>inner product space</strong> or a <strong>real vector space with inner product</strong>.</p>
+<p><strong>Definition 5</strong> (Inner Product Space). An <strong>inner product space</strong> is a pair <span class="math inline">\((\mathcal{V}, (\cdot, \cdot))\)</span> consisting of a vector space <span class="math inline">\(\mathcal{V}\)</span> and an inner product <span class="math inline">\((\cdot, \cdot)\)</span> defined on <span class="math inline">\(\mathcal{V}\)</span>.</p>
 </div>
 </div>
-<p>Thus, an inner product is essentially a positive definite, symmetric bilinear mapping.</p>
 </section>
-<section id="euclidean-vector-space-as-a-special-case" class="level3">
-<h3 class="anchored" data-anchor-id="euclidean-vector-space-as-a-special-case">Euclidean Vector Space as a Special Case</h3>
+<section id="euclidean-vector-space" class="level3">
+<h3 class="anchored" data-anchor-id="euclidean-vector-space">Euclidean Vector Space</h3>
 <div class="tcolorbox">
 <div class="def:euclidean_vector_space definition">
-<p><strong>Definition 6</strong> (Euclidean Vector Space). If the inner product used on a vector space <span class="math inline">\(\mathcal{V}\)</span> is the dot product (as defined in previous lectures, e.g., equation (3.5) in the textbook), then <span class="math inline">\((\mathcal{V}, \langle \cdot, \cdot \rangle)\)</span> is called a <strong>Euclidean vector space</strong>.</p>
+<p><strong>Definition 6</strong> (Euclidean Vector Space). A <strong>Euclidean vector space</strong> is an inner product space where the inner product is the dot product.</p>
 </div>
 </div>
-<p>The familiar dot product provides a standard example of an inner product, leading to the concept of Euclidean vector spaces. However, it is crucial to recognize that the dot product is not the only possible inner product.</p>
+<p>The dot product is a specific example of an inner product, leading to Euclidean vector spaces. However, other inner products exist.</p>
 </section>
 </section>
 <section id="example-a-non-standard-inner-product" class="level2">
 <h2 class="anchored" data-anchor-id="example-a-non-standard-inner-product">Example: A Non-Standard Inner Product</h2>
 <div class="tcolorbox">
 <div class="ex:non_standard_inner_product example">
-<p><strong>Example 7</strong> (Inner Product That Is Not the Dot Product). Consider the vector space <span class="math inline">\(\mathcal{V}= \mathbb{R}^2\)</span>. Define a mapping <span class="math inline">\(\langle \cdot, \cdot \rangle : \mathbb{R}^2 \times \mathbb{R}^2 \to \mathbb{R}\)</span> as follows: For <span class="math inline">\(x = (x_1, x_2)^T\)</span> and <span class="math inline">\(y = (y_1, y_2)^T\)</span>, <span class="math display">\[\langle x, y \rangle := x_1y_1 - (x_1y_2 + x_2y_1) + 2x_2y_2\]</span> This inner product, defined by equation (3.9) in the transcription, is different from the standard dot product on <span class="math inline">\(\mathbb{R}^2\)</span>. It can be verified as an exercise to show that this mapping is indeed an inner product by proving that it satisfies bilinearity, symmetry, and positive definiteness.</p>
+<p><strong>Example 7</strong> (Inner Product That Is Not the Dot Product). Consider <span class="math inline">\(\mathcal{V}= \mathbb{R}^2\)</span>. Define <span class="math inline">\((x, y) := x_1y_1 - (x_1y_2 + x_2y_1) + 2x_2y_2\)</span> for <span class="math inline">\(x = \begin{pmatrix} x_1 \\ x_2 \end{pmatrix}\)</span> and <span class="math inline">\(y = \begin{pmatrix} y_1 \\ y_2 \end{pmatrix}\)</span>. This defines an inner product on <span class="math inline">\(\mathbb{R}^2\)</span> different from the dot product. Verifying that this mapping is indeed an inner product (i.e., bilinear, symmetric, and positive definite) is left as an exercise.</p>
 </div>
 </div>
-<p>This example illustrates that inner products can be defined in ways that are distinct from the conventional dot product, expanding the scope of inner product spaces.</p>
+<p>This example demonstrates that inner products are not unique and can be defined differently from the standard dot product.</p>
 </section>
 </section>
 <section id="inner-products-and-bases" class="level1">
 <h1>Inner Products and Bases</h1>
 <section id="representing-vectors-using-a-basis" class="level2">
 <h2 class="anchored" data-anchor-id="representing-vectors-using-a-basis">Representing Vectors Using a Basis</h2>
-<p>We know that a basis for a vector space provides a way to represent any vector in that space as a linear combination of basis vectors. Let <span class="math inline">\(\{b_1, b_2, \ldots, b_n\}\)</span> be a basis for a vector space <span class="math inline">\(\mathcal{V}\)</span>. Then, any vectors <span class="math inline">\(x, y \in \mathcal{V}\)</span> can be represented as: <span class="math display">\[\label{eq:vector_representation_x}
+<p>Let <span class="math inline">\(\{b_1, \ldots, b_n\}\)</span> be a basis for a vector space <span class="math inline">\(\mathcal{V}\)</span>. Any vectors <span class="math inline">\(x, y \in \mathcal{V}\)</span> can be represented as linear combinations of these basis vectors: <span class="math display">\[\label{eq:vector_representation_x}
 x = \sum_{i=1}^{n} \psi_i b_i\]</span> <span class="math display">\[\label{eq:vector_representation_y}
-y = \sum_{j=1}^{n} \lambda_j b_j\]</span> where <span class="math inline">\(\psi_i\)</span> and <span class="math inline">\(\lambda_j\)</span> are scalar coefficients.</p>
+y = \sum_{j=1}^{n} \lambda_j b_j\]</span> where <span class="math inline">\(\psi_i\)</span> and <span class="math inline">\(\lambda_j\)</span> are scalar coefficients, representing the coordinates of <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> with respect to the basis <span class="math inline">\(\{b_1, \ldots, b_n\}\)</span>.</p>
 </section>
-<section id="expressing-inner-products-with-basis-vectors" class="level2">
-<h2 class="anchored" data-anchor-id="expressing-inner-products-with-basis-vectors">Expressing Inner Products with Basis Vectors</h2>
-<p>Given a basis, we can express the inner product of two vectors in terms of their coordinates with respect to that basis.</p>
-<section id="derivation-of-the-formula" class="level3">
-<h3 class="anchored" data-anchor-id="derivation-of-the-formula">Derivation of the Formula</h3>
-<p>Let <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> be represented as in equations <a href="#eq:vector_representation_x" data-reference-type="eqref" data-reference="eq:vector_representation_x">[eq:vector_representation_x]</a> and <a href="#eq:vector_representation_y" data-reference-type="eqref" data-reference="eq:vector_representation_y">[eq:vector_representation_y]</a>. Using the bilinearity of the inner product, we can expand <span class="math inline">\(\langle x, y \rangle\)</span> as: <span class="math display">\[\begin{aligned}
-\langle x, y \rangle &amp;= \langle \sum_{i=1}^{n} \psi_i b_i, \sum_{j=1}^{n} \lambda_j b_j \rangle \\
-&amp;= \sum_{i=1}^{n} \sum_{j=1}^{n} \psi_i \lambda_j \langle b_i, b_j \rangle
-\end{aligned}\]</span> Rearranging the terms, we get: <span class="math display">\[\label{eq:inner_product_basis_expansion}
-\langle x, y \rangle = \sum_{i=1}^{n} \sum_{j=1}^{n} \psi_i  \langle b_i, b_j \rangle \lambda_j\]</span></p>
+<section id="expressing-inner-products-via-basis-vectors" class="level2">
+<h2 class="anchored" data-anchor-id="expressing-inner-products-via-basis-vectors">Expressing Inner Products via Basis Vectors</h2>
+<p>Given a basis, we can express the inner product of any two vectors <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> in terms of their basis representations.</p>
+<section id="derivation" class="level3">
+<h3 class="anchored" data-anchor-id="derivation">Derivation</h3>
+<p>Using the bilinear property of inner products, we can expand <span class="math inline">\((x, y)\)</span> as follows: <span class="math display">\[\begin{aligned}
+(x, y) &amp;= \left( \sum_{i=1}^{n} \psi_i b_i, \sum_{j=1}^{n} \lambda_j b_j \right) \\
+&amp;= \sum_{i=1}^{n} \sum_{j=1}^{n} \psi_i \lambda_j (b_i, b_j)
+\end{aligned}\]</span> Thus, the inner product <span class="math inline">\((x, y)\)</span> can be expressed as a double summation involving the coefficients <span class="math inline">\(\psi_i, \lambda_j\)</span> and the inner products of the basis vectors <span class="math inline">\((b_i, b_j)\)</span>. Rearranging the terms, we have: <span class="math display">\[\label{eq:inner_product_basis_expansion}
+(x, y) = \sum_{i=1}^{n} \sum_{j=1}^{n} \psi_i (b_i, b_j) \lambda_j\]</span></p>
 </section>
 </section>
-<section id="matrix-representation-of-inner-products" class="level2">
-<h2 class="anchored" data-anchor-id="matrix-representation-of-inner-products">Matrix Representation of Inner Products</h2>
-<section id="the-matrix-a-and-its-entries" class="level3">
-<h3 class="anchored" data-anchor-id="the-matrix-a-and-its-entries">The Matrix A and its Entries</h3>
-<p>Define a matrix <span class="math inline">\(A\)</span> of size <span class="math inline">\(n \times n\)</span> where the entry <span class="math inline">\(A_{ij}\)</span> is given by the inner product of the basis vectors <span class="math inline">\(b_i\)</span> and <span class="math inline">\(b_j\)</span>: <span class="math display">\[\label{eq:matrix_A_definition}
-A_{ij} = \langle b_i, b_j \rangle\]</span> The matrix <span class="math inline">\(A\)</span> is determined by the choice of basis <span class="math inline">\(\{b_1, \ldots, b_n\}\)</span> and the inner product <span class="math inline">\(\langle \cdot, \cdot \rangle\)</span>.</p>
+<section id="matrix-representation" class="level2">
+<h2 class="anchored" data-anchor-id="matrix-representation">Matrix Representation</h2>
+<p>The expression in <a href="#eq:inner_product_basis_expansion" data-reference-type="eqref" data-reference="eq:inner_product_basis_expansion">[eq:inner_product_basis_expansion]</a> can be represented in matrix form, which provides a convenient way to compute inner products.</p>
+<section id="defining-the-matrix-a" class="level3">
+<h3 class="anchored" data-anchor-id="defining-the-matrix-a">Defining the Matrix A</h3>
+<p>Let <span class="math inline">\(A\)</span> be an <span class="math inline">\(n \times n\)</span> matrix where the <span class="math inline">\((i, j)\)</span>-th entry <span class="math inline">\(A_{ij}\)</span> is the inner product of the <span class="math inline">\(i\)</span>-th and <span class="math inline">\(j\)</span>-th basis vectors: <span class="math display">\[\label{eq:matrix_A_definition}
+A_{ij} = (b_i, b_j)\]</span> The matrix <span class="math inline">\(A\)</span> is determined by the chosen basis <span class="math inline">\(\{b_1, \ldots, b_n\}\)</span> and the inner product <span class="math inline">\((\cdot, \cdot)\)</span>.</p>
 </section>
-<section id="inner-product-as-a-matrix-product-psit-a-lambda" class="level3">
-<h3 class="anchored" data-anchor-id="inner-product-as-a-matrix-product-psit-a-lambda">Inner Product as a Matrix Product: <span class="math inline">\(\psi^T A \lambda\)</span></h3>
-<p>Using the matrix <span class="math inline">\(A\)</span>, we can express the inner product <span class="math inline">\(\langle x, y \rangle\)</span> in matrix form. Let <span class="math inline">\(\psi = \begin{pmatrix} \psi_1 \\ \vdots \\ \psi_n \end{pmatrix}\)</span> and <span class="math inline">\(\lambda = \begin{pmatrix} \lambda_1 \\ \vdots \\ \lambda_n \end{pmatrix}\)</span> be the column vectors of coefficients of <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> respectively. Then, the inner product can be written as a matrix product: <span class="math display">\[\label{eq:inner_product_matrix_form}
-\langle x, y \rangle = \psi^T A \lambda\]</span> where <span class="math inline">\(\psi^T\)</span> is the transpose of <span class="math inline">\(\psi\)</span>. This formula shows that once we have a basis and the matrix <span class="math inline">\(A\)</span> (whose entries are inner products of basis vectors), we can compute the inner product of any two vectors <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> by knowing their coordinate vectors <span class="math inline">\(\psi\)</span> and <span class="math inline">\(\lambda\)</span> with respect to the basis.</p>
+<section id="inner-product-as-matrix-multiplication" class="level3">
+<h3 class="anchored" data-anchor-id="inner-product-as-matrix-multiplication">Inner Product as Matrix Multiplication</h3>
+<p>Let <span class="math inline">\(\psi = \begin{pmatrix} \psi_1 \\ \vdots \\ \psi_n \end{pmatrix}\)</span> and <span class="math inline">\(\lambda = \begin{pmatrix} \lambda_1 \\ \vdots \\ \lambda_n \end{pmatrix}\)</span> be the coordinate vectors of <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> with respect to the basis <span class="math inline">\(\{b_1, \ldots, b_n\}\)</span>. Then, the inner product <span class="math inline">\((x, y)\)</span> can be written in matrix notation as: <span class="math display">\[\label{eq:inner_product_matrix_form}
+(x, y) = \psi^T A \lambda\]</span> where <span class="math inline">\(\psi^T\)</span> is the transpose of the column vector <span class="math inline">\(\psi\)</span>. This matrix representation shows that the inner product of any two vectors can be computed using their coordinate vectors and the matrix <span class="math inline">\(A\)</span>, which is constructed from the inner products of the basis vectors.</p>
 <div class="tcolorbox">
 <div class="remark:matrix_representation_inner_product proof remark">
-<p><span class="proof-title"><em>Remark</em>. </span><strong>Remark 8</strong>. The inner product is fully described by the coordinates with respect to a chosen basis and the matrix <span class="math inline">\(A\)</span>. This matrix <span class="math inline">\(A\)</span> has special properties due to the properties of the inner product itself (symmetry and positive definiteness). Specifically, <span class="math inline">\(A\)</span> will be a symmetric and positive definite matrix.</p>
+<p><span class="proof-title"><em>Remark</em>. </span><strong>Remark 8</strong>. The inner product is completely determined by the choice of basis and the matrix <span class="math inline">\(A\)</span>, where <span class="math inline">\(A_{ij} = (b_i, b_j)\)</span>. Due to the properties of the inner product (symmetry and positive definiteness), the matrix <span class="math inline">\(A\)</span> is guaranteed to be symmetric and positive definite.</p>
 </div>
 </div>
 </section>
@@ -393,8 +399,16 @@ A_{ij} = \langle b_i, b_j \rangle\]</span> The matrix <span class="math inline">
 </section>
 <section id="conclusion" class="level1">
 <h1>Conclusion</h1>
-<p>In this lecture, we generalized the concept of the dot product to inner products, which are bilinear, symmetric, and positive definite mappings. We saw that inner products allow us to extend notions of length, angle, and orthogonality to general vector spaces. We defined bilinear mappings (<a href="#def:bilinear_mapping" data-reference-type="ref+Label" data-reference="def:bilinear_mapping">1</a>), symmetry (<a href="#def:symmetric_bilinear_mapping" data-reference-type="ref+Label" data-reference="def:symmetric_bilinear_mapping">2</a>), and positive definiteness (<a href="#def:positive_definite_bilinear_mapping" data-reference-type="ref+Label" data-reference="def:positive_definite_bilinear_mapping">3</a>), culminating in the definition of an inner product (<a href="#def:inner_product" data-reference-type="ref+Label" data-reference="def:inner_product">4</a>) and inner product space (<a href="#def:inner_product_space" data-reference-type="ref+Label" data-reference="def:inner_product_space">5</a>). We explored an example of a non-standard inner product (<a href="#ex:non_standard_inner_product" data-reference-type="ref+Label" data-reference="ex:non_standard_inner_product">7</a>) and derived the matrix representation of inner products using a basis (<a href="#eq:inner_product_matrix_form" data-reference-type="ref+Label" data-reference="eq:inner_product_matrix_form">[eq:inner_product_matrix_form]</a>). This matrix representation is a powerful tool for computation and analysis.</p>
-<p>Further topics to consider include the properties of the matrix <span class="math inline">\(A\)</span> (<a href="#eq:matrix_A_definition" data-reference-type="ref+Label" data-reference="eq:matrix_A_definition">[eq:matrix_A_definition]</a>), its symmetry and positive definiteness (as noted in <a href="#remark:matrix_representation_inner_product" data-reference-type="ref+Label" data-reference="remark:matrix_representation_inner_product">8</a>), and how these properties relate back to the inner product. We will also explore how inner products are used to define norms, distances, and orthogonality more formally in subsequent lectures.</p>
+<p>In this lecture, we generalized the concept of the dot product to the broader notion of inner products. We established that inner products are bilinear, symmetric, and positive definite mappings, which extend the geometric concepts of length, angle, and orthogonality to general vector spaces. Key definitions introduced include:</p>
+<ul>
+<li><p><strong>Bilinear Mapping</strong> (<a href="#def:bilinear_mapping" data-reference-type="ref+Label" data-reference="def:bilinear_mapping">1</a>): A mapping linear in each argument.</p></li>
+<li><p><strong>Symmetric Bilinear Mapping</strong> (<a href="#def:symmetric_bilinear_mapping" data-reference-type="ref+Label" data-reference="def:symmetric_bilinear_mapping">2</a>): A bilinear mapping where the order of vectors does not matter.</p></li>
+<li><p><strong>Positive Definite Bilinear Mapping</strong> (<a href="#def:positive_definite_bilinear_mapping" data-reference-type="ref+Label" data-reference="def:positive_definite_bilinear_mapping">3</a>): A bilinear mapping that is strictly positive for non-zero vectors when applied to a vector and itself.</p></li>
+<li><p><strong>Inner Product</strong> (<a href="#def:inner_product" data-reference-type="ref+Label" data-reference="def:inner_product">4</a>): A bilinear mapping that is both symmetric and positive definite.</p></li>
+<li><p><strong>Inner Product Space</strong> (<a href="#def:inner_product_space" data-reference-type="ref+Label" data-reference="def:inner_product_space">5</a>): A vector space equipped with an inner product.</p></li>
+</ul>
+<p>We examined an example of a non-standard inner product on <span class="math inline">\(\mathbb{R}^2\)</span> (<a href="#ex:non_standard_inner_product" data-reference-type="ref+Label" data-reference="ex:non_standard_inner_product">7</a>) and derived the matrix representation of inner products using a basis (<a href="#eq:inner_product_matrix_form" data-reference-type="ref+Label" data-reference="eq:inner_product_matrix_form">[eq:inner_product_matrix_form]</a>). This representation shows that an inner product can be fully described by a matrix <span class="math inline">\(A\)</span>, where <span class="math inline">\(A_{ij} = (b_i, b_j)\)</span> for a chosen basis <span class="math inline">\(\{b_i\}\)</span>. The matrix <span class="math inline">\(A\)</span> is symmetric and positive definite (<a href="#remark:matrix_representation_inner_product" data-reference-type="ref+Label" data-reference="remark:matrix_representation_inner_product">8</a>).</p>
+<p>In subsequent lectures, we will explore the properties of the matrix <span class="math inline">\(A\)</span> in more detail and investigate how inner products are used to formally define norms, distances, and orthogonality in vector spaces, building upon the foundations laid in this lecture.</p>
 
 
 <!-- -->
@@ -884,296 +898,280 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="fu"># Introduction</span></span>
 <span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>In this lecture, we delve into the concept of general inner products,</span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>extending our understanding of vector spaces beyond the familiar</span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>Euclidean space. We will explore how inner products generalize the</span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>notions of length, angle, and orthogonality, which are fundamental in</span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>various areas of mathematics, physics, and engineering, especially in</span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>machine learning. Key concepts we will cover include bilinear mappings,</span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>symmetric and positive definite conditions, the formal definition of an</span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>inner product, and its representation using basis vectors and matrices.</span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>Understanding inner products provides a powerful framework for</span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>abstracting geometric concepts and solving a wide range of problems in</span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>vector spaces.</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>This lecture introduces the concept of general inner products, extending</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>the familiar notion of the dot product in Euclidean space. Inner</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>products serve as a powerful tool to generalize the concepts of length,</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>angle, and orthogonality in vector spaces. We will define inner products</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>formally by examining:</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Bilinear mappings</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Symmetry</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Positive definiteness</span>
 <span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="fu"># General Inner Products</span></span>
-<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a><span class="fu">## Motivation</span></span>
-<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a><span class="fu">### Generalizing Length and Angle</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>Furthermore, we will demonstrate how inner products can be represented</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>using basis vectors and matrices. Understanding inner products provides</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>a robust framework for abstracting geometric concepts and is crucial in</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>various fields, including linear algebra, geometry, and machine</span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>learning.</span>
 <span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>We begin by recalling the concept of the Euclidean norm and its close</span>
-<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>relationship with the dot product. As previously discussed, the</span>
-<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>Euclidean norm is indeed derived from the dot product. In fact, the dot</span>
-<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>product is a specific instance of a more general structure known as an</span>
-<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>inner product. Inner products are instrumental in extending the concepts</span>
-<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>of length and angle from Euclidean space to more abstract vector spaces.</span>
-<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a><span class="fu">### Defining Orthogonality</span></span>
-<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>A primary application of inner products is to define and determine</span>
-<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>orthogonality between vectors. Orthogonality, or perpendicularity, is a</span>
-<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a>cornerstone concept in linear algebra and geometry. Inner products</span>
-<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a>furnish us with the means to define and verify orthogonality in a broad</span>
-<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a>and versatile manner, applicable to various vector spaces beyond the</span>
-<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a>standard Euclidean setting.</span>
-<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a><span class="fu">## Bilinear Mappings</span></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a><span class="fu"># General Inner Products</span></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a><span class="fu">## Motivation</span></span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a><span class="fu">### Generalizing Length and Angle</span></span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>The Euclidean norm, closely related to the dot product, motivates the</span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>concept of general inner products. The dot product is a specific type of</span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>inner product, which allows us to generalize the notions of length and</span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>angle from Euclidean space to abstract vector spaces.</span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a><span class="fu">### Defining Orthogonality</span></span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a>A key application of inner products is to define orthogonality.</span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a>Orthogonality, or perpendicularity, is fundamental in linear algebra and</span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a>geometry. Inner products provide a generalized way to define and</span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a>determine orthogonality in various vector spaces.</span>
 <span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a><span class="fu">### Definition</span></span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a><span class="fu">## Bilinear Mappings</span></span>
 <span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a>To formally define an inner product, we first introduce the concept of a</span>
-<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a>bilinear mapping. The term \"bilinear\" signifies linearity in two</span>
-<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a>arguments. A bilinear mapping takes two vectors as input and exhibits</span>
-<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a>linearity with respect to each input separately.</span>
-<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a>:::: tcolorbox</span>
-<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a>::: {.def:bilinear_mapping .definition}</span>
-<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a>**Definition 1** (Bilinear Mapping). Let $\mathcal{V}$ be a vector space</span>
-<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a>over $\mathbb{R}$. A mapping</span>
-<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a>$\Omega: \mathcal{V}\times \mathcal{V}\to \mathbb{R}$ is called a</span>
-<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a>**bilinear mapping** if for all vectors $x, y, z \in \mathcal{V}$ and</span>
-<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a>scalars $\lambda, \psi \in \mathbb{R}$, it satisfies the following</span>
-<span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a>properties:</span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a><span class="fu">### Definition</span></span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a>Inner products are defined based on bilinear mappings. A bilinear</span>
+<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a>mapping takes two vectors as input and is linear in each argument</span>
+<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a>separately.</span>
+<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a>:::: tcolorbox</span>
+<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a>::: {.def:bilinear_mapping .definition}</span>
+<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a>**Definition 1** (Bilinear Mapping). Let $\mathcal{V}$ be a vector space</span>
+<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a>over $\mathbb{R}$. A mapping</span>
+<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a>$\Omega: \mathcal{V}\times \mathcal{V}\to \mathbb{R}$ is a **bilinear</span>
+<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a>mapping** if for all $x, y, z \in \mathcal{V}$ and scalars</span>
+<span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a>$\lambda, \psi \in \mathbb{R}$:</span>
 <span id="cb1-66"><a href="#cb1-66" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-67"><a href="#cb1-67" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>Linearity in the first argument:</span>
-<span id="cb1-68"><a href="#cb1-68" aria-hidden="true" tabindex="-1"></a>    $$\Omega(\lambda x + \psi y, z) = \lambda \Omega(x, z) + \psi \Omega(y, z)$$</span>
+<span id="cb1-67"><a href="#cb1-67" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>$\Omega(\lambda x + \psi y, z) = \lambda \Omega(x, z) + \psi \Omega(y, z)$</span>
+<span id="cb1-68"><a href="#cb1-68" aria-hidden="true" tabindex="-1"></a>    (Linearity in the first argument)</span>
 <span id="cb1-69"><a href="#cb1-69" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-70"><a href="#cb1-70" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>Linearity in the second argument:</span>
-<span id="cb1-71"><a href="#cb1-71" aria-hidden="true" tabindex="-1"></a>    $$\Omega(x, \lambda y + \psi z) = \lambda \Omega(x, y) + \psi \Omega(x, z)$$</span>
+<span id="cb1-70"><a href="#cb1-70" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>$\Omega(x, \lambda y + \psi z) = \lambda \Omega(x, y) + \psi \Omega(x, z)$</span>
+<span id="cb1-71"><a href="#cb1-71" aria-hidden="true" tabindex="-1"></a>    (Linearity in the second argument)</span>
 <span id="cb1-72"><a href="#cb1-72" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb1-73"><a href="#cb1-73" aria-hidden="true" tabindex="-1"></a>::::</span>
 <span id="cb1-74"><a href="#cb1-74" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-75"><a href="#cb1-75" aria-hidden="true" tabindex="-1"></a>In essence, bilinearity means that the mapping distributes linearly over</span>
-<span id="cb1-76"><a href="#cb1-76" aria-hidden="true" tabindex="-1"></a>each component when dealing with linear combinations of vectors. We can</span>
-<span id="cb1-77"><a href="#cb1-77" aria-hidden="true" tabindex="-1"></a>view bilinear mappings as a specific subset of functions between pairs</span>
-<span id="cb1-78"><a href="#cb1-78" aria-hidden="true" tabindex="-1"></a>of vectors that possess this desirable linearity property.</span>
+<span id="cb1-75"><a href="#cb1-75" aria-hidden="true" tabindex="-1"></a>Bilinear mappings are linear in each argument, which is a crucial</span>
+<span id="cb1-76"><a href="#cb1-76" aria-hidden="true" tabindex="-1"></a>property for defining inner products.</span>
+<span id="cb1-77"><a href="#cb1-77" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-78"><a href="#cb1-78" aria-hidden="true" tabindex="-1"></a><span class="fu">## Symmetric and Positive Definite Mappings</span></span>
 <span id="cb1-79"><a href="#cb1-79" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-80"><a href="#cb1-80" aria-hidden="true" tabindex="-1"></a><span class="fu">### Properties of Bilinearity</span></span>
-<span id="cb1-81"><a href="#cb1-81" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-82"><a href="#cb1-82" aria-hidden="true" tabindex="-1"></a>Bilinear mappings generalize the concept of linear transformations to</span>
-<span id="cb1-83"><a href="#cb1-83" aria-hidden="true" tabindex="-1"></a>two arguments. They are fundamental in defining inner products and other</span>
-<span id="cb1-84"><a href="#cb1-84" aria-hidden="true" tabindex="-1"></a>important structures in linear algebra.</span>
+<span id="cb1-80"><a href="#cb1-80" aria-hidden="true" tabindex="-1"></a>For an inner product, a bilinear mapping must also be symmetric and</span>
+<span id="cb1-81"><a href="#cb1-81" aria-hidden="true" tabindex="-1"></a>positive definite. These properties are essential for generalizing</span>
+<span id="cb1-82"><a href="#cb1-82" aria-hidden="true" tabindex="-1"></a>geometric concepts.</span>
+<span id="cb1-83"><a href="#cb1-83" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-84"><a href="#cb1-84" aria-hidden="true" tabindex="-1"></a><span class="fu">### Symmetry Condition</span></span>
 <span id="cb1-85"><a href="#cb1-85" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-86"><a href="#cb1-86" aria-hidden="true" tabindex="-1"></a><span class="fu">## Symmetric and Positive Definite Mappings</span></span>
-<span id="cb1-87"><a href="#cb1-87" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-88"><a href="#cb1-88" aria-hidden="true" tabindex="-1"></a>Among bilinear mappings, we are particularly interested in those that</span>
-<span id="cb1-89"><a href="#cb1-89" aria-hidden="true" tabindex="-1"></a>are also symmetric and positive definite. These additional conditions</span>
-<span id="cb1-90"><a href="#cb1-90" aria-hidden="true" tabindex="-1"></a>endow them with properties that are crucial for generalizing geometric</span>
-<span id="cb1-91"><a href="#cb1-91" aria-hidden="true" tabindex="-1"></a>notions like length and angle.</span>
-<span id="cb1-92"><a href="#cb1-92" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-93"><a href="#cb1-93" aria-hidden="true" tabindex="-1"></a><span class="fu">### Symmetry Condition</span></span>
-<span id="cb1-94"><a href="#cb1-94" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-95"><a href="#cb1-95" aria-hidden="true" tabindex="-1"></a>:::: tcolorbox</span>
-<span id="cb1-96"><a href="#cb1-96" aria-hidden="true" tabindex="-1"></a>::: {.def:symmetric_bilinear_mapping .definition}</span>
-<span id="cb1-97"><a href="#cb1-97" aria-hidden="true" tabindex="-1"></a>**Definition 2** (Symmetric Bilinear Mapping). A bilinear mapping</span>
-<span id="cb1-98"><a href="#cb1-98" aria-hidden="true" tabindex="-1"></a>$\Omega: \mathcal{V}\times \mathcal{V}\to \mathbb{R}$ is called</span>
-<span id="cb1-99"><a href="#cb1-99" aria-hidden="true" tabindex="-1"></a>**symmetric** if for all $x, y \in \mathcal{V}$:</span>
-<span id="cb1-100"><a href="#cb1-100" aria-hidden="true" tabindex="-1"></a>$$\Omega(x, y) = \Omega(y, x)$$</span>
-<span id="cb1-101"><a href="#cb1-101" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb1-102"><a href="#cb1-102" aria-hidden="true" tabindex="-1"></a>::::</span>
-<span id="cb1-103"><a href="#cb1-103" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-104"><a href="#cb1-104" aria-hidden="true" tabindex="-1"></a>Symmetry implies that the order of the arguments does not affect the</span>
-<span id="cb1-105"><a href="#cb1-105" aria-hidden="true" tabindex="-1"></a>result of the mapping. Swapping the input vectors $x$ and $y$ yields the</span>
-<span id="cb1-106"><a href="#cb1-106" aria-hidden="true" tabindex="-1"></a>same output value.</span>
-<span id="cb1-107"><a href="#cb1-107" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-108"><a href="#cb1-108" aria-hidden="true" tabindex="-1"></a><span class="fu">### Positive Definite Condition</span></span>
-<span id="cb1-109"><a href="#cb1-109" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-110"><a href="#cb1-110" aria-hidden="true" tabindex="-1"></a>:::: tcolorbox</span>
-<span id="cb1-111"><a href="#cb1-111" aria-hidden="true" tabindex="-1"></a>::: {.def:positive_definite_bilinear_mapping .definition}</span>
-<span id="cb1-112"><a href="#cb1-112" aria-hidden="true" tabindex="-1"></a>**Definition 3** (Positive Definite Bilinear Mapping). A bilinear</span>
-<span id="cb1-113"><a href="#cb1-113" aria-hidden="true" tabindex="-1"></a>mapping $\Omega: \mathcal{V}\times \mathcal{V}\to \mathbb{R}$ is called</span>
-<span id="cb1-114"><a href="#cb1-114" aria-hidden="true" tabindex="-1"></a>**positive definite** if it satisfies two conditions:</span>
-<span id="cb1-115"><a href="#cb1-115" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-116"><a href="#cb1-116" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>For all non-zero vectors $x \in \mathcal{V}\setminus <span class="sc">\{</span>0<span class="sc">\}</span>$:</span>
-<span id="cb1-117"><a href="#cb1-117" aria-hidden="true" tabindex="-1"></a>    $$\Omega(x, x) &gt; 0$$</span>
-<span id="cb1-118"><a href="#cb1-118" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-119"><a href="#cb1-119" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>For the zero vector $0 \in \mathcal{V}$: $$\Omega(0, 0) = 0$$</span>
-<span id="cb1-120"><a href="#cb1-120" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-121"><a href="#cb1-121" aria-hidden="true" tabindex="-1"></a>This can be compactly written as:</span>
-<span id="cb1-122"><a href="#cb1-122" aria-hidden="true" tabindex="-1"></a>$$\forall x \in \mathcal{V}\setminus <span class="sc">\{</span>0<span class="sc">\}</span> : \Omega(x,x) &gt; 0, \quad \text{and} \quad \Omega(0, 0) = 0$$</span>
-<span id="cb1-123"><a href="#cb1-123" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb1-124"><a href="#cb1-124" aria-hidden="true" tabindex="-1"></a>::::</span>
-<span id="cb1-125"><a href="#cb1-125" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-126"><a href="#cb1-126" aria-hidden="true" tabindex="-1"></a>Positive definiteness ensures that when the mapping is applied to a</span>
-<span id="cb1-127"><a href="#cb1-127" aria-hidden="true" tabindex="-1"></a>vector and itself, the result is always positive, except when the vector</span>
-<span id="cb1-128"><a href="#cb1-128" aria-hidden="true" tabindex="-1"></a>is the zero vector, in which case the result is zero. This property is</span>
-<span id="cb1-129"><a href="#cb1-129" aria-hidden="true" tabindex="-1"></a>essential for defining notions of length and distance, as we will see</span>
-<span id="cb1-130"><a href="#cb1-130" aria-hidden="true" tabindex="-1"></a>later.</span>
+<span id="cb1-86"><a href="#cb1-86" aria-hidden="true" tabindex="-1"></a>:::: tcolorbox</span>
+<span id="cb1-87"><a href="#cb1-87" aria-hidden="true" tabindex="-1"></a>::: {.def:symmetric_bilinear_mapping .definition}</span>
+<span id="cb1-88"><a href="#cb1-88" aria-hidden="true" tabindex="-1"></a>**Definition 2** (Symmetric Bilinear Mapping). A bilinear mapping</span>
+<span id="cb1-89"><a href="#cb1-89" aria-hidden="true" tabindex="-1"></a>$\Omega: \mathcal{V}\times \mathcal{V}\to \mathbb{R}$ is **symmetric**</span>
+<span id="cb1-90"><a href="#cb1-90" aria-hidden="true" tabindex="-1"></a>if for all $x, y \in \mathcal{V}$: $$\Omega(x, y) = \Omega(y, x)$$</span>
+<span id="cb1-91"><a href="#cb1-91" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-92"><a href="#cb1-92" aria-hidden="true" tabindex="-1"></a>::::</span>
+<span id="cb1-93"><a href="#cb1-93" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-94"><a href="#cb1-94" aria-hidden="true" tabindex="-1"></a>Symmetry means the order of vectors in the mapping does not affect the</span>
+<span id="cb1-95"><a href="#cb1-95" aria-hidden="true" tabindex="-1"></a>result.</span>
+<span id="cb1-96"><a href="#cb1-96" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-97"><a href="#cb1-97" aria-hidden="true" tabindex="-1"></a><span class="fu">### Positive Definite Condition</span></span>
+<span id="cb1-98"><a href="#cb1-98" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-99"><a href="#cb1-99" aria-hidden="true" tabindex="-1"></a>:::: tcolorbox</span>
+<span id="cb1-100"><a href="#cb1-100" aria-hidden="true" tabindex="-1"></a>::: {.def:positive_definite_bilinear_mapping .definition}</span>
+<span id="cb1-101"><a href="#cb1-101" aria-hidden="true" tabindex="-1"></a>**Definition 3** (Positive Definite Bilinear Mapping). A bilinear</span>
+<span id="cb1-102"><a href="#cb1-102" aria-hidden="true" tabindex="-1"></a>mapping $\Omega: \mathcal{V}\times \mathcal{V}\to \mathbb{R}$ is</span>
+<span id="cb1-103"><a href="#cb1-103" aria-hidden="true" tabindex="-1"></a>**positive definite** if:</span>
+<span id="cb1-104"><a href="#cb1-104" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-105"><a href="#cb1-105" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>$\forall x \in \mathcal{V}\setminus <span class="sc">\{</span>0<span class="sc">\}</span> : \Omega(x, x) &gt; 0$</span>
+<span id="cb1-106"><a href="#cb1-106" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-107"><a href="#cb1-107" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>$\Omega(0, 0) = 0$</span>
+<span id="cb1-108"><a href="#cb1-108" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-109"><a href="#cb1-109" aria-hidden="true" tabindex="-1"></a>::::</span>
+<span id="cb1-110"><a href="#cb1-110" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-111"><a href="#cb1-111" aria-hidden="true" tabindex="-1"></a>Positive definiteness ensures that $\Omega(x,x)$ is strictly positive</span>
+<span id="cb1-112"><a href="#cb1-112" aria-hidden="true" tabindex="-1"></a>for any non-zero vector $x$, which is vital for defining length and</span>
+<span id="cb1-113"><a href="#cb1-113" aria-hidden="true" tabindex="-1"></a>distance.</span>
+<span id="cb1-114"><a href="#cb1-114" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-115"><a href="#cb1-115" aria-hidden="true" tabindex="-1"></a><span class="fu">## Definition of an Inner Product</span></span>
+<span id="cb1-116"><a href="#cb1-116" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-117"><a href="#cb1-117" aria-hidden="true" tabindex="-1"></a>An inner product is defined as a bilinear mapping that is both symmetric</span>
+<span id="cb1-118"><a href="#cb1-118" aria-hidden="true" tabindex="-1"></a>and positive definite.</span>
+<span id="cb1-119"><a href="#cb1-119" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-120"><a href="#cb1-120" aria-hidden="true" tabindex="-1"></a><span class="fu">### Inner Product Space</span></span>
+<span id="cb1-121"><a href="#cb1-121" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-122"><a href="#cb1-122" aria-hidden="true" tabindex="-1"></a>:::: tcolorbox</span>
+<span id="cb1-123"><a href="#cb1-123" aria-hidden="true" tabindex="-1"></a>::: {.def:inner_product .definition}</span>
+<span id="cb1-124"><a href="#cb1-124" aria-hidden="true" tabindex="-1"></a>**Definition 4** (Inner Product). Let $\mathcal{V}$ be a vector space</span>
+<span id="cb1-125"><a href="#cb1-125" aria-hidden="true" tabindex="-1"></a>over $\mathbb{R}$. An **inner product** on $\mathcal{V}$ is a mapping</span>
+<span id="cb1-126"><a href="#cb1-126" aria-hidden="true" tabindex="-1"></a>$(\cdot, \cdot): \mathcal{V}\times \mathcal{V}\to \mathbb{R}$ that is</span>
+<span id="cb1-127"><a href="#cb1-127" aria-hidden="true" tabindex="-1"></a>bilinear, symmetric, and positive definite. We denote the inner product</span>
+<span id="cb1-128"><a href="#cb1-128" aria-hidden="true" tabindex="-1"></a>of vectors $x$ and $y$ as $(x, y)$.</span>
+<span id="cb1-129"><a href="#cb1-129" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-130"><a href="#cb1-130" aria-hidden="true" tabindex="-1"></a>::::</span>
 <span id="cb1-131"><a href="#cb1-131" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-132"><a href="#cb1-132" aria-hidden="true" tabindex="-1"></a><span class="fu">## Definition of an Inner Product</span></span>
-<span id="cb1-133"><a href="#cb1-133" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-134"><a href="#cb1-134" aria-hidden="true" tabindex="-1"></a>The properties of bilinearity, symmetry, and positive definiteness are</span>
-<span id="cb1-135"><a href="#cb1-135" aria-hidden="true" tabindex="-1"></a>precisely what we need to formally define an inner product.</span>
-<span id="cb1-136"><a href="#cb1-136" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-137"><a href="#cb1-137" aria-hidden="true" tabindex="-1"></a><span class="fu">### Inner Product Space</span></span>
-<span id="cb1-138"><a href="#cb1-138" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-139"><a href="#cb1-139" aria-hidden="true" tabindex="-1"></a>:::: tcolorbox</span>
-<span id="cb1-140"><a href="#cb1-140" aria-hidden="true" tabindex="-1"></a>::: {.def:inner_product .definition}</span>
-<span id="cb1-141"><a href="#cb1-141" aria-hidden="true" tabindex="-1"></a>**Definition 4** (Inner Product). Let $\mathcal{V}$ be a vector space</span>
-<span id="cb1-142"><a href="#cb1-142" aria-hidden="true" tabindex="-1"></a>over $\mathbb{R}$. A bilinear mapping</span>
-<span id="cb1-143"><a href="#cb1-143" aria-hidden="true" tabindex="-1"></a>$\langle \cdot, \cdot \rangle : \mathcal{V}\times \mathcal{V}\to \mathbb{R}$</span>
-<span id="cb1-144"><a href="#cb1-144" aria-hidden="true" tabindex="-1"></a>is called an **inner product** on $\mathcal{V}$ if it is both symmetric</span>
-<span id="cb1-145"><a href="#cb1-145" aria-hidden="true" tabindex="-1"></a>and positive definite. We often use the notation $\langle x, y \rangle$</span>
-<span id="cb1-146"><a href="#cb1-146" aria-hidden="true" tabindex="-1"></a>instead of $\Omega(x, y)$ to denote the inner product of vectors $x$ and</span>
-<span id="cb1-147"><a href="#cb1-147" aria-hidden="true" tabindex="-1"></a>$y$.</span>
-<span id="cb1-148"><a href="#cb1-148" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb1-149"><a href="#cb1-149" aria-hidden="true" tabindex="-1"></a>::::</span>
-<span id="cb1-150"><a href="#cb1-150" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-151"><a href="#cb1-151" aria-hidden="true" tabindex="-1"></a>:::: tcolorbox</span>
-<span id="cb1-152"><a href="#cb1-152" aria-hidden="true" tabindex="-1"></a>::: {.def:inner_product_space .definition}</span>
-<span id="cb1-153"><a href="#cb1-153" aria-hidden="true" tabindex="-1"></a>**Definition 5** (Inner Product Space). A pair</span>
-<span id="cb1-154"><a href="#cb1-154" aria-hidden="true" tabindex="-1"></a>$(\mathcal{V}, \langle \cdot, \cdot \rangle)$ consisting of a vector</span>
-<span id="cb1-155"><a href="#cb1-155" aria-hidden="true" tabindex="-1"></a>space $\mathcal{V}$ and an inner product $\langle \cdot, \cdot \rangle$</span>
-<span id="cb1-156"><a href="#cb1-156" aria-hidden="true" tabindex="-1"></a>defined on it is called an **inner product space** or a **real vector</span>
-<span id="cb1-157"><a href="#cb1-157" aria-hidden="true" tabindex="-1"></a>space with inner product**.</span>
-<span id="cb1-158"><a href="#cb1-158" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb1-159"><a href="#cb1-159" aria-hidden="true" tabindex="-1"></a>::::</span>
-<span id="cb1-160"><a href="#cb1-160" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-161"><a href="#cb1-161" aria-hidden="true" tabindex="-1"></a>Thus, an inner product is essentially a positive definite, symmetric</span>
-<span id="cb1-162"><a href="#cb1-162" aria-hidden="true" tabindex="-1"></a>bilinear mapping.</span>
-<span id="cb1-163"><a href="#cb1-163" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-164"><a href="#cb1-164" aria-hidden="true" tabindex="-1"></a><span class="fu">### Euclidean Vector Space as a Special Case</span></span>
-<span id="cb1-165"><a href="#cb1-165" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-166"><a href="#cb1-166" aria-hidden="true" tabindex="-1"></a>:::: tcolorbox</span>
-<span id="cb1-167"><a href="#cb1-167" aria-hidden="true" tabindex="-1"></a>::: {.def:euclidean_vector_space .definition}</span>
-<span id="cb1-168"><a href="#cb1-168" aria-hidden="true" tabindex="-1"></a>**Definition 6** (Euclidean Vector Space). If the inner product used on</span>
-<span id="cb1-169"><a href="#cb1-169" aria-hidden="true" tabindex="-1"></a>a vector space $\mathcal{V}$ is the dot product (as defined in previous</span>
-<span id="cb1-170"><a href="#cb1-170" aria-hidden="true" tabindex="-1"></a>lectures, e.g., equation (3.5) in the textbook), then</span>
-<span id="cb1-171"><a href="#cb1-171" aria-hidden="true" tabindex="-1"></a>$(\mathcal{V}, \langle \cdot, \cdot \rangle)$ is called a **Euclidean</span>
-<span id="cb1-172"><a href="#cb1-172" aria-hidden="true" tabindex="-1"></a>vector space**.</span>
-<span id="cb1-173"><a href="#cb1-173" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb1-174"><a href="#cb1-174" aria-hidden="true" tabindex="-1"></a>::::</span>
-<span id="cb1-175"><a href="#cb1-175" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-176"><a href="#cb1-176" aria-hidden="true" tabindex="-1"></a>The familiar dot product provides a standard example of an inner</span>
-<span id="cb1-177"><a href="#cb1-177" aria-hidden="true" tabindex="-1"></a>product, leading to the concept of Euclidean vector spaces. However, it</span>
-<span id="cb1-178"><a href="#cb1-178" aria-hidden="true" tabindex="-1"></a>is crucial to recognize that the dot product is not the only possible</span>
-<span id="cb1-179"><a href="#cb1-179" aria-hidden="true" tabindex="-1"></a>inner product.</span>
-<span id="cb1-180"><a href="#cb1-180" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-181"><a href="#cb1-181" aria-hidden="true" tabindex="-1"></a><span class="fu">## Example: A Non-Standard Inner Product</span></span>
-<span id="cb1-182"><a href="#cb1-182" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-183"><a href="#cb1-183" aria-hidden="true" tabindex="-1"></a>:::: tcolorbox</span>
-<span id="cb1-184"><a href="#cb1-184" aria-hidden="true" tabindex="-1"></a>::: {.ex:non_standard_inner_product .example}</span>
-<span id="cb1-185"><a href="#cb1-185" aria-hidden="true" tabindex="-1"></a>**Example 7** (Inner Product That Is Not the Dot Product). Consider the</span>
-<span id="cb1-186"><a href="#cb1-186" aria-hidden="true" tabindex="-1"></a>vector space $\mathcal{V}= \mathbb{R}^2$. Define a mapping</span>
-<span id="cb1-187"><a href="#cb1-187" aria-hidden="true" tabindex="-1"></a>$\langle \cdot, \cdot \rangle : \mathbb{R}^2 \times \mathbb{R}^2 \to \mathbb{R}$</span>
-<span id="cb1-188"><a href="#cb1-188" aria-hidden="true" tabindex="-1"></a>as follows: For $x = (x_1, x_2)^T$ and $y = (y_1, y_2)^T$,</span>
-<span id="cb1-189"><a href="#cb1-189" aria-hidden="true" tabindex="-1"></a>$$\langle x, y \rangle := x_1y_1 - (x_1y_2 + x_2y_1) + 2x_2y_2$$ This</span>
-<span id="cb1-190"><a href="#cb1-190" aria-hidden="true" tabindex="-1"></a>inner product, defined by equation (3.9) in the transcription, is</span>
-<span id="cb1-191"><a href="#cb1-191" aria-hidden="true" tabindex="-1"></a>different from the standard dot product on $\mathbb{R}^2$. It can be</span>
-<span id="cb1-192"><a href="#cb1-192" aria-hidden="true" tabindex="-1"></a>verified as an exercise to show that this mapping is indeed an inner</span>
-<span id="cb1-193"><a href="#cb1-193" aria-hidden="true" tabindex="-1"></a>product by proving that it satisfies bilinearity, symmetry, and positive</span>
-<span id="cb1-194"><a href="#cb1-194" aria-hidden="true" tabindex="-1"></a>definiteness.</span>
-<span id="cb1-195"><a href="#cb1-195" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb1-196"><a href="#cb1-196" aria-hidden="true" tabindex="-1"></a>::::</span>
-<span id="cb1-197"><a href="#cb1-197" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-198"><a href="#cb1-198" aria-hidden="true" tabindex="-1"></a>This example illustrates that inner products can be defined in ways that</span>
-<span id="cb1-199"><a href="#cb1-199" aria-hidden="true" tabindex="-1"></a>are distinct from the conventional dot product, expanding the scope of</span>
-<span id="cb1-200"><a href="#cb1-200" aria-hidden="true" tabindex="-1"></a>inner product spaces.</span>
-<span id="cb1-201"><a href="#cb1-201" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-202"><a href="#cb1-202" aria-hidden="true" tabindex="-1"></a><span class="fu"># Inner Products and Bases</span></span>
-<span id="cb1-203"><a href="#cb1-203" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-204"><a href="#cb1-204" aria-hidden="true" tabindex="-1"></a><span class="fu">## Representing Vectors Using a Basis</span></span>
-<span id="cb1-205"><a href="#cb1-205" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-206"><a href="#cb1-206" aria-hidden="true" tabindex="-1"></a>We know that a basis for a vector space provides a way to represent any</span>
-<span id="cb1-207"><a href="#cb1-207" aria-hidden="true" tabindex="-1"></a>vector in that space as a linear combination of basis vectors. Let</span>
-<span id="cb1-208"><a href="#cb1-208" aria-hidden="true" tabindex="-1"></a>$<span class="sc">\{</span>b_1, b_2, \ldots, b_n<span class="sc">\}</span>$ be a basis for a vector space $\mathcal{V}$.</span>
-<span id="cb1-209"><a href="#cb1-209" aria-hidden="true" tabindex="-1"></a>Then, any vectors $x, y \in \mathcal{V}$ can be represented as:</span>
-<span id="cb1-210"><a href="#cb1-210" aria-hidden="true" tabindex="-1"></a>$$\label{eq:vector_representation_x}</span>
-<span id="cb1-211"><a href="#cb1-211" aria-hidden="true" tabindex="-1"></a>x = \sum_{i=1}^{n} \psi_i b_i$$ $$\label{eq:vector_representation_y}</span>
-<span id="cb1-212"><a href="#cb1-212" aria-hidden="true" tabindex="-1"></a>y = \sum_{j=1}^{n} \lambda_j b_j$$ where $\psi_i$ and $\lambda_j$ are</span>
-<span id="cb1-213"><a href="#cb1-213" aria-hidden="true" tabindex="-1"></a>scalar coefficients.</span>
-<span id="cb1-214"><a href="#cb1-214" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-215"><a href="#cb1-215" aria-hidden="true" tabindex="-1"></a><span class="fu">## Expressing Inner Products with Basis Vectors</span></span>
-<span id="cb1-216"><a href="#cb1-216" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-217"><a href="#cb1-217" aria-hidden="true" tabindex="-1"></a>Given a basis, we can express the inner product of two vectors in terms</span>
-<span id="cb1-218"><a href="#cb1-218" aria-hidden="true" tabindex="-1"></a>of their coordinates with respect to that basis.</span>
-<span id="cb1-219"><a href="#cb1-219" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-220"><a href="#cb1-220" aria-hidden="true" tabindex="-1"></a><span class="fu">### Derivation of the Formula</span></span>
-<span id="cb1-221"><a href="#cb1-221" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-222"><a href="#cb1-222" aria-hidden="true" tabindex="-1"></a>Let $x$ and $y$ be represented as in equations</span>
-<span id="cb1-223"><a href="#cb1-223" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">\[eq:vector_representation_x\]</span><span class="co">](#eq:vector_representation_x)</span>{reference-type="eqref"</span>
-<span id="cb1-224"><a href="#cb1-224" aria-hidden="true" tabindex="-1"></a>reference="eq:vector_representation_x"} and</span>
-<span id="cb1-225"><a href="#cb1-225" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">\[eq:vector_representation_y\]</span><span class="co">](#eq:vector_representation_y)</span>{reference-type="eqref"</span>
-<span id="cb1-226"><a href="#cb1-226" aria-hidden="true" tabindex="-1"></a>reference="eq:vector_representation_y"}. Using the bilinearity of the</span>
-<span id="cb1-227"><a href="#cb1-227" aria-hidden="true" tabindex="-1"></a>inner product, we can expand $\langle x, y \rangle$ as:</span>
-<span id="cb1-228"><a href="#cb1-228" aria-hidden="true" tabindex="-1"></a>$$\begin{aligned}</span>
-<span id="cb1-229"><a href="#cb1-229" aria-hidden="true" tabindex="-1"></a>\langle x, y \rangle &amp;= \langle \sum_{i=1}^{n} \psi_i b_i, \sum_{j=1}^{n} \lambda_j b_j \rangle <span class="sc">\\</span></span>
-<span id="cb1-230"><a href="#cb1-230" aria-hidden="true" tabindex="-1"></a>&amp;= \sum_{i=1}^{n} \sum_{j=1}^{n} \psi_i \lambda_j \langle b_i, b_j \rangle</span>
-<span id="cb1-231"><a href="#cb1-231" aria-hidden="true" tabindex="-1"></a>\end{aligned}$$ Rearranging the terms, we get:</span>
-<span id="cb1-232"><a href="#cb1-232" aria-hidden="true" tabindex="-1"></a>$$\label{eq:inner_product_basis_expansion}</span>
-<span id="cb1-233"><a href="#cb1-233" aria-hidden="true" tabindex="-1"></a>\langle x, y \rangle = \sum_{i=1}^{n} \sum_{j=1}^{n} \psi_i  \langle b_i, b_j \rangle \lambda_j$$</span>
-<span id="cb1-234"><a href="#cb1-234" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-235"><a href="#cb1-235" aria-hidden="true" tabindex="-1"></a><span class="fu">## Matrix Representation of Inner Products</span></span>
-<span id="cb1-236"><a href="#cb1-236" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-237"><a href="#cb1-237" aria-hidden="true" tabindex="-1"></a><span class="fu">### The Matrix A and its Entries</span></span>
+<span id="cb1-132"><a href="#cb1-132" aria-hidden="true" tabindex="-1"></a>:::: tcolorbox</span>
+<span id="cb1-133"><a href="#cb1-133" aria-hidden="true" tabindex="-1"></a>::: {.def:inner_product_space .definition}</span>
+<span id="cb1-134"><a href="#cb1-134" aria-hidden="true" tabindex="-1"></a>**Definition 5** (Inner Product Space). An **inner product space** is a</span>
+<span id="cb1-135"><a href="#cb1-135" aria-hidden="true" tabindex="-1"></a>pair $(\mathcal{V}, (\cdot, \cdot))$ consisting of a vector space</span>
+<span id="cb1-136"><a href="#cb1-136" aria-hidden="true" tabindex="-1"></a>$\mathcal{V}$ and an inner product $(\cdot, \cdot)$ defined on</span>
+<span id="cb1-137"><a href="#cb1-137" aria-hidden="true" tabindex="-1"></a>$\mathcal{V}$.</span>
+<span id="cb1-138"><a href="#cb1-138" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-139"><a href="#cb1-139" aria-hidden="true" tabindex="-1"></a>::::</span>
+<span id="cb1-140"><a href="#cb1-140" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-141"><a href="#cb1-141" aria-hidden="true" tabindex="-1"></a><span class="fu">### Euclidean Vector Space</span></span>
+<span id="cb1-142"><a href="#cb1-142" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-143"><a href="#cb1-143" aria-hidden="true" tabindex="-1"></a>:::: tcolorbox</span>
+<span id="cb1-144"><a href="#cb1-144" aria-hidden="true" tabindex="-1"></a>::: {.def:euclidean_vector_space .definition}</span>
+<span id="cb1-145"><a href="#cb1-145" aria-hidden="true" tabindex="-1"></a>**Definition 6** (Euclidean Vector Space). A **Euclidean vector space**</span>
+<span id="cb1-146"><a href="#cb1-146" aria-hidden="true" tabindex="-1"></a>is an inner product space where the inner product is the dot product.</span>
+<span id="cb1-147"><a href="#cb1-147" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-148"><a href="#cb1-148" aria-hidden="true" tabindex="-1"></a>::::</span>
+<span id="cb1-149"><a href="#cb1-149" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-150"><a href="#cb1-150" aria-hidden="true" tabindex="-1"></a>The dot product is a specific example of an inner product, leading to</span>
+<span id="cb1-151"><a href="#cb1-151" aria-hidden="true" tabindex="-1"></a>Euclidean vector spaces. However, other inner products exist.</span>
+<span id="cb1-152"><a href="#cb1-152" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-153"><a href="#cb1-153" aria-hidden="true" tabindex="-1"></a><span class="fu">## Example: A Non-Standard Inner Product</span></span>
+<span id="cb1-154"><a href="#cb1-154" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-155"><a href="#cb1-155" aria-hidden="true" tabindex="-1"></a>:::: tcolorbox</span>
+<span id="cb1-156"><a href="#cb1-156" aria-hidden="true" tabindex="-1"></a>::: {.ex:non_standard_inner_product .example}</span>
+<span id="cb1-157"><a href="#cb1-157" aria-hidden="true" tabindex="-1"></a>**Example 7** (Inner Product That Is Not the Dot Product). Consider</span>
+<span id="cb1-158"><a href="#cb1-158" aria-hidden="true" tabindex="-1"></a>$\mathcal{V}= \mathbb{R}^2$. Define</span>
+<span id="cb1-159"><a href="#cb1-159" aria-hidden="true" tabindex="-1"></a>$(x, y) := x_1y_1 - (x_1y_2 + x_2y_1) + 2x_2y_2$ for</span>
+<span id="cb1-160"><a href="#cb1-160" aria-hidden="true" tabindex="-1"></a>$x = \begin{pmatrix} x_1 <span class="sc">\\</span> x_2 \end{pmatrix}$ and</span>
+<span id="cb1-161"><a href="#cb1-161" aria-hidden="true" tabindex="-1"></a>$y = \begin{pmatrix} y_1 <span class="sc">\\</span> y_2 \end{pmatrix}$. This defines an inner</span>
+<span id="cb1-162"><a href="#cb1-162" aria-hidden="true" tabindex="-1"></a>product on $\mathbb{R}^2$ different from the dot product. Verifying that</span>
+<span id="cb1-163"><a href="#cb1-163" aria-hidden="true" tabindex="-1"></a>this mapping is indeed an inner product (i.e., bilinear, symmetric, and</span>
+<span id="cb1-164"><a href="#cb1-164" aria-hidden="true" tabindex="-1"></a>positive definite) is left as an exercise.</span>
+<span id="cb1-165"><a href="#cb1-165" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-166"><a href="#cb1-166" aria-hidden="true" tabindex="-1"></a>::::</span>
+<span id="cb1-167"><a href="#cb1-167" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-168"><a href="#cb1-168" aria-hidden="true" tabindex="-1"></a>This example demonstrates that inner products are not unique and can be</span>
+<span id="cb1-169"><a href="#cb1-169" aria-hidden="true" tabindex="-1"></a>defined differently from the standard dot product.</span>
+<span id="cb1-170"><a href="#cb1-170" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-171"><a href="#cb1-171" aria-hidden="true" tabindex="-1"></a><span class="fu"># Inner Products and Bases</span></span>
+<span id="cb1-172"><a href="#cb1-172" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-173"><a href="#cb1-173" aria-hidden="true" tabindex="-1"></a><span class="fu">## Representing Vectors Using a Basis</span></span>
+<span id="cb1-174"><a href="#cb1-174" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-175"><a href="#cb1-175" aria-hidden="true" tabindex="-1"></a>Let $<span class="sc">\{</span>b_1, \ldots, b_n<span class="sc">\}</span>$ be a basis for a vector space $\mathcal{V}$.</span>
+<span id="cb1-176"><a href="#cb1-176" aria-hidden="true" tabindex="-1"></a>Any vectors $x, y \in \mathcal{V}$ can be represented as linear</span>
+<span id="cb1-177"><a href="#cb1-177" aria-hidden="true" tabindex="-1"></a>combinations of these basis vectors:</span>
+<span id="cb1-178"><a href="#cb1-178" aria-hidden="true" tabindex="-1"></a>$$\label{eq:vector_representation_x}</span>
+<span id="cb1-179"><a href="#cb1-179" aria-hidden="true" tabindex="-1"></a>x = \sum_{i=1}^{n} \psi_i b_i$$ $$\label{eq:vector_representation_y}</span>
+<span id="cb1-180"><a href="#cb1-180" aria-hidden="true" tabindex="-1"></a>y = \sum_{j=1}^{n} \lambda_j b_j$$ where $\psi_i$ and $\lambda_j$ are</span>
+<span id="cb1-181"><a href="#cb1-181" aria-hidden="true" tabindex="-1"></a>scalar coefficients, representing the coordinates of $x$ and $y$ with</span>
+<span id="cb1-182"><a href="#cb1-182" aria-hidden="true" tabindex="-1"></a>respect to the basis $<span class="sc">\{</span>b_1, \ldots, b_n<span class="sc">\}</span>$.</span>
+<span id="cb1-183"><a href="#cb1-183" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-184"><a href="#cb1-184" aria-hidden="true" tabindex="-1"></a><span class="fu">## Expressing Inner Products via Basis Vectors</span></span>
+<span id="cb1-185"><a href="#cb1-185" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-186"><a href="#cb1-186" aria-hidden="true" tabindex="-1"></a>Given a basis, we can express the inner product of any two vectors $x$</span>
+<span id="cb1-187"><a href="#cb1-187" aria-hidden="true" tabindex="-1"></a>and $y$ in terms of their basis representations.</span>
+<span id="cb1-188"><a href="#cb1-188" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-189"><a href="#cb1-189" aria-hidden="true" tabindex="-1"></a><span class="fu">### Derivation</span></span>
+<span id="cb1-190"><a href="#cb1-190" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-191"><a href="#cb1-191" aria-hidden="true" tabindex="-1"></a>Using the bilinear property of inner products, we can expand $(x, y)$ as</span>
+<span id="cb1-192"><a href="#cb1-192" aria-hidden="true" tabindex="-1"></a>follows: $$\begin{aligned}</span>
+<span id="cb1-193"><a href="#cb1-193" aria-hidden="true" tabindex="-1"></a>(x, y) &amp;= \left( \sum_{i=1}^{n} \psi_i b_i, \sum_{j=1}^{n} \lambda_j b_j \right) <span class="sc">\\</span></span>
+<span id="cb1-194"><a href="#cb1-194" aria-hidden="true" tabindex="-1"></a>&amp;= \sum_{i=1}^{n} \sum_{j=1}^{n} \psi_i \lambda_j (b_i, b_j)</span>
+<span id="cb1-195"><a href="#cb1-195" aria-hidden="true" tabindex="-1"></a>\end{aligned}$$ Thus, the inner product $(x, y)$ can be expressed as a</span>
+<span id="cb1-196"><a href="#cb1-196" aria-hidden="true" tabindex="-1"></a>double summation involving the coefficients $\psi_i, \lambda_j$ and the</span>
+<span id="cb1-197"><a href="#cb1-197" aria-hidden="true" tabindex="-1"></a>inner products of the basis vectors $(b_i, b_j)$. Rearranging the terms,</span>
+<span id="cb1-198"><a href="#cb1-198" aria-hidden="true" tabindex="-1"></a>we have: $$\label{eq:inner_product_basis_expansion}</span>
+<span id="cb1-199"><a href="#cb1-199" aria-hidden="true" tabindex="-1"></a>(x, y) = \sum_{i=1}^{n} \sum_{j=1}^{n} \psi_i (b_i, b_j) \lambda_j$$</span>
+<span id="cb1-200"><a href="#cb1-200" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-201"><a href="#cb1-201" aria-hidden="true" tabindex="-1"></a><span class="fu">## Matrix Representation</span></span>
+<span id="cb1-202"><a href="#cb1-202" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-203"><a href="#cb1-203" aria-hidden="true" tabindex="-1"></a>The expression in</span>
+<span id="cb1-204"><a href="#cb1-204" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">\[eq:inner_product_basis_expansion\]</span><span class="co">](#eq:inner_product_basis_expansion)</span>{reference-type="eqref"</span>
+<span id="cb1-205"><a href="#cb1-205" aria-hidden="true" tabindex="-1"></a>reference="eq:inner_product_basis_expansion"} can be represented in</span>
+<span id="cb1-206"><a href="#cb1-206" aria-hidden="true" tabindex="-1"></a>matrix form, which provides a convenient way to compute inner products.</span>
+<span id="cb1-207"><a href="#cb1-207" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-208"><a href="#cb1-208" aria-hidden="true" tabindex="-1"></a><span class="fu">### Defining the Matrix A</span></span>
+<span id="cb1-209"><a href="#cb1-209" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-210"><a href="#cb1-210" aria-hidden="true" tabindex="-1"></a>Let $A$ be an $n \times n$ matrix where the $(i, j)$-th entry $A_{ij}$</span>
+<span id="cb1-211"><a href="#cb1-211" aria-hidden="true" tabindex="-1"></a>is the inner product of the $i$-th and $j$-th basis vectors:</span>
+<span id="cb1-212"><a href="#cb1-212" aria-hidden="true" tabindex="-1"></a>$$\label{eq:matrix_A_definition}</span>
+<span id="cb1-213"><a href="#cb1-213" aria-hidden="true" tabindex="-1"></a>A_{ij} = (b_i, b_j)$$ The matrix $A$ is determined by the chosen basis</span>
+<span id="cb1-214"><a href="#cb1-214" aria-hidden="true" tabindex="-1"></a>$<span class="sc">\{</span>b_1, \ldots, b_n<span class="sc">\}</span>$ and the inner product $(\cdot, \cdot)$.</span>
+<span id="cb1-215"><a href="#cb1-215" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-216"><a href="#cb1-216" aria-hidden="true" tabindex="-1"></a><span class="fu">### Inner Product as Matrix Multiplication</span></span>
+<span id="cb1-217"><a href="#cb1-217" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-218"><a href="#cb1-218" aria-hidden="true" tabindex="-1"></a>Let $\psi = \begin{pmatrix} \psi_1 <span class="sc">\\</span> \vdots <span class="sc">\\</span> \psi_n \end{pmatrix}$</span>
+<span id="cb1-219"><a href="#cb1-219" aria-hidden="true" tabindex="-1"></a>and</span>
+<span id="cb1-220"><a href="#cb1-220" aria-hidden="true" tabindex="-1"></a>$\lambda = \begin{pmatrix} \lambda_1 <span class="sc">\\</span> \vdots <span class="sc">\\</span> \lambda_n \end{pmatrix}$</span>
+<span id="cb1-221"><a href="#cb1-221" aria-hidden="true" tabindex="-1"></a>be the coordinate vectors of $x$ and $y$ with respect to the basis</span>
+<span id="cb1-222"><a href="#cb1-222" aria-hidden="true" tabindex="-1"></a>$<span class="sc">\{</span>b_1, \ldots, b_n<span class="sc">\}</span>$. Then, the inner product $(x, y)$ can be written</span>
+<span id="cb1-223"><a href="#cb1-223" aria-hidden="true" tabindex="-1"></a>in matrix notation as: $$\label{eq:inner_product_matrix_form}</span>
+<span id="cb1-224"><a href="#cb1-224" aria-hidden="true" tabindex="-1"></a>(x, y) = \psi^T A \lambda$$ where $\psi^T$ is the transpose of the</span>
+<span id="cb1-225"><a href="#cb1-225" aria-hidden="true" tabindex="-1"></a>column vector $\psi$. This matrix representation shows that the inner</span>
+<span id="cb1-226"><a href="#cb1-226" aria-hidden="true" tabindex="-1"></a>product of any two vectors can be computed using their coordinate</span>
+<span id="cb1-227"><a href="#cb1-227" aria-hidden="true" tabindex="-1"></a>vectors and the matrix $A$, which is constructed from the inner products</span>
+<span id="cb1-228"><a href="#cb1-228" aria-hidden="true" tabindex="-1"></a>of the basis vectors.</span>
+<span id="cb1-229"><a href="#cb1-229" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-230"><a href="#cb1-230" aria-hidden="true" tabindex="-1"></a>:::: tcolorbox</span>
+<span id="cb1-231"><a href="#cb1-231" aria-hidden="true" tabindex="-1"></a>::: {.remark:matrix_representation_inner_product .remark}</span>
+<span id="cb1-232"><a href="#cb1-232" aria-hidden="true" tabindex="-1"></a>**Remark 8**. The inner product is completely determined by the choice</span>
+<span id="cb1-233"><a href="#cb1-233" aria-hidden="true" tabindex="-1"></a>of basis and the matrix $A$, where $A_{ij} = (b_i, b_j)$. Due to the</span>
+<span id="cb1-234"><a href="#cb1-234" aria-hidden="true" tabindex="-1"></a>properties of the inner product (symmetry and positive definiteness),</span>
+<span id="cb1-235"><a href="#cb1-235" aria-hidden="true" tabindex="-1"></a>the matrix $A$ is guaranteed to be symmetric and positive definite.</span>
+<span id="cb1-236"><a href="#cb1-236" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-237"><a href="#cb1-237" aria-hidden="true" tabindex="-1"></a>::::</span>
 <span id="cb1-238"><a href="#cb1-238" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-239"><a href="#cb1-239" aria-hidden="true" tabindex="-1"></a>Define a matrix $A$ of size $n \times n$ where the entry $A_{ij}$ is</span>
-<span id="cb1-240"><a href="#cb1-240" aria-hidden="true" tabindex="-1"></a>given by the inner product of the basis vectors $b_i$ and $b_j$:</span>
-<span id="cb1-241"><a href="#cb1-241" aria-hidden="true" tabindex="-1"></a>$$\label{eq:matrix_A_definition}</span>
-<span id="cb1-242"><a href="#cb1-242" aria-hidden="true" tabindex="-1"></a>A_{ij} = \langle b_i, b_j \rangle$$ The matrix $A$ is determined by the</span>
-<span id="cb1-243"><a href="#cb1-243" aria-hidden="true" tabindex="-1"></a>choice of basis $<span class="sc">\{</span>b_1, \ldots, b_n<span class="sc">\}</span>$ and the inner product</span>
-<span id="cb1-244"><a href="#cb1-244" aria-hidden="true" tabindex="-1"></a>$\langle \cdot, \cdot \rangle$.</span>
-<span id="cb1-245"><a href="#cb1-245" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-246"><a href="#cb1-246" aria-hidden="true" tabindex="-1"></a><span class="fu">### Inner Product as a Matrix Product: $\psi^T A \lambda$</span></span>
-<span id="cb1-247"><a href="#cb1-247" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-248"><a href="#cb1-248" aria-hidden="true" tabindex="-1"></a>Using the matrix $A$, we can express the inner product</span>
-<span id="cb1-249"><a href="#cb1-249" aria-hidden="true" tabindex="-1"></a>$\langle x, y \rangle$ in matrix form. Let</span>
-<span id="cb1-250"><a href="#cb1-250" aria-hidden="true" tabindex="-1"></a>$\psi = \begin{pmatrix} \psi_1 <span class="sc">\\</span> \vdots <span class="sc">\\</span> \psi_n \end{pmatrix}$ and</span>
-<span id="cb1-251"><a href="#cb1-251" aria-hidden="true" tabindex="-1"></a>$\lambda = \begin{pmatrix} \lambda_1 <span class="sc">\\</span> \vdots <span class="sc">\\</span> \lambda_n \end{pmatrix}$</span>
-<span id="cb1-252"><a href="#cb1-252" aria-hidden="true" tabindex="-1"></a>be the column vectors of coefficients of $x$ and $y$ respectively. Then,</span>
-<span id="cb1-253"><a href="#cb1-253" aria-hidden="true" tabindex="-1"></a>the inner product can be written as a matrix product:</span>
-<span id="cb1-254"><a href="#cb1-254" aria-hidden="true" tabindex="-1"></a>$$\label{eq:inner_product_matrix_form}</span>
-<span id="cb1-255"><a href="#cb1-255" aria-hidden="true" tabindex="-1"></a>\langle x, y \rangle = \psi^T A \lambda$$ where $\psi^T$ is the</span>
-<span id="cb1-256"><a href="#cb1-256" aria-hidden="true" tabindex="-1"></a>transpose of $\psi$. This formula shows that once we have a basis and</span>
-<span id="cb1-257"><a href="#cb1-257" aria-hidden="true" tabindex="-1"></a>the matrix $A$ (whose entries are inner products of basis vectors), we</span>
-<span id="cb1-258"><a href="#cb1-258" aria-hidden="true" tabindex="-1"></a>can compute the inner product of any two vectors $x$ and $y$ by knowing</span>
-<span id="cb1-259"><a href="#cb1-259" aria-hidden="true" tabindex="-1"></a>their coordinate vectors $\psi$ and $\lambda$ with respect to the basis.</span>
-<span id="cb1-260"><a href="#cb1-260" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-261"><a href="#cb1-261" aria-hidden="true" tabindex="-1"></a>:::: tcolorbox</span>
-<span id="cb1-262"><a href="#cb1-262" aria-hidden="true" tabindex="-1"></a>::: {.remark:matrix_representation_inner_product .remark}</span>
-<span id="cb1-263"><a href="#cb1-263" aria-hidden="true" tabindex="-1"></a>**Remark 8**. The inner product is fully described by the coordinates</span>
-<span id="cb1-264"><a href="#cb1-264" aria-hidden="true" tabindex="-1"></a>with respect to a chosen basis and the matrix $A$. This matrix $A$ has</span>
-<span id="cb1-265"><a href="#cb1-265" aria-hidden="true" tabindex="-1"></a>special properties due to the properties of the inner product itself</span>
-<span id="cb1-266"><a href="#cb1-266" aria-hidden="true" tabindex="-1"></a>(symmetry and positive definiteness). Specifically, $A$ will be a</span>
-<span id="cb1-267"><a href="#cb1-267" aria-hidden="true" tabindex="-1"></a>symmetric and positive definite matrix.</span>
-<span id="cb1-268"><a href="#cb1-268" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb1-269"><a href="#cb1-269" aria-hidden="true" tabindex="-1"></a>::::</span>
-<span id="cb1-270"><a href="#cb1-270" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-271"><a href="#cb1-271" aria-hidden="true" tabindex="-1"></a><span class="fu"># Conclusion</span></span>
+<span id="cb1-239"><a href="#cb1-239" aria-hidden="true" tabindex="-1"></a><span class="fu"># Conclusion</span></span>
+<span id="cb1-240"><a href="#cb1-240" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-241"><a href="#cb1-241" aria-hidden="true" tabindex="-1"></a>In this lecture, we generalized the concept of the dot product to the</span>
+<span id="cb1-242"><a href="#cb1-242" aria-hidden="true" tabindex="-1"></a>broader notion of inner products. We established that inner products are</span>
+<span id="cb1-243"><a href="#cb1-243" aria-hidden="true" tabindex="-1"></a>bilinear, symmetric, and positive definite mappings, which extend the</span>
+<span id="cb1-244"><a href="#cb1-244" aria-hidden="true" tabindex="-1"></a>geometric concepts of length, angle, and orthogonality to general vector</span>
+<span id="cb1-245"><a href="#cb1-245" aria-hidden="true" tabindex="-1"></a>spaces. Key definitions introduced include:</span>
+<span id="cb1-246"><a href="#cb1-246" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-247"><a href="#cb1-247" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**Bilinear Mapping**</span>
+<span id="cb1-248"><a href="#cb1-248" aria-hidden="true" tabindex="-1"></a>    (<span class="co">[</span><span class="ot">1</span><span class="co">](#def:bilinear_mapping)</span>{reference-type="ref+Label"</span>
+<span id="cb1-249"><a href="#cb1-249" aria-hidden="true" tabindex="-1"></a>    reference="def:bilinear_mapping"}): A mapping linear in each</span>
+<span id="cb1-250"><a href="#cb1-250" aria-hidden="true" tabindex="-1"></a>    argument.</span>
+<span id="cb1-251"><a href="#cb1-251" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-252"><a href="#cb1-252" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**Symmetric Bilinear Mapping**</span>
+<span id="cb1-253"><a href="#cb1-253" aria-hidden="true" tabindex="-1"></a>    (<span class="co">[</span><span class="ot">2</span><span class="co">](#def:symmetric_bilinear_mapping)</span>{reference-type="ref+Label"</span>
+<span id="cb1-254"><a href="#cb1-254" aria-hidden="true" tabindex="-1"></a>    reference="def:symmetric_bilinear_mapping"}): A bilinear mapping</span>
+<span id="cb1-255"><a href="#cb1-255" aria-hidden="true" tabindex="-1"></a>    where the order of vectors does not matter.</span>
+<span id="cb1-256"><a href="#cb1-256" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-257"><a href="#cb1-257" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**Positive Definite Bilinear Mapping**</span>
+<span id="cb1-258"><a href="#cb1-258" aria-hidden="true" tabindex="-1"></a>    (<span class="co">[</span><span class="ot">3</span><span class="co">](#def:positive_definite_bilinear_mapping)</span>{reference-type="ref+Label"</span>
+<span id="cb1-259"><a href="#cb1-259" aria-hidden="true" tabindex="-1"></a>    reference="def:positive_definite_bilinear_mapping"}): A bilinear</span>
+<span id="cb1-260"><a href="#cb1-260" aria-hidden="true" tabindex="-1"></a>    mapping that is strictly positive for non-zero vectors when applied</span>
+<span id="cb1-261"><a href="#cb1-261" aria-hidden="true" tabindex="-1"></a>    to a vector and itself.</span>
+<span id="cb1-262"><a href="#cb1-262" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-263"><a href="#cb1-263" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**Inner Product**</span>
+<span id="cb1-264"><a href="#cb1-264" aria-hidden="true" tabindex="-1"></a>    (<span class="co">[</span><span class="ot">4</span><span class="co">](#def:inner_product)</span>{reference-type="ref+Label"</span>
+<span id="cb1-265"><a href="#cb1-265" aria-hidden="true" tabindex="-1"></a>    reference="def:inner_product"}): A bilinear mapping that is both</span>
+<span id="cb1-266"><a href="#cb1-266" aria-hidden="true" tabindex="-1"></a>    symmetric and positive definite.</span>
+<span id="cb1-267"><a href="#cb1-267" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-268"><a href="#cb1-268" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**Inner Product Space**</span>
+<span id="cb1-269"><a href="#cb1-269" aria-hidden="true" tabindex="-1"></a>    (<span class="co">[</span><span class="ot">5</span><span class="co">](#def:inner_product_space)</span>{reference-type="ref+Label"</span>
+<span id="cb1-270"><a href="#cb1-270" aria-hidden="true" tabindex="-1"></a>    reference="def:inner_product_space"}): A vector space equipped with</span>
+<span id="cb1-271"><a href="#cb1-271" aria-hidden="true" tabindex="-1"></a>    an inner product.</span>
 <span id="cb1-272"><a href="#cb1-272" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-273"><a href="#cb1-273" aria-hidden="true" tabindex="-1"></a>In this lecture, we generalized the concept of the dot product to inner</span>
-<span id="cb1-274"><a href="#cb1-274" aria-hidden="true" tabindex="-1"></a>products, which are bilinear, symmetric, and positive definite mappings.</span>
-<span id="cb1-275"><a href="#cb1-275" aria-hidden="true" tabindex="-1"></a>We saw that inner products allow us to extend notions of length, angle,</span>
-<span id="cb1-276"><a href="#cb1-276" aria-hidden="true" tabindex="-1"></a>and orthogonality to general vector spaces. We defined bilinear mappings</span>
-<span id="cb1-277"><a href="#cb1-277" aria-hidden="true" tabindex="-1"></a>(<span class="co">[</span><span class="ot">1</span><span class="co">](#def:bilinear_mapping)</span>{reference-type="ref+Label"</span>
-<span id="cb1-278"><a href="#cb1-278" aria-hidden="true" tabindex="-1"></a>reference="def:bilinear_mapping"}), symmetry</span>
-<span id="cb1-279"><a href="#cb1-279" aria-hidden="true" tabindex="-1"></a>(<span class="co">[</span><span class="ot">2</span><span class="co">](#def:symmetric_bilinear_mapping)</span>{reference-type="ref+Label"</span>
-<span id="cb1-280"><a href="#cb1-280" aria-hidden="true" tabindex="-1"></a>reference="def:symmetric_bilinear_mapping"}), and positive definiteness</span>
-<span id="cb1-281"><a href="#cb1-281" aria-hidden="true" tabindex="-1"></a>(<span class="co">[</span><span class="ot">3</span><span class="co">](#def:positive_definite_bilinear_mapping)</span>{reference-type="ref+Label"</span>
-<span id="cb1-282"><a href="#cb1-282" aria-hidden="true" tabindex="-1"></a>reference="def:positive_definite_bilinear_mapping"}), culminating in the</span>
-<span id="cb1-283"><a href="#cb1-283" aria-hidden="true" tabindex="-1"></a>definition of an inner product</span>
-<span id="cb1-284"><a href="#cb1-284" aria-hidden="true" tabindex="-1"></a>(<span class="co">[</span><span class="ot">4</span><span class="co">](#def:inner_product)</span>{reference-type="ref+Label"</span>
-<span id="cb1-285"><a href="#cb1-285" aria-hidden="true" tabindex="-1"></a>reference="def:inner_product"}) and inner product space</span>
-<span id="cb1-286"><a href="#cb1-286" aria-hidden="true" tabindex="-1"></a>(<span class="co">[</span><span class="ot">5</span><span class="co">](#def:inner_product_space)</span>{reference-type="ref+Label"</span>
-<span id="cb1-287"><a href="#cb1-287" aria-hidden="true" tabindex="-1"></a>reference="def:inner_product_space"}). We explored an example of a</span>
-<span id="cb1-288"><a href="#cb1-288" aria-hidden="true" tabindex="-1"></a>non-standard inner product</span>
-<span id="cb1-289"><a href="#cb1-289" aria-hidden="true" tabindex="-1"></a>(<span class="co">[</span><span class="ot">7</span><span class="co">](#ex:non_standard_inner_product)</span>{reference-type="ref+Label"</span>
-<span id="cb1-290"><a href="#cb1-290" aria-hidden="true" tabindex="-1"></a>reference="ex:non_standard_inner_product"}) and derived the matrix</span>
-<span id="cb1-291"><a href="#cb1-291" aria-hidden="true" tabindex="-1"></a>representation of inner products using a basis</span>
-<span id="cb1-292"><a href="#cb1-292" aria-hidden="true" tabindex="-1"></a>(<span class="co">[</span><span class="ot">\[eq:inner_product_matrix_form\]</span><span class="co">](#eq:inner_product_matrix_form)</span>{reference-type="ref+Label"</span>
-<span id="cb1-293"><a href="#cb1-293" aria-hidden="true" tabindex="-1"></a>reference="eq:inner_product_matrix_form"}). This matrix representation</span>
-<span id="cb1-294"><a href="#cb1-294" aria-hidden="true" tabindex="-1"></a>is a powerful tool for computation and analysis.</span>
-<span id="cb1-295"><a href="#cb1-295" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-296"><a href="#cb1-296" aria-hidden="true" tabindex="-1"></a>Further topics to consider include the properties of the matrix $A$</span>
-<span id="cb1-297"><a href="#cb1-297" aria-hidden="true" tabindex="-1"></a>(<span class="co">[</span><span class="ot">\[eq:matrix_A_definition\]</span><span class="co">](#eq:matrix_A_definition)</span>{reference-type="ref+Label"</span>
-<span id="cb1-298"><a href="#cb1-298" aria-hidden="true" tabindex="-1"></a>reference="eq:matrix_A_definition"}), its symmetry and positive</span>
-<span id="cb1-299"><a href="#cb1-299" aria-hidden="true" tabindex="-1"></a>definiteness (as noted in</span>
-<span id="cb1-300"><a href="#cb1-300" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">8</span><span class="co">](#remark:matrix_representation_inner_product)</span>{reference-type="ref+Label"</span>
-<span id="cb1-301"><a href="#cb1-301" aria-hidden="true" tabindex="-1"></a>reference="remark:matrix_representation_inner_product"}), and how these</span>
-<span id="cb1-302"><a href="#cb1-302" aria-hidden="true" tabindex="-1"></a>properties relate back to the inner product. We will also explore how</span>
-<span id="cb1-303"><a href="#cb1-303" aria-hidden="true" tabindex="-1"></a>inner products are used to define norms, distances, and orthogonality</span>
-<span id="cb1-304"><a href="#cb1-304" aria-hidden="true" tabindex="-1"></a>more formally in subsequent lectures.</span></code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></pre></div>
+<span id="cb1-273"><a href="#cb1-273" aria-hidden="true" tabindex="-1"></a>We examined an example of a non-standard inner product on $\mathbb{R}^2$</span>
+<span id="cb1-274"><a href="#cb1-274" aria-hidden="true" tabindex="-1"></a>(<span class="co">[</span><span class="ot">7</span><span class="co">](#ex:non_standard_inner_product)</span>{reference-type="ref+Label"</span>
+<span id="cb1-275"><a href="#cb1-275" aria-hidden="true" tabindex="-1"></a>reference="ex:non_standard_inner_product"}) and derived the matrix</span>
+<span id="cb1-276"><a href="#cb1-276" aria-hidden="true" tabindex="-1"></a>representation of inner products using a basis</span>
+<span id="cb1-277"><a href="#cb1-277" aria-hidden="true" tabindex="-1"></a>(<span class="co">[</span><span class="ot">\[eq:inner_product_matrix_form\]</span><span class="co">](#eq:inner_product_matrix_form)</span>{reference-type="ref+Label"</span>
+<span id="cb1-278"><a href="#cb1-278" aria-hidden="true" tabindex="-1"></a>reference="eq:inner_product_matrix_form"}). This representation shows</span>
+<span id="cb1-279"><a href="#cb1-279" aria-hidden="true" tabindex="-1"></a>that an inner product can be fully described by a matrix $A$, where</span>
+<span id="cb1-280"><a href="#cb1-280" aria-hidden="true" tabindex="-1"></a>$A_{ij} = (b_i, b_j)$ for a chosen basis $<span class="sc">\{</span>b_i<span class="sc">\}</span>$. The matrix $A$ is</span>
+<span id="cb1-281"><a href="#cb1-281" aria-hidden="true" tabindex="-1"></a>symmetric and positive definite</span>
+<span id="cb1-282"><a href="#cb1-282" aria-hidden="true" tabindex="-1"></a>(<span class="co">[</span><span class="ot">8</span><span class="co">](#remark:matrix_representation_inner_product)</span>{reference-type="ref+Label"</span>
+<span id="cb1-283"><a href="#cb1-283" aria-hidden="true" tabindex="-1"></a>reference="remark:matrix_representation_inner_product"}).</span>
+<span id="cb1-284"><a href="#cb1-284" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-285"><a href="#cb1-285" aria-hidden="true" tabindex="-1"></a>In subsequent lectures, we will explore the properties of the matrix $A$</span>
+<span id="cb1-286"><a href="#cb1-286" aria-hidden="true" tabindex="-1"></a>in more detail and investigate how inner products are used to formally</span>
+<span id="cb1-287"><a href="#cb1-287" aria-hidden="true" tabindex="-1"></a>define norms, distances, and orthogonality in vector spaces, building</span>
+<span id="cb1-288"><a href="#cb1-288" aria-hidden="true" tabindex="-1"></a>upon the foundations laid in this lecture.</span></code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 
