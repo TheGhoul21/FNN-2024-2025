@@ -1,0 +1,1913 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.40">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Your Name">
+<meta name="dcterms.date" content="2025-02-01">
+
+<title>Lecture Notes on Word Embeddings and Recurrent Neural Networks – Your Site Name</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-549806ee2085284f45b00abea8c6df48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-6bd9cfa162949bde0a231f530c97869d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">Your Site Name</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="./index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+    <div class="dropdown">
+      <a href="" title="" id="quarto-navigation-tool-dropdown-0" class="quarto-navigation-tool dropdown-toggle px-1" data-bs-toggle="dropdown" aria-expanded="false" role="link" aria-label=""><i class="bi bi-list"></i></a>
+      <ul class="dropdown-menu" aria-labelledby="quarto-navigation-tool-dropdown-0">
+          <li>
+            <a class="dropdown-item quarto-navbar-tools-item" href="./Note_-_FNN_24-25_(01-02).pdf.html">
+            Introduction to Neural Networks
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item quarto-navbar-tools-item" href="./Note_-_FNN_24-25_(03-04).pdf.html">
+            Lecture Notes on Perceptrons and Feedforward Neural Networks
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item quarto-navbar-tools-item" href="./Note_-_FNN_24-25_(05-06).pdf.html">
+            Lecture Notes on Vector Spaces and Subspaces
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item quarto-navbar-tools-item" href="./Note_-_FNN_24-25_(07-08).pdf.html">
+            General Inner Products
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item quarto-navbar-tools-item" href="./Note_-_FNN_24-25_(09-10).pdf.html">
+            Lecture Notes on the Perceptron Algorithm
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item quarto-navbar-tools-item" href="./Note_-_FNN_24-25_(11-12).pdf.html">
+            Lecture Notes on Multilayer Perceptrons and Backpropagation
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item quarto-navbar-tools-item" href="./Note_-_FNN_24-25_(13-14).pdf.html">
+            Lecture Notes on Eigenvalues, Eigenvectors, and Matrix Decompositions
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item quarto-navbar-tools-item" href="./Note_-_FNN_24-25_(15-16).pdf.html">
+            Lecture Notes on Convolutional Neural Networks
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item quarto-navbar-tools-item" href="./Note_-_FNN_24-25_(17-18).pdf.html">
+            Lecture Notes on Word Embeddings and Recurrent Neural Networks
+            </a>
+          </li>
+      </ul>
+    </div>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul class="collapse">
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
+  <li><a href="#language-modeling" id="toc-language-modeling" class="nav-link" data-scroll-target="#language-modeling">Language Modeling</a>
+  <ul class="collapse">
+  <li><a href="#the-goal-modeling-sequences-of-words" id="toc-the-goal-modeling-sequences-of-words" class="nav-link" data-scroll-target="#the-goal-modeling-sequences-of-words">The Goal: Modeling Sequences of Words</a></li>
+  <li><a href="#probability-distributions-over-sentences" id="toc-probability-distributions-over-sentences" class="nav-link" data-scroll-target="#probability-distributions-over-sentences">Probability Distributions over Sentences</a></li>
+  <li><a href="#conditional-probability-and-the-chain-rule" id="toc-conditional-probability-and-the-chain-rule" class="nav-link" data-scroll-target="#conditional-probability-and-the-chain-rule">Conditional Probability and the Chain Rule</a></li>
+  <li><a href="#notation-for-word-sequences" id="toc-notation-for-word-sequences" class="nav-link" data-scroll-target="#notation-for-word-sequences">Notation for Word Sequences</a></li>
+  <li><a href="#tokenization-and-vocabulary" id="toc-tokenization-and-vocabulary" class="nav-link" data-scroll-target="#tokenization-and-vocabulary">Tokenization and Vocabulary</a></li>
+  <li><a href="#the-penn-treebank-corpus-ptb" id="toc-the-penn-treebank-corpus-ptb" class="nav-link" data-scroll-target="#the-penn-treebank-corpus-ptb">The Penn Treebank Corpus (PTB)</a></li>
+  <li><a href="#the-challenge-of-long-range-dependencies" id="toc-the-challenge-of-long-range-dependencies" class="nav-link" data-scroll-target="#the-challenge-of-long-range-dependencies">The Challenge of Long-Range Dependencies</a></li>
+  <li><a href="#n-gram-models" id="toc-n-gram-models" class="nav-link" data-scroll-target="#n-gram-models">N-gram Models</a></li>
+  </ul></li>
+  <li><a href="#word-embeddings" id="toc-word-embeddings" class="nav-link" data-scroll-target="#word-embeddings">Word Embeddings</a>
+  <ul class="collapse">
+  <li><a href="#motivation-representing-words-as-vectors" id="toc-motivation-representing-words-as-vectors" class="nav-link" data-scroll-target="#motivation-representing-words-as-vectors">Motivation: Representing Words as Vectors</a></li>
+  <li><a href="#word-embeddings-as-features-for-language-models" id="toc-word-embeddings-as-features-for-language-models" class="nav-link" data-scroll-target="#word-embeddings-as-features-for-language-models">Word Embeddings as Features for Language Models</a></li>
+  <li><a href="#creating-word-embeddings" id="toc-creating-word-embeddings" class="nav-link" data-scroll-target="#creating-word-embeddings">Creating Word Embeddings</a></li>
+  <li><a href="#neural-network-architecture-for-word-prediction" id="toc-neural-network-architecture-for-word-prediction" class="nav-link" data-scroll-target="#neural-network-architecture-for-word-prediction">Neural Network Architecture for Word Prediction</a></li>
+  <li><a href="#training-and-backpropagation" id="toc-training-and-backpropagation" class="nav-link" data-scroll-target="#training-and-backpropagation">Training and Backpropagation</a></li>
+  <li><a href="#the-emergence-of-semantic-meaning-in-embeddings" id="toc-the-emergence-of-semantic-meaning-in-embeddings" class="nav-link" data-scroll-target="#the-emergence-of-semantic-meaning-in-embeddings">The Emergence of Semantic Meaning in Embeddings</a></li>
+  <li><a href="#measuring-similarity-cosine-similarity" id="toc-measuring-similarity-cosine-similarity" class="nav-link" data-scroll-target="#measuring-similarity-cosine-similarity">Measuring Similarity: Cosine Similarity</a></li>
+  <li><a href="#tensorflow-implementation" id="toc-tensorflow-implementation" class="nav-link" data-scroll-target="#tensorflow-implementation">TensorFlow Implementation</a></li>
+  <li><a href="#evaluation-metrics" id="toc-evaluation-metrics" class="nav-link" data-scroll-target="#evaluation-metrics">Evaluation Metrics</a></li>
+  <li><a href="#beyond-bigrams-trigrams-and-higher-order-n-grams" id="toc-beyond-bigrams-trigrams-and-higher-order-n-grams" class="nav-link" data-scroll-target="#beyond-bigrams-trigrams-and-higher-order-n-grams">Beyond Bigrams: Trigrams and Higher-Order N-grams</a></li>
+  </ul></li>
+  <li><a href="#overfitting-and-regularization" id="toc-overfitting-and-regularization" class="nav-link" data-scroll-target="#overfitting-and-regularization">Overfitting and Regularization</a>
+  <ul class="collapse">
+  <li><a href="#the-problem-of-overfitting-in-language-models" id="toc-the-problem-of-overfitting-in-language-models" class="nav-link" data-scroll-target="#the-problem-of-overfitting-in-language-models">The Problem of Overfitting in Language Models</a></li>
+  <li><a href="#regularization-techniques-to-combat-overfitting" id="toc-regularization-techniques-to-combat-overfitting" class="nav-link" data-scroll-target="#regularization-techniques-to-combat-overfitting">Regularization Techniques to Combat Overfitting</a></li>
+  </ul></li>
+  <li><a href="#recurrent-neural-networks-rnns" id="toc-recurrent-neural-networks-rnns" class="nav-link" data-scroll-target="#recurrent-neural-networks-rnns">Recurrent Neural Networks (RNNs)</a>
+  <ul class="collapse">
+  <li><a href="#limitations-of-feedforward-networks-for-sequential-data" id="toc-limitations-of-feedforward-networks-for-sequential-data" class="nav-link" data-scroll-target="#limitations-of-feedforward-networks-for-sequential-data">Limitations of Feedforward Networks for Sequential Data</a></li>
+  <li><a href="#introducing-recurrent-neural-networks" id="toc-introducing-recurrent-neural-networks" class="nav-link" data-scroll-target="#introducing-recurrent-neural-networks">Introducing Recurrent Neural Networks</a></li>
+  <li><a href="#the-concept-of-state-and-memory-in-rnns" id="toc-the-concept-of-state-and-memory-in-rnns" class="nav-link" data-scroll-target="#the-concept-of-state-and-memory-in-rnns">The Concept of State and Memory in RNNs</a></li>
+  <li><a href="#a-simple-rnn-model" id="toc-a-simple-rnn-model" class="nav-link" data-scroll-target="#a-simple-rnn-model">A Simple RNN Model</a></li>
+  <li><a href="#backpropagation-through-time-bptt" id="toc-backpropagation-through-time-bptt" class="nav-link" data-scroll-target="#backpropagation-through-time-bptt">Backpropagation Through Time (BPTT)</a></li>
+  <li><a href="#batching-and-windowing-for-rnn-training" id="toc-batching-and-windowing-for-rnn-training" class="nav-link" data-scroll-target="#batching-and-windowing-for-rnn-training">Batching and Windowing for RNN Training</a></li>
+  <li><a href="#tensorflow-implementation-of-rnns" id="toc-tensorflow-implementation-of-rnns" class="nav-link" data-scroll-target="#tensorflow-implementation-of-rnns">TensorFlow Implementation of RNNs</a></li>
+  <li><a href="#complexity-analysis-of-rnns" id="toc-complexity-analysis-of-rnns" class="nav-link" data-scroll-target="#complexity-analysis-of-rnns">Complexity Analysis of RNNs</a></li>
+  </ul></li>
+  <li><a href="#long-short-term-memory-lstm-networks" id="toc-long-short-term-memory-lstm-networks" class="nav-link" data-scroll-target="#long-short-term-memory-lstm-networks">Long Short-Term Memory (LSTM) Networks</a>
+  <ul class="collapse">
+  <li><a href="#motivation-for-lstms-addressing-rnn-limitations" id="toc-motivation-for-lstms-addressing-rnn-limitations" class="nav-link" data-scroll-target="#motivation-for-lstms-addressing-rnn-limitations">Motivation for LSTMs: Addressing RNN Limitations</a></li>
+  <li><a href="#lstm-architecture-and-components" id="toc-lstm-architecture-and-components" class="nav-link" data-scroll-target="#lstm-architecture-and-components">LSTM Architecture and Components</a></li>
+  <li><a href="#detailed-lstm-equations-and-operations" id="toc-detailed-lstm-equations-and-operations" class="nav-link" data-scroll-target="#detailed-lstm-equations-and-operations">Detailed LSTM Equations and Operations</a></li>
+  <li><a href="#complexity-analysis-of-lstms" id="toc-complexity-analysis-of-lstms" class="nav-link" data-scroll-target="#complexity-analysis-of-lstms">Complexity Analysis of LSTMs</a></li>
+  </ul></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<div class="quarto-title-block"><div><h1 class="title">Lecture Notes on Word Embeddings and Recurrent Neural Networks</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Your Name </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">February 1, 2025</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="introduction" class="level1">
+<h1>Introduction</h1>
+<p>This lecture introduces the fundamental concepts of word embeddings and recurrent neural networks (RNNs) as essential components in modern deep learning for natural language processing. We will explore how to model sequences of words, represent words as vectors, and use neural networks to predict the probability of word sequences. The lecture covers <span class="math inline">\(n\)</span>-gram models, word embeddings, the architecture of RNNs, Long Short-Term Memory (LSTM) networks, and techniques to handle overfitting and improve model performance.</p>
+</section>
+<section id="language-modeling" class="level1">
+<h1>Language Modeling</h1>
+<section id="the-goal-modeling-sequences-of-words" class="level2">
+<h2 class="anchored" data-anchor-id="the-goal-modeling-sequences-of-words">The Goal: Modeling Sequences of Words</h2>
+<p>The primary goal is to build a <strong>language model</strong> that can understand and generate human language. This involves assigning probabilities to sequences of words, effectively modeling the likelihood of different sentences occurring in a language.</p>
+</section>
+<section id="probability-distributions-over-sentences" class="level2">
+<h2 class="anchored" data-anchor-id="probability-distributions-over-sentences">Probability Distributions over Sentences</h2>
+<p>We aim to model the probability distribution over sentences. While creating a probability distribution over individual words is relatively straightforward (by counting word frequencies and normalizing), language modeling requires understanding the relationships and dependencies between words in a sentence. A crucial application of this is in tasks like translation, where generating probable and contextually relevant sentences is essential.</p>
+<p>A <strong>probability distribution over strings</strong> is important for language modeling. We are not just interested in individual words, but in the probability of entire sentences.</p>
+</section>
+<section id="conditional-probability-and-the-chain-rule" class="level2">
+<h2 class="anchored" data-anchor-id="conditional-probability-and-the-chain-rule">Conditional Probability and the Chain Rule</h2>
+<section id="basic-conditional-probability" class="level3">
+<h3 class="anchored" data-anchor-id="basic-conditional-probability">Basic Conditional Probability</h3>
+<p><strong>Conditioning</strong> is a fundamental concept in statistics. The basic formula for conditional probability is given by:</p>
+<div class="tcolorbox">
+<p><span class="math display">\[\Prm(A|B) = \frac{\Prm(A \cap B)}{\Prm(B)}\]</span> or equivalently, <span class="math display">\[\Prm(A \cap B) = \Prm(A|B) \Prm(B)\]</span></p>
+</div>
+<p>Here, <span class="math inline">\(\Prm(A|B)\)</span> represents the probability of event <span class="math inline">\(A\)</span> occurring given that event <span class="math inline">\(B\)</span> has already occurred. <span class="math inline">\(\Prm(A)\)</span> is the prior probability of <span class="math inline">\(A\)</span>, and <span class="math inline">\(\Prm(A|B)\)</span> is the posterior probability of <span class="math inline">\(A\)</span> after observing <span class="math inline">\(B\)</span>.</p>
+</section>
+<section id="chain-rule-for-joint-probability" class="level3">
+<h3 class="anchored" data-anchor-id="chain-rule-for-joint-probability">Chain Rule for Joint Probability</h3>
+<div class="tcolorbox">
+<p>The chain rule extends conditional probability to sequences of events. For a sequence of events <span class="math inline">\(A_0, A_1, \ldots, A_m\)</span>, the probability of their joint occurrence is: <span class="math display">\[\Prm(A_0, A_1, \ldots, A_m) = \Prm(A_0) \Prm(A_1|A_0) \Prm(A_2|A_0, A_1) \cdots \Prm(A_m|A_0, \ldots, A_{m-1})\]</span></p>
+</div>
+<p>This rule is essential for decomposing the probability of a sentence into a product of conditional probabilities.</p>
+</section>
+<section id="interpreting-the-conditioning-event" class="level3">
+<h3 class="anchored" data-anchor-id="interpreting-the-conditioning-event">Interpreting the Conditioning Event</h3>
+<p>In <span class="math inline">\(\Prm(A|B)\)</span>, <span class="math inline">\(B\)</span> represents the <strong>evidence</strong> or the condition that we are considering. It is crucial to understand that <span class="math inline">\(\Prm(A|B)\)</span> is the probability of <span class="math inline">\(A\)</span> given the evidence <span class="math inline">\(B\)</span>, and not the probability of some combined event ‘AB’. There is no event ‘AB’.</p>
+<p>It is important to note that <span class="math inline">\(\Prm(A|B)\)</span> can be high even if <span class="math inline">\(\Prm(A)\)</span> is low. This means that the likelihood of <span class="math inline">\(A\)</span> given <span class="math inline">\(B\)</span> can be significant even if <span class="math inline">\(A\)</span> is generally rare. For example, the word ‘mat’ might be uncommon in general text, but after the sequence ‘the cat sat on the’, the probability of ‘mat’ appearing next is considerably higher.</p>
+<p>Both <span class="math inline">\(\Prm(A|B)\)</span> and <span class="math inline">\(\Prm(B|A)\)</span> are meaningful and depend on the context and the information we want to extract, not necessarily on chronological order or causality.</p>
+</section>
+</section>
+<section id="notation-for-word-sequences" class="level2">
+<h2 class="anchored" data-anchor-id="notation-for-word-sequences">Notation for Word Sequences</h2>
+<p>We represent a sequence of words as <span class="math inline">\(E_{1,m} = (E_1, \ldots, E_m)\)</span>, where each <span class="math inline">\(E_i\)</span> is a random variable representing the word at position <span class="math inline">\(i\)</span>. We can think of commas as representing ‘and’. For example, for the sentence "We live in a small world", an instance <span class="math inline">\(e_{1,m}\)</span> would be (We, live, in, a, small, world), where <span class="math inline">\(m=6\)</span> is the length of the sentence.</p>
+<p>We are interested in the probability of a specific sentence, such as <span class="math inline">\(\Prm(E_{1,n} = e_{1,n})\)</span>, which is the probability of the sequence of words <span class="math inline">\(e_{1,n}\)</span>. For instance, <span class="math inline">\(\Prm(\text{We, live, in, a, small, world})\)</span>. Using the chain rule, this can be written as:</p>
+<div class="tcolorbox">
+<p><span class="math display">\[\Prm(\text{world} | \text{We, live, in, a, small}) \times \Prm(\text{small} | \text{We, live, in, a}) \times \cdots \times \Prm(\text{live} | \text{We}) \times \Prm(\text{We})\]</span></p>
+</div>
+<p>Typically, this is written in reverse order (right-to-left), predicting each word based on the preceding words. In general, the probability of a sentence is:</p>
+<div class="tcolorbox">
+<p><span class="math display">\[\Prm(E_{1,n} = e_{1,n}) = \prod_{j=1}^{n} \Prm(E_j = e_j | E_{1,j-1} = e_{1,j-1})\]</span></p>
+</div>
+<p>Here, <span class="math inline">\(\prod\)</span> denotes the product from <span class="math inline">\(j=1\)</span> to <span class="math inline">\(n\)</span> of the conditional probability of the <span class="math inline">\(j\)</span>-th word given the prefix sentence. This framework forms the basis for language modeling.</p>
+</section>
+<section id="tokenization-and-vocabulary" class="level2">
+<h2 class="anchored" data-anchor-id="tokenization-and-vocabulary">Tokenization and Vocabulary</h2>
+<section id="handling-out-of-vocabulary-words" class="level3">
+<h3 class="anchored" data-anchor-id="handling-out-of-vocabulary-words">Handling Out-of-Vocabulary Words</h3>
+<p><strong>Tokenization</strong> is the process of breaking down text into individual words or tokens. This can be complex due to punctuation and contractions. For simplicity, we assume a tokenization method is available.</p>
+<p>To manage the complexity of natural language, we typically <strong>cap the vocabulary</strong> size. The number of possible words in a language is vast, making it impractical to model probabilities for every word. We select a vocabulary <span class="math inline">\(\V\)</span> of a fixed size, say 40,000 words, where <span class="math inline">\(|\V|\)</span> is the vocabulary size.</p>
+<p>Words that are not included in our vocabulary are considered <strong>out-of-vocabulary (OOV)</strong> words. These are represented by a special token, . If a word is encountered that is not in <span class="math inline">\(\V\)</span>, it is replaced with .</p>
+</section>
+</section>
+<section id="the-penn-treebank-corpus-ptb" class="level2">
+<h2 class="anchored" data-anchor-id="the-penn-treebank-corpus-ptb">The Penn Treebank Corpus (PTB)</h2>
+<p>We use the <strong>Penn Treebank Corpus (PTB)</strong>, which contains approximately 1,000,000 words from Wall Street Journal news articles. The PTB is already tokenized, but not "unked" in the original data, meaning unknown words are not pre-marked. The vocabulary size is around 50,000 words. PTB is a "treebank" because sentences are parsed into grammatical trees, but we focus solely on the words and replace words occurring less than 10 times with .</p>
+</section>
+<section id="the-challenge-of-long-range-dependencies" class="level2">
+<h2 class="anchored" data-anchor-id="the-challenge-of-long-range-dependencies">The Challenge of Long-Range Dependencies</h2>
+<p>A significant issue is that <strong>longer prefix sentences tend to have lower probabilities</strong>. This is because we are multiplying probabilities (which are less than 1), causing the overall probability to decrease with sentence length. Longer sentences are also harder to model reliably due to data sparsity for long prefixes.</p>
+<p>To address this, we need to <strong>reduce the span of conditioning</strong> for probability computation. Instead of conditioning on the entire prefix, we can condition only on the last few words. This approach leads to models like <strong><span class="math inline">\(n\)</span>-gram models</strong>.</p>
+</section>
+<section id="n-gram-models" class="level2">
+<h2 class="anchored" data-anchor-id="n-gram-models">N-gram Models</h2>
+<section id="bigram-model-approximation" class="level3">
+<h3 class="anchored" data-anchor-id="bigram-model-approximation">Bigram Model Approximation</h3>
+<p>An <strong>bigram model</strong> simplifies probability estimation by approximating the probability of a word based only on the preceding word. In a bigram model, we approximate <span class="math inline">\(\Prm(E_j = e_j | E_{1,j-1} = e_{1,j-1})\)</span> as <span class="math inline">\(\Prm(E_j = e_j | E_{j-1} = e_{j-1})\)</span>. This simplification is a practical technique to make probability computations more manageable.</p>
+</section>
+<section id="model-construction-using-frequencies" class="level3">
+<h3 class="anchored" data-anchor-id="model-construction-using-frequencies">Model Construction Using Frequencies</h3>
+<p>Constructing a language model involves defining a probability distribution. We typically use frequencies from training data to estimate these probabilities.</p>
+<ul>
+<li><p><strong>Super-trivial Model</strong>: Assumes every word is equally probable, i.e., <span class="math inline">\(1/|\V|\)</span>. This model is not very useful in practice.</p></li>
+<li><p><strong>Trivial Model</strong>: Counts the occurrences of each word and uses maximum likelihood estimation. This is still context-agnostic.</p></li>
+<li><p><strong>Bigram Model</strong>: Estimates probabilities based on pairs of consecutive words. This is more reliable and can be generalized using deep learning techniques.</p></li>
+</ul>
+</section>
+<section id="limitations-of-simple-models" class="level3">
+<h3 class="anchored" data-anchor-id="limitations-of-simple-models">Limitations of Simple Models</h3>
+<p>Simple models like unigram and bigram models have limitations in capturing long-range dependencies and semantic nuances in language. To overcome these, we turn to more sophisticated methods like neural networks and word embeddings.</p>
+</section>
+</section>
+</section>
+<section id="word-embeddings" class="level1">
+<h1>Word Embeddings</h1>
+<section id="motivation-representing-words-as-vectors" class="level2">
+<h2 class="anchored" data-anchor-id="motivation-representing-words-as-vectors">Motivation: Representing Words as Vectors</h2>
+<p>To use deep learning for language modeling, we need to represent words numerically. <strong>Word embeddings</strong> are vectors of floating-point numbers that serve as representations of words. These embeddings act as <strong>features</strong> for language models, enabling neural networks to process and understand textual data.</p>
+</section>
+<section id="word-embeddings-as-features-for-language-models" class="level2">
+<h2 class="anchored" data-anchor-id="word-embeddings-as-features-for-language-models">Word Embeddings as Features for Language Models</h2>
+<p>Word embeddings transform words into a continuous vector space where words with similar meanings are located closer to each other. These vectors capture semantic and syntactic information, making them powerful features for various NLP tasks, including language modeling.</p>
+</section>
+<section id="creating-word-embeddings" class="level2">
+<h2 class="anchored" data-anchor-id="creating-word-embeddings">Creating Word Embeddings</h2>
+<section id="indexing-the-vocabulary" class="level3">
+<h3 class="anchored" data-anchor-id="indexing-the-vocabulary">Indexing the Vocabulary</h3>
+<p>The first step in creating word embeddings is to <strong>index the vocabulary</strong>. This involves assigning a unique integer index to each word in our vocabulary <span class="math inline">\(\V\)</span>. This allows us to refer to words by their numerical indices.</p>
+</section>
+<section id="the-embedding-matrix" class="level3">
+<h3 class="anchored" data-anchor-id="the-embedding-matrix">The Embedding Matrix</h3>
+<p>Next, we create an <strong>embedding matrix</strong> <span class="math inline">\(E\)</span>. This matrix has dimensions <span class="math inline">\(|\V| \times e\)</span>, where <span class="math inline">\(|\V|\)</span> is the vocabulary size and <span class="math inline">\(e\)</span> is the embedding size (a hyperparameter, e.g., 20, 100, or 1000). Each row in <span class="math inline">\(E\)</span> corresponds to a word in the vocabulary, and the row itself is the word’s embedding vector. The values in <span class="math inline">\(E\)</span> are initially random and are learned during the training process.</p>
+</section>
+</section>
+<section id="neural-network-architecture-for-word-prediction" class="level2">
+<h2 class="anchored" data-anchor-id="neural-network-architecture-for-word-prediction">Neural Network Architecture for Word Prediction</h2>
+<section id="input-word-index" class="level3">
+<h3 class="anchored" data-anchor-id="input-word-index">Input: Word Index</h3>
+<p>The input to our neural network is the index of a word, say <span class="math inline">\(e_i\)</span>.</p>
+</section>
+<section id="embedding-lookup" class="level3">
+<h3 class="anchored" data-anchor-id="embedding-lookup">Embedding Lookup</h3>
+<p>We perform an <strong>embedding lookup</strong> to retrieve the embedding vector <span class="math inline">\(\mathbf{x}\)</span> corresponding to the input word index from the embedding matrix <span class="math inline">\(E\)</span>.</p>
+</section>
+<section id="linear-layer-and-softmax-output" class="level3">
+<h3 class="anchored" data-anchor-id="linear-layer-and-softmax-output">Linear Layer and Softmax Output</h3>
+<p>The embedding vector <span class="math inline">\(\mathbf{x}\)</span> is then fed into a neural network. A simple architecture could consist of a single linear layer with weights <span class="math inline">\(W\)</span> and bias <span class="math inline">\(b\)</span>, followed by a softmax activation function <span class="math inline">\(\sigma\)</span>.</p>
+<div class="tcolorbox">
+<p><span class="math display">\[\text{logits} = \mathbf{x}W + b\]</span> <span class="math display">\[\mathbf{y} = \sigma(\text{logits})\]</span></p>
+</div>
+<p>where <span class="math inline">\(\mathbf{y}\)</span> is the output vector representing the probability distribution over the vocabulary.</p>
+</section>
+<section id="output-as-a-probability-distribution" class="level3">
+<h3 class="anchored" data-anchor-id="output-as-a-probability-distribution">Output as a Probability Distribution</h3>
+<p>The output <span class="math inline">\(\mathbf{y}\)</span> is a <strong>probability distribution</strong> over the vocabulary <span class="math inline">\(\V\)</span>. It represents the predicted probabilities for each word in <span class="math inline">\(\V\)</span> being the next word in the sequence, given the input word. We aim for this distribution to predict the correct next word with high probability.</p>
+</section>
+</section>
+<section id="training-and-backpropagation" class="level2">
+<h2 class="anchored" data-anchor-id="training-and-backpropagation">Training and Backpropagation</h2>
+<section id="updating-embeddings-through-backpropagation" class="level3">
+<h3 class="anchored" data-anchor-id="updating-embeddings-through-backpropagation">Updating Embeddings through Backpropagation</h3>
+<p>During training, we compare the predicted probability distribution with the actual next word (target word). We use a loss function, such as cross-entropy loss, to quantify the difference between the prediction and the target. <strong>Backpropagation</strong> is then used to update the network parameters, including the weights <span class="math inline">\(W\)</span>, bias <span class="math inline">\(b\)</span>, and crucially, the <strong>embedding matrix</strong> <span class="math inline">\(E\)</span>.</p>
+<p>The embedding matrix <span class="math inline">\(E\)</span> is a trainable parameter of the model. Initially, its values are random, typically drawn from a normal distribution with mean zero and small standard deviation. Through stochastic gradient descent during backpropagation, these values are adjusted to minimize the loss function.</p>
+</section>
+</section>
+<section id="the-emergence-of-semantic-meaning-in-embeddings" class="level2">
+<h2 class="anchored" data-anchor-id="the-emergence-of-semantic-meaning-in-embeddings">The Emergence of Semantic Meaning in Embeddings</h2>
+<p>A remarkable outcome of training word embeddings is the emergence of semantic meaning. After training on a large corpus, words with similar meanings tend to have embedding vectors that are close to each other in the embedding space. Words that appear in similar contexts in the language will have similar embedding vectors.</p>
+</section>
+<section id="measuring-similarity-cosine-similarity" class="level2">
+<h2 class="anchored" data-anchor-id="measuring-similarity-cosine-similarity">Measuring Similarity: Cosine Similarity</h2>
+<p>To measure the "closeness" or similarity between word embedding vectors, <strong>cosine similarity</strong> is commonly used. The cosine similarity between two vectors <span class="math inline">\(\mathbf{x}\)</span> and <span class="math inline">\(\mathbf{y}\)</span> is defined as:</p>
+<div class="tcolorbox">
+<p><span class="math display">\[\cos(\mathbf{x}, \mathbf{y}) = \frac{\mathbf{x} \cdot \mathbf{y}}{||\mathbf{x}|| \cdot ||\mathbf{y}||}\]</span></p>
+</div>
+<p>where <span class="math inline">\(\mathbf{x} \cdot \mathbf{y}\)</span> is the dot product of <span class="math inline">\(\mathbf{x}\)</span> and <span class="math inline">\(\mathbf{y}\)</span>, and <span class="math inline">\(||\mathbf{x}||\)</span> and <span class="math inline">\(||\mathbf{y}||\)</span> are their respective Euclidean norms. Cosine similarity yields a value between -1 and 1, representing the cosine of the angle between the vectors. A value closer to 1 indicates higher similarity.</p>
+<div class="tcolorbox">
+<p>Examples of word similarities measured by cosine similarity: For instance, the word "above" is most similar to "under" with a cosine similarity of 0.362.</p>
+</div>
+</section>
+<section id="tensorflow-implementation" class="level2">
+<h2 class="anchored" data-anchor-id="tensorflow-implementation">TensorFlow Implementation</h2>
+<section id="placeholders-for-input-and-output" class="level3">
+<h3 class="anchored" data-anchor-id="placeholders-for-input-and-output">Placeholders for Input and Output</h3>
+<p>In TensorFlow, we define placeholders for input and output data:</p>
+<pre><code>        inpt = tf.placeholder(tf.int32, shape=[batchSz])
+        answr = tf.placeholder(tf.int32, shape=[batchSz])</code></pre>
+<p>Here, ‘inpt’ will hold the input word indices and ‘answr’ will hold the indices of the correct next words. ‘batchSz’ represents the batch size.</p>
+</section>
+<section id="embedding-matrix-as-a-trainable-variable" class="level3">
+<h3 class="anchored" data-anchor-id="embedding-matrix-as-a-trainable-variable">Embedding Matrix as a Trainable Variable</h3>
+<p>The embedding matrix <span class="math inline">\(E\)</span> is defined as a trainable variable:</p>
+<pre><code>        E = tf.Variable(tf.random_normal([vocabSz, embedSz], stddev=0.1))</code></pre>
+<p>‘vocabSz’ is the vocabulary size and ‘embedSz’ is the embedding size. ‘tf.random_normal’ initializes the embedding matrix with random values from a normal distribution.</p>
+</section>
+<section id="embedding-lookup-operation" class="level3">
+<h3 class="anchored" data-anchor-id="embedding-lookup-operation">Embedding Lookup Operation</h3>
+<p>The embedding lookup operation is performed using ‘tf.nn.embedding_lookup’:</p>
+<pre><code>        embed = tf.nn.embedding_lookup(E, inpt)</code></pre>
+<p>This operation retrieves the embedding vectors for the input word indices from the embedding matrix <span class="math inline">\(E\)</span>.</p>
+</section>
+<section id="loss-function-sparse-softmax-cross-entropy" class="level3">
+<h3 class="anchored" data-anchor-id="loss-function-sparse-softmax-cross-entropy">Loss Function: Sparse Softmax Cross-Entropy</h3>
+<p>For the loss function, we use sparse softmax cross-entropy with logits:</p>
+<pre><code>        xEnt = tf.nn.sparse_softmax_cross_entropy_with_logits(logits=logits, labels=answr)
+        loss = tf.reduce_sum(xEnt)</code></pre>
+<p>This computes the cross-entropy loss between the predicted logits and the true labels (‘answr’). ‘tf.reduce_sum’ sums up the cross-entropy values across the batch to get the total loss.</p>
+</section>
+</section>
+<section id="evaluation-metrics" class="level2">
+<h2 class="anchored" data-anchor-id="evaluation-metrics">Evaluation Metrics</h2>
+<section id="average-loss-per-example" class="level3">
+<h3 class="anchored" data-anchor-id="average-loss-per-example">Average Loss per Example</h3>
+<p>A basic evaluation metric is the average loss per example or per word. This is similar to the approach used in digit recognition. We aim to minimize this loss during training.</p>
+</section>
+<section id="perplexity-a-common-language-modeling-metric" class="level3">
+<h3 class="anchored" data-anchor-id="perplexity-a-common-language-modeling-metric">Perplexity: A Common Language Modeling Metric</h3>
+<p>A more standard metric in language modeling is <strong>perplexity</strong>. Perplexity measures how well a language model predicts a sample of text. It is related to the average probability of predicting the correct next word.</p>
+<div class="tcolorbox">
+<p>Perplexity is defined as <span class="math inline">\(e^Z\)</span>, where <span class="math inline">\(Z\)</span> is the average negative log-probability of the correct words in a sentence or corpus <span class="math inline">\(d\)</span> of length <span class="math inline">\(|d|\)</span>: <span class="math display">\[Z = \frac{1}{|d|} \sum_{i=1}^{|d|} -\log(\Prm_{z_i})\]</span> Here, <span class="math inline">\(\Prm_{z_i}\)</span> is the probability assigned by the model to the correct <span class="math inline">\(i\)</span>-th word. Perplexity is then: <span class="math display">\[\text{Perplexity} = e^Z = \left( \prod_{i=1}^{|d|} \frac{1}{\Prm_{z_i}} \right)^{1/|d|}\]</span></p>
+</div>
+<p>Lower perplexity indicates a better language model. If the model assigns a uniform probability <span class="math inline">\(1/|\V|\)</span> to every word, then perplexity becomes:</p>
+<div class="tcolorbox">
+<p><span class="math display">\[\text{Perplexity} = |\V|\]</span></p>
+</div>
+<p>which is equal to the vocabulary size.</p>
+</section>
+</section>
+<section id="beyond-bigrams-trigrams-and-higher-order-n-grams" class="level2">
+<h2 class="anchored" data-anchor-id="beyond-bigrams-trigrams-and-higher-order-n-grams">Beyond Bigrams: Trigrams and Higher-Order N-grams</h2>
+<p>We can extend the bigram model to <strong>trigram models</strong> and higher-order <span class="math inline">\(n\)</span>-gram models by conditioning on more preceding words. For example, a trigram model considers the two previous words to predict the next word. This requires adjusting the input to the model to take into account the additional context words. Adding hidden layers to the neural network can also improve perplexity.</p>
+</section>
+</section>
+<section id="overfitting-and-regularization" class="level1">
+<h1>Overfitting and Regularization</h1>
+<section id="the-problem-of-overfitting-in-language-models" class="level2">
+<h2 class="anchored" data-anchor-id="the-problem-of-overfitting-in-language-models">The Problem of Overfitting in Language Models</h2>
+<p><strong>Overfitting</strong> is a significant concern in language modeling. Language models, especially complex ones, can easily overfit to the training data, performing well on the training set but poorly on unseen data (development or test sets). This is partly because language data may not always be perfectly independently and identically distributed (i.i.d.), and training datasets may not be fully representative of the vastness of language.</p>
+<div class="tcolorbox">
+<p>Training perplexity decreases consistently over epochs, but development perplexity starts to increase after a certain point, indicating overfitting.</p>
+</div>
+</section>
+<section id="regularization-techniques-to-combat-overfitting" class="level2">
+<h2 class="anchored" data-anchor-id="regularization-techniques-to-combat-overfitting">Regularization Techniques to Combat Overfitting</h2>
+<p><strong>Regularization</strong> techniques are used to mitigate overfitting.</p>
+<section id="early-stopping" class="level3">
+<h3 class="anchored" data-anchor-id="early-stopping">Early Stopping</h3>
+<p><strong>Early stopping</strong> is a simple regularization method where training is stopped when the performance on a validation set (e.g., development perplexity) starts to degrade. This prevents the model from continuing to train and overfit to the training data.</p>
+</section>
+<section id="dropout-regularization" class="level3">
+<h3 class="anchored" data-anchor-id="dropout-regularization">Dropout Regularization</h3>
+<p><strong>Dropout</strong> is a more advanced regularization technique that involves randomly dropping out (setting to zero) a fraction of neurons during training. This forces the network to learn more robust features and reduces reliance on individual neurons. In TensorFlow, dropout can be implemented using ‘tf.nn.dropout’.</p>
+<div class="tcolorbox">
+<p>Dropout can be implemented by randomly dropping 50% of the first layer’s output units during training.</p>
+</div>
+</section>
+<section id="l2-regularization" class="level3">
+<h3 class="anchored" data-anchor-id="l2-regularization">L2 Regularization</h3>
+<p><strong>L2 regularization</strong> adds a penalty term to the loss function that is proportional to the sum of the squared weights of the network. This encourages the network to learn smaller weights, which can help prevent overfitting. The modified loss function becomes:</p>
+<div class="tcolorbox">
+<p><span class="math display">\[L(\Phi) = -\log(\Prm(c)) + \alpha \sum_{\phi \in \Phi} ||\phi||^2\]</span></p>
+</div>
+<p>where <span class="math inline">\(\Phi\)</span> represents the set of weights, and <span class="math inline">\(\alpha\)</span> is a hyperparameter controlling the strength of regularization. In TensorFlow, L2 regularization can be implemented using ‘tf.nn.l2_loss’.</p>
+<pre><code>        keepP = tf.placeholder(tf.float32)
+        w1out = tf.nn.dropout(w1out, keepP) % Dropout implementation
+
+        l2_loss = 0.01 * tf.nn.l2_loss(W1) % L2 regularization term
+        loss = original_loss + l2_loss % Adding L2 regularization to the loss</code></pre>
+</section>
+</section>
+</section>
+<section id="recurrent-neural-networks-rnns" class="level1">
+<h1>Recurrent Neural Networks (RNNs)</h1>
+<section id="limitations-of-feedforward-networks-for-sequential-data" class="level2">
+<h2 class="anchored" data-anchor-id="limitations-of-feedforward-networks-for-sequential-data">Limitations of Feedforward Networks for Sequential Data</h2>
+<p>Feedforward neural networks, even with techniques like word embeddings, treat each input independently. They lack the ability to maintain state or memory of past inputs, which is crucial for processing sequential data like language where context is important.</p>
+</section>
+<section id="introducing-recurrent-neural-networks" class="level2">
+<h2 class="anchored" data-anchor-id="introducing-recurrent-neural-networks">Introducing Recurrent Neural Networks</h2>
+<p><strong>Recurrent Neural Networks (RNNs)</strong> are designed to handle sequential data by incorporating cycles in their network graph. Unlike feedforward networks, RNNs have connections that loop back to previous layers, allowing information to persist over time.</p>
+</section>
+<section id="the-concept-of-state-and-memory-in-rnns" class="level2">
+<h2 class="anchored" data-anchor-id="the-concept-of-state-and-memory-in-rnns">The Concept of State and Memory in RNNs</h2>
+<p>RNNs introduce the concept of <strong>state</strong> or <strong>memory</strong>. This state allows the network to remember information from previous inputs and use it to influence the processing of current inputs. This memory is essential for understanding context and dependencies in sequential data.</p>
+</section>
+<section id="a-simple-rnn-model" class="level2">
+<h2 class="anchored" data-anchor-id="a-simple-rnn-model">A Simple RNN Model</h2>
+<section id="state-update-rule" class="level3">
+<h3 class="anchored" data-anchor-id="state-update-rule">State Update Rule</h3>
+<p>A simple RNN model can be defined by the following equations:</p>
+<div class="tcolorbox">
+<p><span class="math display">\[\mathbf{s}_0 = \mathbf{0} \quad \text{(initial state is zero vector)}\]</span> <span class="math display">\[\mathbf{s}_{t+1} = \rho((\mathbf{e}_{t+1} \cdot \mathbf{s}_t)W_r + \mathbf{b}_r) \quad \text{(state update rule)}\]</span></p>
+</div>
+<p>Here, <span class="math inline">\(t\)</span> represents time, <span class="math inline">\(\mathbf{s}_t\)</span> is the state vector at time <span class="math inline">\(t\)</span>, <span class="math inline">\(\mathbf{e}_{t+1}\)</span> is the embedding vector of the input word at time <span class="math inline">\(t+1\)</span>, <span class="math inline">\(W_r\)</span> and <span class="math inline">\(\mathbf{b}_r\)</span> are the weight matrix and bias vector for the recurrent layer, and <span class="math inline">\(\rho\)</span> is an activation function, such as tanh.</p>
+</section>
+<section id="output-calculation" class="level3">
+<h3 class="anchored" data-anchor-id="output-calculation">Output Calculation</h3>
+<p>The output <span class="math inline">\(\mathbf{o}\)</span> is calculated from the updated state:</p>
+<div class="tcolorbox">
+<p><span class="math display">\[\mathbf{o} = \mathbf{s}_{t+1}W_o + \mathbf{b}_o \quad \text{(output calculation)}\]</span></p>
+</div>
+<p>where <span class="math inline">\(W_o\)</span> and <span class="math inline">\(\mathbf{b}_o\)</span> are the weight matrix and bias vector for the output layer. The output <span class="math inline">\(\mathbf{o}\)</span> can then be passed through a softmax layer to obtain a probability distribution over the vocabulary for the next word prediction.</p>
+<div class="tcolorbox">
+<p>The state vector <span class="math inline">\(\mathbf{s}_t\)</span> summarizes information from all previous inputs up to time <span class="math inline">\(t\)</span>. The dimension of the state vector is a hyperparameter. New states are computed recursively, incorporating the current input and the previous state.</p>
+</div>
+</section>
+</section>
+<section id="backpropagation-through-time-bptt" class="level2">
+<h2 class="anchored" data-anchor-id="backpropagation-through-time-bptt">Backpropagation Through Time (BPTT)</h2>
+<p>Training RNNs involves <strong>Backpropagation Through Time (BPTT)</strong>. Since RNNs have cycles, standard backpropagation cannot be directly applied. BPTT unfolds the RNN over a fixed number of time steps (window size) and then applies backpropagation as if it were a deep feedforward network.</p>
+<div class="tcolorbox">
+<p>A simple approach is to unfold the RNN for a fixed number of steps <span class="math inline">\(N\)</span> and then perform backpropagation. This is an approximation, as true recurrence implies potentially infinite unfolding.</p>
+</div>
+</section>
+<section id="batching-and-windowing-for-rnn-training" class="level2">
+<h2 class="anchored" data-anchor-id="batching-and-windowing-for-rnn-training">Batching and Windowing for RNN Training</h2>
+<p>To train RNNs efficiently, we use batching and windowing. The corpus is first split into batches and then further divided into windows of a fixed size. For example, with a window size of 3, we process sequences of 3 words at a time.</p>
+<p>Data is processed in batches, and within each batch, sequences of words are processed in windows. This approach allows for parallel processing within a batch and manages the computational complexity of BPTT.</p>
+<div class="tcolorbox">
+<p>When the batch size is 2 and the window size is 3, the corpus is divided into chunks of 2x3 words. Each chunk is processed sequentially, and the final state of one chunk is used as the initial state for the next chunk.</p>
+</div>
+</section>
+<section id="tensorflow-implementation-of-rnns" class="level2">
+<h2 class="anchored" data-anchor-id="tensorflow-implementation-of-rnns">TensorFlow Implementation of RNNs</h2>
+<p>In TensorFlow, a basic RNN cell can be created using:</p>
+<pre><code>    rnn = tf.contrib.rnn.BasicRNNCell(rnnSz)</code></pre>
+<p>where ‘rnnSz’ is the size of the RNN state. The initial state is set to zero:</p>
+<pre><code>    initialState = rnn.zero_state(batchSz, tf.float32)</code></pre>
+<p>and the dynamic RNN is created using ‘tf.nn.dynamic_rnn’:</p>
+<pre><code>    outputs, nextState = tf.nn.dynamic_rnn(rnn, embeddings, initial_state=initialState)</code></pre>
+<p>‘embeddings’ is the input word embeddings, and ‘initialState’ is the initial RNN state. ‘tf.nn.dynamic_rnn’ handles the unfolding and recurrence over the input sequence.</p>
+</section>
+<section id="complexity-analysis-of-rnns" class="level2">
+<h2 class="anchored" data-anchor-id="complexity-analysis-of-rnns">Complexity Analysis of RNNs</h2>
+<ul>
+<li><p><strong>Time Complexity</strong>: The time complexity of training an RNN with BPTT is <span class="math inline">\(O(N \times B \times T)\)</span>, where <span class="math inline">\(N\)</span> is the number of steps to unfold, <span class="math inline">\(B\)</span> is the batch size, and <span class="math inline">\(T\)</span> is the length of the sequence.</p></li>
+<li><p><strong>Space Complexity</strong>: The space complexity is primarily determined by the size of the state vector and the number of parameters in the network. It is <span class="math inline">\(O(S + P)\)</span>, where <span class="math inline">\(S\)</span> is the size of the state vector and <span class="math inline">\(P\)</span> is the number of parameters.</p></li>
+</ul>
+</section>
+</section>
+<section id="long-short-term-memory-lstm-networks" class="level1">
+<h1>Long Short-Term Memory (LSTM) Networks</h1>
+<section id="motivation-for-lstms-addressing-rnn-limitations" class="level2">
+<h2 class="anchored" data-anchor-id="motivation-for-lstms-addressing-rnn-limitations">Motivation for LSTMs: Addressing RNN Limitations</h2>
+<p>Simple RNNs suffer from vanishing gradient and exploding gradient problems, especially when dealing with long sequences. This makes it difficult for them to learn long-range dependencies. <strong>Long Short-Term Memory (LSTM)</strong> networks are a type of RNN designed to address these limitations and effectively capture long-range dependencies.</p>
+</section>
+<section id="lstm-architecture-and-components" class="level2">
+<h2 class="anchored" data-anchor-id="lstm-architecture-and-components">LSTM Architecture and Components</h2>
+<p>LSTMs introduce a more complex cell structure with a <strong>cell state</strong> (long-term memory) and <strong>gates</strong> that control the flow of information.</p>
+<section id="cell-state-long-term-memory" class="level3">
+<h3 class="anchored" data-anchor-id="cell-state-long-term-memory">Cell State: Long-Term Memory</h3>
+<p>The <strong>cell state</strong> acts as a long-term memory, carrying information across time steps. It is a central component that LSTM gates manipulate.</p>
+</section>
+<section id="gates-forget-input-and-output" class="level3">
+<h3 class="anchored" data-anchor-id="gates-forget-input-and-output">Gates: Forget, Input, and Output</h3>
+<p>LSTMs use three main types of gates to regulate information flow:</p>
+<ul>
+<li><p><strong>Forget Gate</strong>: Determines what information to discard from the cell state.</p></li>
+<li><p><strong>Input Gate</strong>: Determines what new information to add to the cell state.</p></li>
+<li><p><strong>Output Gate</strong>: Determines what information to output based on the cell state and input.</p></li>
+</ul>
+<p>These gates are implemented using sigmoid and tanh activation functions and pointwise multiplication.</p>
+</section>
+</section>
+<section id="detailed-lstm-equations-and-operations" class="level2">
+<h2 class="anchored" data-anchor-id="detailed-lstm-equations-and-operations">Detailed LSTM Equations and Operations</h2>
+<section id="forget-gate-controlling-information-retention" class="level3">
+<h3 class="anchored" data-anchor-id="forget-gate-controlling-information-retention">Forget Gate: Controlling Information Retention</h3>
+<p>The forget gate <span class="math inline">\(f_t\)</span> decides what information to forget from the previous cell state <span class="math inline">\(c_{t-1}\)</span>. It is calculated as:</p>
+<div class="tcolorbox">
+<p><span class="math display">\[f_t = \sigma(\mathbf{h}'W_f + \mathbf{b}_f)\]</span></p>
+</div>
+<p>where <span class="math inline">\(\mathbf{h}' = [\mathbf{h}_{t-1}, \mathbf{e}_t]\)</span> is the concatenation of the previous hidden state and the current input embedding, <span class="math inline">\(W_f\)</span> and <span class="math inline">\(\mathbf{b}_f\)</span> are weights and biases for the forget gate, and <span class="math inline">\(\sigma\)</span> is the sigmoid function.</p>
+</section>
+<section id="input-gate-adding-new-information" class="level3">
+<h3 class="anchored" data-anchor-id="input-gate-adding-new-information">Input Gate: Adding New Information</h3>
+<p>The input gate has two parts: an input gate layer <span class="math inline">\(a_{1,t}\)</span> and a candidate cell state <span class="math inline">\(\tilde{c}_t\)</span>.</p>
+<div class="tcolorbox">
+<p><span class="math display">\[a_{1,t} = \sigma(\mathbf{h}'W_{a1} + \mathbf{b}_{a1})\]</span> <span class="math display">\[a_{2,t} = \tanh(\mathbf{h}'W_{a2} + \mathbf{b}_{a2})\]</span></p>
+</div>
+<p>where <span class="math inline">\(W_{a1}, \mathbf{b}_{a1}, W_{a2}, \mathbf{b}_{a2}\)</span> are weights and biases for the input gate components.</p>
+</section>
+<section id="cell-state-update-combining-old-and-new-information" class="level3">
+<h3 class="anchored" data-anchor-id="cell-state-update-combining-old-and-new-information">Cell State Update: Combining Old and New Information</h3>
+<p>The cell state <span class="math inline">\(c_t\)</span> is updated by combining the forgotten information from <span class="math inline">\(c_{t-1}\)</span> and the new information from the input gate:</p>
+<div class="tcolorbox">
+<p><span class="math display">\[c_t = c_{t-1} \odot f_t + (a_{1,t} \odot a_{2,t})\]</span></p>
+</div>
+<p>where <span class="math inline">\(\odot\)</span> denotes element-wise multiplication.</p>
+</section>
+<section id="output-gate-controlling-information-output" class="level3">
+<h3 class="anchored" data-anchor-id="output-gate-controlling-information-output">Output Gate: Controlling Information Output</h3>
+<p>The output gate <span class="math inline">\(o_t\)</span> decides what parts of the cell state to output:</p>
+<div class="tcolorbox">
+<p><span class="math display">\[\mathbf{h}''_t = \mathbf{h}'W_h + \mathbf{b}_h\]</span> <span class="math display">\[o_t = \sigma(\mathbf{h}''_t W_o + \mathbf{b}_o)\]</span> <span class="math display">\[\mathbf{h}_t = \tanh(c_t) \odot o_t\]</span></p>
+</div>
+<p>where <span class="math inline">\(W_h, \mathbf{b}_h, W_o, \mathbf{b}_o\)</span> are weights and biases for the output gate components, and <span class="math inline">\(\mathbf{h}_t\)</span> is the hidden state output at time <span class="math inline">\(t\)</span>.</p>
+<div class="tcolorbox">
+<p>The sigmoid gates (forget, input, output) produce values between 0 and 1, acting as "smooth" controls to regulate information flow.</p>
+</div>
+</section>
+</section>
+<section id="complexity-analysis-of-lstms" class="level2">
+<h2 class="anchored" data-anchor-id="complexity-analysis-of-lstms">Complexity Analysis of LSTMs</h2>
+<ul>
+<li><p><strong>Time Complexity</strong>: The time complexity of training an LSTM is similar to that of a simple RNN, but with a larger constant factor due to the more complex operations within each LSTM cell. It is <span class="math inline">\(O(N \times B \times T \times G)\)</span>, where <span class="math inline">\(N\)</span> is the number of steps to unfold, <span class="math inline">\(B\)</span> is the batch size, <span class="math inline">\(T\)</span> is the length of the sequence, and <span class="math inline">\(G\)</span> represents the complexity factor due to gates.</p></li>
+<li><p><strong>Space Complexity</strong>: The space complexity of an LSTM is higher than that of a simple RNN due to the additional parameters in the gates and the cell state. It is <span class="math inline">\(O(S + P + G)\)</span>, where <span class="math inline">\(S\)</span> is the size of the state vector, <span class="math inline">\(P\)</span> is the number of parameters in the basic RNN, and <span class="math inline">\(G\)</span> is the additional parameters due to the LSTM gates.</p></li>
+</ul>
+</section>
+</section>
+<section id="conclusion" class="level1">
+<h1>Conclusion</h1>
+<p>In this lecture, we covered the basics of language modeling, word embeddings, and recurrent neural networks, focusing on RNNs and LSTMs. We discussed how word embeddings provide numerical representations of wordsthat capture semantic meaning, and how RNNs and LSTMs are designed to process sequential data by maintaining state and memory. We also explored techniques to address overfitting, such as dropout and L2 regularization.</p>
+<p>Key takeaways include:</p>
+<ul>
+<li><p>Language models aim to predict the probability of word sequences.</p></li>
+<li><p>Word embeddings are crucial for representing words as numerical vectors in deep learning models.</p></li>
+<li><p>RNNs and LSTMs are powerful architectures for handling sequential data and capturing long-range dependencies.</p></li>
+<li><p>Regularization techniques are essential to prevent overfitting in language models.</p></li>
+</ul>
+<p>Further topics to explore might include attention mechanisms, transformers, and more advanced applications of RNNs and LSTMs in natural language processing. Understanding these concepts is crucial for building sophisticated NLP systems.</p>
+
+
+<!-- -->
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+  const viewSource = window.document.getElementById('quarto-view-source') ||
+                     window.document.getElementById('quarto-code-tools-source');
+  if (viewSource) {
+    const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+    viewSource.addEventListener("click", function(e) {
+      if (sourceUrl) {
+        // rstudio viewer pane
+        if (/\bcapabilities=\b/.test(window.location)) {
+          window.open(sourceUrl);
+        } else {
+          window.location.href = sourceUrl;
+        }
+      } else {
+        const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+        modal.show();
+      }
+      return false;
+    });
+  }
+  function toggleCodeHandler(show) {
+    return function(e) {
+      const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+      for (let i=0; i<detailsSrc.length; i++) {
+        const details = detailsSrc[i].parentElement;
+        if (show) {
+          details.open = true;
+        } else {
+          details.removeAttribute("open");
+        }
+      }
+      const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+      const fromCls = show ? "hidden" : "unhidden";
+      const toCls = show ? "unhidden" : "hidden";
+      for (let i=0; i<cellCodeDivs.length; i++) {
+        const codeDiv = cellCodeDivs[i];
+        if (codeDiv.classList.contains(fromCls)) {
+          codeDiv.classList.remove(fromCls);
+          codeDiv.classList.add(toCls);
+        } 
+      }
+      return false;
+    }
+  }
+  const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+  if (hideAllCode) {
+    hideAllCode.addEventListener("click", toggleCodeHandler(false));
+  }
+  const showAllCode = window.document.getElementById("quarto-show-all-code");
+  if (showAllCode) {
+    showAllCode.addEventListener("click", toggleCodeHandler(true));
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("git@github\.com-TheGhoul21:TheGhoul21\/FNN-2024-2025\.git");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="sourceCode" id="cb9" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Lecture Notes on Word Embeddings and Recurrent Neural Networks"</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="an">author:</span><span class="co"> "Your Name"</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="an">date:</span><span class="co"> "2025-02-01"</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="co">  html:</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="co">    toc: true  # Table of Contents</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="co">    toc-depth: 2</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="co">    code-tools: true</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="co">    theme: cosmo  # Or "journal" for Distill-like minimalism</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a><span class="fu"># Introduction</span></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>This lecture introduces the fundamental concepts of word embeddings and</span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>recurrent neural networks (RNNs) as essential components in modern deep</span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>learning for natural language processing. We will explore how to model</span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>sequences of words, represent words as vectors, and use neural networks</span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>to predict the probability of word sequences. The lecture covers</span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>$n$-gram models, word embeddings, the architecture of RNNs, Long</span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>Short-Term Memory (LSTM) networks, and techniques to handle overfitting</span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>and improve model performance.</span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a><span class="fu"># Language Modeling</span></span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a><span class="fu">## The Goal: Modeling Sequences of Words</span></span>
+<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a>The primary goal is to build a **language model** that can understand</span>
+<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a>and generate human language. This involves assigning probabilities to</span>
+<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a>sequences of words, effectively modeling the likelihood of different</span>
+<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a>sentences occurring in a language.</span>
+<span id="cb9-32"><a href="#cb9-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-33"><a href="#cb9-33" aria-hidden="true" tabindex="-1"></a><span class="fu">## Probability Distributions over Sentences</span></span>
+<span id="cb9-34"><a href="#cb9-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-35"><a href="#cb9-35" aria-hidden="true" tabindex="-1"></a>We aim to model the probability distribution over sentences. While</span>
+<span id="cb9-36"><a href="#cb9-36" aria-hidden="true" tabindex="-1"></a>creating a probability distribution over individual words is relatively</span>
+<span id="cb9-37"><a href="#cb9-37" aria-hidden="true" tabindex="-1"></a>straightforward (by counting word frequencies and normalizing), language</span>
+<span id="cb9-38"><a href="#cb9-38" aria-hidden="true" tabindex="-1"></a>modeling requires understanding the relationships and dependencies</span>
+<span id="cb9-39"><a href="#cb9-39" aria-hidden="true" tabindex="-1"></a>between words in a sentence. A crucial application of this is in tasks</span>
+<span id="cb9-40"><a href="#cb9-40" aria-hidden="true" tabindex="-1"></a>like translation, where generating probable and contextually relevant</span>
+<span id="cb9-41"><a href="#cb9-41" aria-hidden="true" tabindex="-1"></a>sentences is essential.</span>
+<span id="cb9-42"><a href="#cb9-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-43"><a href="#cb9-43" aria-hidden="true" tabindex="-1"></a>A **probability distribution over strings** is important for language</span>
+<span id="cb9-44"><a href="#cb9-44" aria-hidden="true" tabindex="-1"></a>modeling. We are not just interested in individual words, but in the</span>
+<span id="cb9-45"><a href="#cb9-45" aria-hidden="true" tabindex="-1"></a>probability of entire sentences.</span>
+<span id="cb9-46"><a href="#cb9-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-47"><a href="#cb9-47" aria-hidden="true" tabindex="-1"></a><span class="fu">## Conditional Probability and the Chain Rule</span></span>
+<span id="cb9-48"><a href="#cb9-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-49"><a href="#cb9-49" aria-hidden="true" tabindex="-1"></a><span class="fu">### Basic Conditional Probability</span></span>
+<span id="cb9-50"><a href="#cb9-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-51"><a href="#cb9-51" aria-hidden="true" tabindex="-1"></a>**Conditioning** is a fundamental concept in statistics. The basic</span>
+<span id="cb9-52"><a href="#cb9-52" aria-hidden="true" tabindex="-1"></a>formula for conditional probability is given by:</span>
+<span id="cb9-53"><a href="#cb9-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-54"><a href="#cb9-54" aria-hidden="true" tabindex="-1"></a>::: tcolorbox</span>
+<span id="cb9-55"><a href="#cb9-55" aria-hidden="true" tabindex="-1"></a>$$\Prm(A|B) = \frac{\Prm(A \cap B)}{\Prm(B)}$$ or equivalently,</span>
+<span id="cb9-56"><a href="#cb9-56" aria-hidden="true" tabindex="-1"></a>$$\Prm(A \cap B) = \Prm(A|B) \Prm(B)$$</span>
+<span id="cb9-57"><a href="#cb9-57" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb9-58"><a href="#cb9-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-59"><a href="#cb9-59" aria-hidden="true" tabindex="-1"></a>Here, $\Prm(A|B)$ represents the probability of event $A$ occurring</span>
+<span id="cb9-60"><a href="#cb9-60" aria-hidden="true" tabindex="-1"></a>given that event $B$ has already occurred. $\Prm(A)$ is the prior</span>
+<span id="cb9-61"><a href="#cb9-61" aria-hidden="true" tabindex="-1"></a>probability of $A$, and $\Prm(A|B)$ is the posterior probability of $A$</span>
+<span id="cb9-62"><a href="#cb9-62" aria-hidden="true" tabindex="-1"></a>after observing $B$.</span>
+<span id="cb9-63"><a href="#cb9-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-64"><a href="#cb9-64" aria-hidden="true" tabindex="-1"></a><span class="fu">### Chain Rule for Joint Probability</span></span>
+<span id="cb9-65"><a href="#cb9-65" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-66"><a href="#cb9-66" aria-hidden="true" tabindex="-1"></a>::: tcolorbox</span>
+<span id="cb9-67"><a href="#cb9-67" aria-hidden="true" tabindex="-1"></a>The chain rule extends conditional probability to sequences of events.</span>
+<span id="cb9-68"><a href="#cb9-68" aria-hidden="true" tabindex="-1"></a>For a sequence of events $A_0, A_1, \ldots, A_m$, the probability of</span>
+<span id="cb9-69"><a href="#cb9-69" aria-hidden="true" tabindex="-1"></a>their joint occurrence is:</span>
+<span id="cb9-70"><a href="#cb9-70" aria-hidden="true" tabindex="-1"></a>$$\Prm(A_0, A_1, \ldots, A_m) = \Prm(A_0) \Prm(A_1|A_0) \Prm(A_2|A_0, A_1) \cdots \Prm(A_m|A_0, \ldots, A_{m-1})$$</span>
+<span id="cb9-71"><a href="#cb9-71" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb9-72"><a href="#cb9-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-73"><a href="#cb9-73" aria-hidden="true" tabindex="-1"></a>This rule is essential for decomposing the probability of a sentence</span>
+<span id="cb9-74"><a href="#cb9-74" aria-hidden="true" tabindex="-1"></a>into a product of conditional probabilities.</span>
+<span id="cb9-75"><a href="#cb9-75" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-76"><a href="#cb9-76" aria-hidden="true" tabindex="-1"></a><span class="fu">### Interpreting the Conditioning Event</span></span>
+<span id="cb9-77"><a href="#cb9-77" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-78"><a href="#cb9-78" aria-hidden="true" tabindex="-1"></a>In $\Prm(A|B)$, $B$ represents the **evidence** or the condition that we</span>
+<span id="cb9-79"><a href="#cb9-79" aria-hidden="true" tabindex="-1"></a>are considering. It is crucial to understand that $\Prm(A|B)$ is the</span>
+<span id="cb9-80"><a href="#cb9-80" aria-hidden="true" tabindex="-1"></a>probability of $A$ given the evidence $B$, and not the probability of</span>
+<span id="cb9-81"><a href="#cb9-81" aria-hidden="true" tabindex="-1"></a>some combined event 'AB'. There is no event 'AB'.</span>
+<span id="cb9-82"><a href="#cb9-82" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-83"><a href="#cb9-83" aria-hidden="true" tabindex="-1"></a>It is important to note that $\Prm(A|B)$ can be high even if $\Prm(A)$</span>
+<span id="cb9-84"><a href="#cb9-84" aria-hidden="true" tabindex="-1"></a>is low. This means that the likelihood of $A$ given $B$ can be</span>
+<span id="cb9-85"><a href="#cb9-85" aria-hidden="true" tabindex="-1"></a>significant even if $A$ is generally rare. For example, the word 'mat'</span>
+<span id="cb9-86"><a href="#cb9-86" aria-hidden="true" tabindex="-1"></a>might be uncommon in general text, but after the sequence 'the cat sat</span>
+<span id="cb9-87"><a href="#cb9-87" aria-hidden="true" tabindex="-1"></a>on the', the probability of 'mat' appearing next is considerably higher.</span>
+<span id="cb9-88"><a href="#cb9-88" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-89"><a href="#cb9-89" aria-hidden="true" tabindex="-1"></a>Both $\Prm(A|B)$ and $\Prm(B|A)$ are meaningful and depend on the</span>
+<span id="cb9-90"><a href="#cb9-90" aria-hidden="true" tabindex="-1"></a>context and the information we want to extract, not necessarily on</span>
+<span id="cb9-91"><a href="#cb9-91" aria-hidden="true" tabindex="-1"></a>chronological order or causality.</span>
+<span id="cb9-92"><a href="#cb9-92" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-93"><a href="#cb9-93" aria-hidden="true" tabindex="-1"></a><span class="fu">## Notation for Word Sequences</span></span>
+<span id="cb9-94"><a href="#cb9-94" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-95"><a href="#cb9-95" aria-hidden="true" tabindex="-1"></a>We represent a sequence of words as $E_{1,m} = (E_1, \ldots, E_m)$,</span>
+<span id="cb9-96"><a href="#cb9-96" aria-hidden="true" tabindex="-1"></a>where each $E_i$ is a random variable representing the word at position</span>
+<span id="cb9-97"><a href="#cb9-97" aria-hidden="true" tabindex="-1"></a>$i$. We can think of commas as representing 'and'. For example, for the</span>
+<span id="cb9-98"><a href="#cb9-98" aria-hidden="true" tabindex="-1"></a>sentence \"We live in a small world\", an instance $e_{1,m}$ would be</span>
+<span id="cb9-99"><a href="#cb9-99" aria-hidden="true" tabindex="-1"></a>(We, live, in, a, small, world), where $m=6$ is the length of the</span>
+<span id="cb9-100"><a href="#cb9-100" aria-hidden="true" tabindex="-1"></a>sentence.</span>
+<span id="cb9-101"><a href="#cb9-101" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-102"><a href="#cb9-102" aria-hidden="true" tabindex="-1"></a>We are interested in the probability of a specific sentence, such as</span>
+<span id="cb9-103"><a href="#cb9-103" aria-hidden="true" tabindex="-1"></a>$\Prm(E_{1,n} = e_{1,n})$, which is the probability of the sequence of</span>
+<span id="cb9-104"><a href="#cb9-104" aria-hidden="true" tabindex="-1"></a>words $e_{1,n}$. For instance,</span>
+<span id="cb9-105"><a href="#cb9-105" aria-hidden="true" tabindex="-1"></a>$\Prm(\text{We, live, in, a, small, world})$. Using the chain rule, this</span>
+<span id="cb9-106"><a href="#cb9-106" aria-hidden="true" tabindex="-1"></a>can be written as:</span>
+<span id="cb9-107"><a href="#cb9-107" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-108"><a href="#cb9-108" aria-hidden="true" tabindex="-1"></a>::: tcolorbox</span>
+<span id="cb9-109"><a href="#cb9-109" aria-hidden="true" tabindex="-1"></a>$$\Prm(\text{world} | \text{We, live, in, a, small}) \times \Prm(\text{small} | \text{We, live, in, a}) \times \cdots \times \Prm(\text{live} | \text{We}) \times \Prm(\text{We})$$</span>
+<span id="cb9-110"><a href="#cb9-110" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb9-111"><a href="#cb9-111" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-112"><a href="#cb9-112" aria-hidden="true" tabindex="-1"></a>Typically, this is written in reverse order (right-to-left), predicting</span>
+<span id="cb9-113"><a href="#cb9-113" aria-hidden="true" tabindex="-1"></a>each word based on the preceding words. In general, the probability of a</span>
+<span id="cb9-114"><a href="#cb9-114" aria-hidden="true" tabindex="-1"></a>sentence is:</span>
+<span id="cb9-115"><a href="#cb9-115" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-116"><a href="#cb9-116" aria-hidden="true" tabindex="-1"></a>::: tcolorbox</span>
+<span id="cb9-117"><a href="#cb9-117" aria-hidden="true" tabindex="-1"></a>$$\Prm(E_{1,n} = e_{1,n}) = \prod_{j=1}^{n} \Prm(E_j = e_j | E_{1,j-1} = e_{1,j-1})$$</span>
+<span id="cb9-118"><a href="#cb9-118" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb9-119"><a href="#cb9-119" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-120"><a href="#cb9-120" aria-hidden="true" tabindex="-1"></a>Here, $\prod$ denotes the product from $j=1$ to $n$ of the conditional</span>
+<span id="cb9-121"><a href="#cb9-121" aria-hidden="true" tabindex="-1"></a>probability of the $j$-th word given the prefix sentence. This framework</span>
+<span id="cb9-122"><a href="#cb9-122" aria-hidden="true" tabindex="-1"></a>forms the basis for language modeling.</span>
+<span id="cb9-123"><a href="#cb9-123" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-124"><a href="#cb9-124" aria-hidden="true" tabindex="-1"></a><span class="fu">## Tokenization and Vocabulary</span></span>
+<span id="cb9-125"><a href="#cb9-125" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-126"><a href="#cb9-126" aria-hidden="true" tabindex="-1"></a><span class="fu">### Handling Out-of-Vocabulary Words</span></span>
+<span id="cb9-127"><a href="#cb9-127" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-128"><a href="#cb9-128" aria-hidden="true" tabindex="-1"></a>**Tokenization** is the process of breaking down text into individual</span>
+<span id="cb9-129"><a href="#cb9-129" aria-hidden="true" tabindex="-1"></a>words or tokens. This can be complex due to punctuation and</span>
+<span id="cb9-130"><a href="#cb9-130" aria-hidden="true" tabindex="-1"></a>contractions. For simplicity, we assume a tokenization method is</span>
+<span id="cb9-131"><a href="#cb9-131" aria-hidden="true" tabindex="-1"></a>available.</span>
+<span id="cb9-132"><a href="#cb9-132" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-133"><a href="#cb9-133" aria-hidden="true" tabindex="-1"></a>To manage the complexity of natural language, we typically **cap the</span>
+<span id="cb9-134"><a href="#cb9-134" aria-hidden="true" tabindex="-1"></a>vocabulary** size. The number of possible words in a language is vast,</span>
+<span id="cb9-135"><a href="#cb9-135" aria-hidden="true" tabindex="-1"></a>making it impractical to model probabilities for every word. We select a</span>
+<span id="cb9-136"><a href="#cb9-136" aria-hidden="true" tabindex="-1"></a>vocabulary $\V$ of a fixed size, say 40,000 words, where $|\V|$ is the</span>
+<span id="cb9-137"><a href="#cb9-137" aria-hidden="true" tabindex="-1"></a>vocabulary size.</span>
+<span id="cb9-138"><a href="#cb9-138" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-139"><a href="#cb9-139" aria-hidden="true" tabindex="-1"></a>Words that are not included in our vocabulary are considered</span>
+<span id="cb9-140"><a href="#cb9-140" aria-hidden="true" tabindex="-1"></a>**out-of-vocabulary (OOV)** words. These are represented by a special</span>
+<span id="cb9-141"><a href="#cb9-141" aria-hidden="true" tabindex="-1"></a>token, . If a word is encountered that is not in $\V$, it is replaced</span>
+<span id="cb9-142"><a href="#cb9-142" aria-hidden="true" tabindex="-1"></a>with .</span>
+<span id="cb9-143"><a href="#cb9-143" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-144"><a href="#cb9-144" aria-hidden="true" tabindex="-1"></a><span class="fu">## The Penn Treebank Corpus (PTB)</span></span>
+<span id="cb9-145"><a href="#cb9-145" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-146"><a href="#cb9-146" aria-hidden="true" tabindex="-1"></a>We use the **Penn Treebank Corpus (PTB)**, which contains approximately</span>
+<span id="cb9-147"><a href="#cb9-147" aria-hidden="true" tabindex="-1"></a>1,000,000 words from Wall Street Journal news articles. The PTB is</span>
+<span id="cb9-148"><a href="#cb9-148" aria-hidden="true" tabindex="-1"></a>already tokenized, but not \"unked\" in the original data, meaning</span>
+<span id="cb9-149"><a href="#cb9-149" aria-hidden="true" tabindex="-1"></a>unknown words are not pre-marked. The vocabulary size is around 50,000</span>
+<span id="cb9-150"><a href="#cb9-150" aria-hidden="true" tabindex="-1"></a>words. PTB is a \"treebank\" because sentences are parsed into</span>
+<span id="cb9-151"><a href="#cb9-151" aria-hidden="true" tabindex="-1"></a>grammatical trees, but we focus solely on the words and replace words</span>
+<span id="cb9-152"><a href="#cb9-152" aria-hidden="true" tabindex="-1"></a>occurring less than 10 times with .</span>
+<span id="cb9-153"><a href="#cb9-153" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-154"><a href="#cb9-154" aria-hidden="true" tabindex="-1"></a><span class="fu">## The Challenge of Long-Range Dependencies</span></span>
+<span id="cb9-155"><a href="#cb9-155" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-156"><a href="#cb9-156" aria-hidden="true" tabindex="-1"></a>A significant issue is that **longer prefix sentences tend to have lower</span>
+<span id="cb9-157"><a href="#cb9-157" aria-hidden="true" tabindex="-1"></a>probabilities**. This is because we are multiplying probabilities (which</span>
+<span id="cb9-158"><a href="#cb9-158" aria-hidden="true" tabindex="-1"></a>are less than 1), causing the overall probability to decrease with</span>
+<span id="cb9-159"><a href="#cb9-159" aria-hidden="true" tabindex="-1"></a>sentence length. Longer sentences are also harder to model reliably due</span>
+<span id="cb9-160"><a href="#cb9-160" aria-hidden="true" tabindex="-1"></a>to data sparsity for long prefixes.</span>
+<span id="cb9-161"><a href="#cb9-161" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-162"><a href="#cb9-162" aria-hidden="true" tabindex="-1"></a>To address this, we need to **reduce the span of conditioning** for</span>
+<span id="cb9-163"><a href="#cb9-163" aria-hidden="true" tabindex="-1"></a>probability computation. Instead of conditioning on the entire prefix,</span>
+<span id="cb9-164"><a href="#cb9-164" aria-hidden="true" tabindex="-1"></a>we can condition only on the last few words. This approach leads to</span>
+<span id="cb9-165"><a href="#cb9-165" aria-hidden="true" tabindex="-1"></a>models like **$n$-gram models**.</span>
+<span id="cb9-166"><a href="#cb9-166" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-167"><a href="#cb9-167" aria-hidden="true" tabindex="-1"></a><span class="fu">## N-gram Models</span></span>
+<span id="cb9-168"><a href="#cb9-168" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-169"><a href="#cb9-169" aria-hidden="true" tabindex="-1"></a><span class="fu">### Bigram Model Approximation</span></span>
+<span id="cb9-170"><a href="#cb9-170" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-171"><a href="#cb9-171" aria-hidden="true" tabindex="-1"></a>An **bigram model** simplifies probability estimation by approximating</span>
+<span id="cb9-172"><a href="#cb9-172" aria-hidden="true" tabindex="-1"></a>the probability of a word based only on the preceding word. In a bigram</span>
+<span id="cb9-173"><a href="#cb9-173" aria-hidden="true" tabindex="-1"></a>model, we approximate $\Prm(E_j = e_j | E_{1,j-1} = e_{1,j-1})$ as</span>
+<span id="cb9-174"><a href="#cb9-174" aria-hidden="true" tabindex="-1"></a>$\Prm(E_j = e_j | E_{j-1} = e_{j-1})$. This simplification is a</span>
+<span id="cb9-175"><a href="#cb9-175" aria-hidden="true" tabindex="-1"></a>practical technique to make probability computations more manageable.</span>
+<span id="cb9-176"><a href="#cb9-176" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-177"><a href="#cb9-177" aria-hidden="true" tabindex="-1"></a><span class="fu">### Model Construction Using Frequencies</span></span>
+<span id="cb9-178"><a href="#cb9-178" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-179"><a href="#cb9-179" aria-hidden="true" tabindex="-1"></a>Constructing a language model involves defining a probability</span>
+<span id="cb9-180"><a href="#cb9-180" aria-hidden="true" tabindex="-1"></a>distribution. We typically use frequencies from training data to</span>
+<span id="cb9-181"><a href="#cb9-181" aria-hidden="true" tabindex="-1"></a>estimate these probabilities.</span>
+<span id="cb9-182"><a href="#cb9-182" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-183"><a href="#cb9-183" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**Super-trivial Model**: Assumes every word is equally probable,</span>
+<span id="cb9-184"><a href="#cb9-184" aria-hidden="true" tabindex="-1"></a>    i.e., $1/|\V|$. This model is not very useful in practice.</span>
+<span id="cb9-185"><a href="#cb9-185" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-186"><a href="#cb9-186" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**Trivial Model**: Counts the occurrences of each word and uses</span>
+<span id="cb9-187"><a href="#cb9-187" aria-hidden="true" tabindex="-1"></a>    maximum likelihood estimation. This is still context-agnostic.</span>
+<span id="cb9-188"><a href="#cb9-188" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-189"><a href="#cb9-189" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**Bigram Model**: Estimates probabilities based on pairs of</span>
+<span id="cb9-190"><a href="#cb9-190" aria-hidden="true" tabindex="-1"></a>    consecutive words. This is more reliable and can be generalized</span>
+<span id="cb9-191"><a href="#cb9-191" aria-hidden="true" tabindex="-1"></a>    using deep learning techniques.</span>
+<span id="cb9-192"><a href="#cb9-192" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-193"><a href="#cb9-193" aria-hidden="true" tabindex="-1"></a><span class="fu">### Limitations of Simple Models</span></span>
+<span id="cb9-194"><a href="#cb9-194" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-195"><a href="#cb9-195" aria-hidden="true" tabindex="-1"></a>Simple models like unigram and bigram models have limitations in</span>
+<span id="cb9-196"><a href="#cb9-196" aria-hidden="true" tabindex="-1"></a>capturing long-range dependencies and semantic nuances in language. To</span>
+<span id="cb9-197"><a href="#cb9-197" aria-hidden="true" tabindex="-1"></a>overcome these, we turn to more sophisticated methods like neural</span>
+<span id="cb9-198"><a href="#cb9-198" aria-hidden="true" tabindex="-1"></a>networks and word embeddings.</span>
+<span id="cb9-199"><a href="#cb9-199" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-200"><a href="#cb9-200" aria-hidden="true" tabindex="-1"></a><span class="fu"># Word Embeddings</span></span>
+<span id="cb9-201"><a href="#cb9-201" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-202"><a href="#cb9-202" aria-hidden="true" tabindex="-1"></a><span class="fu">## Motivation: Representing Words as Vectors</span></span>
+<span id="cb9-203"><a href="#cb9-203" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-204"><a href="#cb9-204" aria-hidden="true" tabindex="-1"></a>To use deep learning for language modeling, we need to represent words</span>
+<span id="cb9-205"><a href="#cb9-205" aria-hidden="true" tabindex="-1"></a>numerically. **Word embeddings** are vectors of floating-point numbers</span>
+<span id="cb9-206"><a href="#cb9-206" aria-hidden="true" tabindex="-1"></a>that serve as representations of words. These embeddings act as</span>
+<span id="cb9-207"><a href="#cb9-207" aria-hidden="true" tabindex="-1"></a>**features** for language models, enabling neural networks to process</span>
+<span id="cb9-208"><a href="#cb9-208" aria-hidden="true" tabindex="-1"></a>and understand textual data.</span>
+<span id="cb9-209"><a href="#cb9-209" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-210"><a href="#cb9-210" aria-hidden="true" tabindex="-1"></a><span class="fu">## Word Embeddings as Features for Language Models</span></span>
+<span id="cb9-211"><a href="#cb9-211" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-212"><a href="#cb9-212" aria-hidden="true" tabindex="-1"></a>Word embeddings transform words into a continuous vector space where</span>
+<span id="cb9-213"><a href="#cb9-213" aria-hidden="true" tabindex="-1"></a>words with similar meanings are located closer to each other. These</span>
+<span id="cb9-214"><a href="#cb9-214" aria-hidden="true" tabindex="-1"></a>vectors capture semantic and syntactic information, making them powerful</span>
+<span id="cb9-215"><a href="#cb9-215" aria-hidden="true" tabindex="-1"></a>features for various NLP tasks, including language modeling.</span>
+<span id="cb9-216"><a href="#cb9-216" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-217"><a href="#cb9-217" aria-hidden="true" tabindex="-1"></a><span class="fu">## Creating Word Embeddings</span></span>
+<span id="cb9-218"><a href="#cb9-218" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-219"><a href="#cb9-219" aria-hidden="true" tabindex="-1"></a><span class="fu">### Indexing the Vocabulary</span></span>
+<span id="cb9-220"><a href="#cb9-220" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-221"><a href="#cb9-221" aria-hidden="true" tabindex="-1"></a>The first step in creating word embeddings is to **index the</span>
+<span id="cb9-222"><a href="#cb9-222" aria-hidden="true" tabindex="-1"></a>vocabulary**. This involves assigning a unique integer index to each</span>
+<span id="cb9-223"><a href="#cb9-223" aria-hidden="true" tabindex="-1"></a>word in our vocabulary $\V$. This allows us to refer to words by their</span>
+<span id="cb9-224"><a href="#cb9-224" aria-hidden="true" tabindex="-1"></a>numerical indices.</span>
+<span id="cb9-225"><a href="#cb9-225" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-226"><a href="#cb9-226" aria-hidden="true" tabindex="-1"></a><span class="fu">### The Embedding Matrix</span></span>
+<span id="cb9-227"><a href="#cb9-227" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-228"><a href="#cb9-228" aria-hidden="true" tabindex="-1"></a>Next, we create an **embedding matrix** $E$. This matrix has dimensions</span>
+<span id="cb9-229"><a href="#cb9-229" aria-hidden="true" tabindex="-1"></a>$|\V| \times e$, where $|\V|$ is the vocabulary size and $e$ is the</span>
+<span id="cb9-230"><a href="#cb9-230" aria-hidden="true" tabindex="-1"></a>embedding size (a hyperparameter, e.g., 20, 100, or 1000). Each row in</span>
+<span id="cb9-231"><a href="#cb9-231" aria-hidden="true" tabindex="-1"></a>$E$ corresponds to a word in the vocabulary, and the row itself is the</span>
+<span id="cb9-232"><a href="#cb9-232" aria-hidden="true" tabindex="-1"></a>word's embedding vector. The values in $E$ are initially random and are</span>
+<span id="cb9-233"><a href="#cb9-233" aria-hidden="true" tabindex="-1"></a>learned during the training process.</span>
+<span id="cb9-234"><a href="#cb9-234" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-235"><a href="#cb9-235" aria-hidden="true" tabindex="-1"></a><span class="fu">## Neural Network Architecture for Word Prediction</span></span>
+<span id="cb9-236"><a href="#cb9-236" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-237"><a href="#cb9-237" aria-hidden="true" tabindex="-1"></a><span class="fu">### Input: Word Index</span></span>
+<span id="cb9-238"><a href="#cb9-238" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-239"><a href="#cb9-239" aria-hidden="true" tabindex="-1"></a>The input to our neural network is the index of a word, say $e_i$.</span>
+<span id="cb9-240"><a href="#cb9-240" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-241"><a href="#cb9-241" aria-hidden="true" tabindex="-1"></a><span class="fu">### Embedding Lookup</span></span>
+<span id="cb9-242"><a href="#cb9-242" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-243"><a href="#cb9-243" aria-hidden="true" tabindex="-1"></a>We perform an **embedding lookup** to retrieve the embedding vector</span>
+<span id="cb9-244"><a href="#cb9-244" aria-hidden="true" tabindex="-1"></a>$\mathbf{x}$ corresponding to the input word index from the embedding</span>
+<span id="cb9-245"><a href="#cb9-245" aria-hidden="true" tabindex="-1"></a>matrix $E$.</span>
+<span id="cb9-246"><a href="#cb9-246" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-247"><a href="#cb9-247" aria-hidden="true" tabindex="-1"></a><span class="fu">### Linear Layer and Softmax Output</span></span>
+<span id="cb9-248"><a href="#cb9-248" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-249"><a href="#cb9-249" aria-hidden="true" tabindex="-1"></a>The embedding vector $\mathbf{x}$ is then fed into a neural network. A</span>
+<span id="cb9-250"><a href="#cb9-250" aria-hidden="true" tabindex="-1"></a>simple architecture could consist of a single linear layer with weights</span>
+<span id="cb9-251"><a href="#cb9-251" aria-hidden="true" tabindex="-1"></a>$W$ and bias $b$, followed by a softmax activation function $\sigma$.</span>
+<span id="cb9-252"><a href="#cb9-252" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-253"><a href="#cb9-253" aria-hidden="true" tabindex="-1"></a>::: tcolorbox</span>
+<span id="cb9-254"><a href="#cb9-254" aria-hidden="true" tabindex="-1"></a>$$\text{logits} = \mathbf{x}W + b$$</span>
+<span id="cb9-255"><a href="#cb9-255" aria-hidden="true" tabindex="-1"></a>$$\mathbf{y} = \sigma(\text{logits})$$</span>
+<span id="cb9-256"><a href="#cb9-256" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb9-257"><a href="#cb9-257" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-258"><a href="#cb9-258" aria-hidden="true" tabindex="-1"></a>where $\mathbf{y}$ is the output vector representing the probability</span>
+<span id="cb9-259"><a href="#cb9-259" aria-hidden="true" tabindex="-1"></a>distribution over the vocabulary.</span>
+<span id="cb9-260"><a href="#cb9-260" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-261"><a href="#cb9-261" aria-hidden="true" tabindex="-1"></a><span class="fu">### Output as a Probability Distribution</span></span>
+<span id="cb9-262"><a href="#cb9-262" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-263"><a href="#cb9-263" aria-hidden="true" tabindex="-1"></a>The output $\mathbf{y}$ is a **probability distribution** over the</span>
+<span id="cb9-264"><a href="#cb9-264" aria-hidden="true" tabindex="-1"></a>vocabulary $\V$. It represents the predicted probabilities for each word</span>
+<span id="cb9-265"><a href="#cb9-265" aria-hidden="true" tabindex="-1"></a>in $\V$ being the next word in the sequence, given the input word. We</span>
+<span id="cb9-266"><a href="#cb9-266" aria-hidden="true" tabindex="-1"></a>aim for this distribution to predict the correct next word with high</span>
+<span id="cb9-267"><a href="#cb9-267" aria-hidden="true" tabindex="-1"></a>probability.</span>
+<span id="cb9-268"><a href="#cb9-268" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-269"><a href="#cb9-269" aria-hidden="true" tabindex="-1"></a><span class="fu">## Training and Backpropagation</span></span>
+<span id="cb9-270"><a href="#cb9-270" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-271"><a href="#cb9-271" aria-hidden="true" tabindex="-1"></a><span class="fu">### Updating Embeddings through Backpropagation</span></span>
+<span id="cb9-272"><a href="#cb9-272" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-273"><a href="#cb9-273" aria-hidden="true" tabindex="-1"></a>During training, we compare the predicted probability distribution with</span>
+<span id="cb9-274"><a href="#cb9-274" aria-hidden="true" tabindex="-1"></a>the actual next word (target word). We use a loss function, such as</span>
+<span id="cb9-275"><a href="#cb9-275" aria-hidden="true" tabindex="-1"></a>cross-entropy loss, to quantify the difference between the prediction</span>
+<span id="cb9-276"><a href="#cb9-276" aria-hidden="true" tabindex="-1"></a>and the target. **Backpropagation** is then used to update the network</span>
+<span id="cb9-277"><a href="#cb9-277" aria-hidden="true" tabindex="-1"></a>parameters, including the weights $W$, bias $b$, and crucially, the</span>
+<span id="cb9-278"><a href="#cb9-278" aria-hidden="true" tabindex="-1"></a>**embedding matrix** $E$.</span>
+<span id="cb9-279"><a href="#cb9-279" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-280"><a href="#cb9-280" aria-hidden="true" tabindex="-1"></a>The embedding matrix $E$ is a trainable parameter of the model.</span>
+<span id="cb9-281"><a href="#cb9-281" aria-hidden="true" tabindex="-1"></a>Initially, its values are random, typically drawn from a normal</span>
+<span id="cb9-282"><a href="#cb9-282" aria-hidden="true" tabindex="-1"></a>distribution with mean zero and small standard deviation. Through</span>
+<span id="cb9-283"><a href="#cb9-283" aria-hidden="true" tabindex="-1"></a>stochastic gradient descent during backpropagation, these values are</span>
+<span id="cb9-284"><a href="#cb9-284" aria-hidden="true" tabindex="-1"></a>adjusted to minimize the loss function.</span>
+<span id="cb9-285"><a href="#cb9-285" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-286"><a href="#cb9-286" aria-hidden="true" tabindex="-1"></a><span class="fu">## The Emergence of Semantic Meaning in Embeddings</span></span>
+<span id="cb9-287"><a href="#cb9-287" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-288"><a href="#cb9-288" aria-hidden="true" tabindex="-1"></a>A remarkable outcome of training word embeddings is the emergence of</span>
+<span id="cb9-289"><a href="#cb9-289" aria-hidden="true" tabindex="-1"></a>semantic meaning. After training on a large corpus, words with similar</span>
+<span id="cb9-290"><a href="#cb9-290" aria-hidden="true" tabindex="-1"></a>meanings tend to have embedding vectors that are close to each other in</span>
+<span id="cb9-291"><a href="#cb9-291" aria-hidden="true" tabindex="-1"></a>the embedding space. Words that appear in similar contexts in the</span>
+<span id="cb9-292"><a href="#cb9-292" aria-hidden="true" tabindex="-1"></a>language will have similar embedding vectors.</span>
+<span id="cb9-293"><a href="#cb9-293" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-294"><a href="#cb9-294" aria-hidden="true" tabindex="-1"></a><span class="fu">## Measuring Similarity: Cosine Similarity</span></span>
+<span id="cb9-295"><a href="#cb9-295" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-296"><a href="#cb9-296" aria-hidden="true" tabindex="-1"></a>To measure the \"closeness\" or similarity between word embedding</span>
+<span id="cb9-297"><a href="#cb9-297" aria-hidden="true" tabindex="-1"></a>vectors, **cosine similarity** is commonly used. The cosine similarity</span>
+<span id="cb9-298"><a href="#cb9-298" aria-hidden="true" tabindex="-1"></a>between two vectors $\mathbf{x}$ and $\mathbf{y}$ is defined as:</span>
+<span id="cb9-299"><a href="#cb9-299" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-300"><a href="#cb9-300" aria-hidden="true" tabindex="-1"></a>::: tcolorbox</span>
+<span id="cb9-301"><a href="#cb9-301" aria-hidden="true" tabindex="-1"></a>$$\cos(\mathbf{x}, \mathbf{y}) = \frac{\mathbf{x} \cdot \mathbf{y}}{||\mathbf{x}|| \cdot ||\mathbf{y}||}$$</span>
+<span id="cb9-302"><a href="#cb9-302" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb9-303"><a href="#cb9-303" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-304"><a href="#cb9-304" aria-hidden="true" tabindex="-1"></a>where $\mathbf{x} \cdot \mathbf{y}$ is the dot product of $\mathbf{x}$</span>
+<span id="cb9-305"><a href="#cb9-305" aria-hidden="true" tabindex="-1"></a>and $\mathbf{y}$, and $||\mathbf{x}||$ and $||\mathbf{y}||$ are their</span>
+<span id="cb9-306"><a href="#cb9-306" aria-hidden="true" tabindex="-1"></a>respective Euclidean norms. Cosine similarity yields a value between -1</span>
+<span id="cb9-307"><a href="#cb9-307" aria-hidden="true" tabindex="-1"></a>and 1, representing the cosine of the angle between the vectors. A value</span>
+<span id="cb9-308"><a href="#cb9-308" aria-hidden="true" tabindex="-1"></a>closer to 1 indicates higher similarity.</span>
+<span id="cb9-309"><a href="#cb9-309" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-310"><a href="#cb9-310" aria-hidden="true" tabindex="-1"></a>::: tcolorbox</span>
+<span id="cb9-311"><a href="#cb9-311" aria-hidden="true" tabindex="-1"></a>Examples of word similarities measured by cosine similarity: For</span>
+<span id="cb9-312"><a href="#cb9-312" aria-hidden="true" tabindex="-1"></a>instance, the word \"above\" is most similar to \"under\" with a cosine</span>
+<span id="cb9-313"><a href="#cb9-313" aria-hidden="true" tabindex="-1"></a>similarity of 0.362.</span>
+<span id="cb9-314"><a href="#cb9-314" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb9-315"><a href="#cb9-315" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-316"><a href="#cb9-316" aria-hidden="true" tabindex="-1"></a><span class="fu">## TensorFlow Implementation</span></span>
+<span id="cb9-317"><a href="#cb9-317" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-318"><a href="#cb9-318" aria-hidden="true" tabindex="-1"></a><span class="fu">### Placeholders for Input and Output</span></span>
+<span id="cb9-319"><a href="#cb9-319" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-320"><a href="#cb9-320" aria-hidden="true" tabindex="-1"></a>In TensorFlow, we define placeholders for input and output data:</span>
+<span id="cb9-321"><a href="#cb9-321" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-322"><a href="#cb9-322" aria-hidden="true" tabindex="-1"></a><span class="in">            inpt = tf.placeholder(tf.int32, shape=[batchSz])</span></span>
+<span id="cb9-323"><a href="#cb9-323" aria-hidden="true" tabindex="-1"></a><span class="in">            answr = tf.placeholder(tf.int32, shape=[batchSz])</span></span>
+<span id="cb9-324"><a href="#cb9-324" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-325"><a href="#cb9-325" aria-hidden="true" tabindex="-1"></a>Here, 'inpt' will hold the input word indices and 'answr' will hold the</span>
+<span id="cb9-326"><a href="#cb9-326" aria-hidden="true" tabindex="-1"></a>indices of the correct next words. 'batchSz' represents the batch size.</span>
+<span id="cb9-327"><a href="#cb9-327" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-328"><a href="#cb9-328" aria-hidden="true" tabindex="-1"></a><span class="fu">### Embedding Matrix as a Trainable Variable</span></span>
+<span id="cb9-329"><a href="#cb9-329" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-330"><a href="#cb9-330" aria-hidden="true" tabindex="-1"></a>The embedding matrix $E$ is defined as a trainable variable:</span>
+<span id="cb9-331"><a href="#cb9-331" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-332"><a href="#cb9-332" aria-hidden="true" tabindex="-1"></a><span class="in">            E = tf.Variable(tf.random_normal([vocabSz, embedSz], stddev=0.1))</span></span>
+<span id="cb9-333"><a href="#cb9-333" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-334"><a href="#cb9-334" aria-hidden="true" tabindex="-1"></a>'vocabSz' is the vocabulary size and 'embedSz' is the embedding size.</span>
+<span id="cb9-335"><a href="#cb9-335" aria-hidden="true" tabindex="-1"></a>'tf.random_normal' initializes the embedding matrix with random values</span>
+<span id="cb9-336"><a href="#cb9-336" aria-hidden="true" tabindex="-1"></a>from a normal distribution.</span>
+<span id="cb9-337"><a href="#cb9-337" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-338"><a href="#cb9-338" aria-hidden="true" tabindex="-1"></a><span class="fu">### Embedding Lookup Operation</span></span>
+<span id="cb9-339"><a href="#cb9-339" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-340"><a href="#cb9-340" aria-hidden="true" tabindex="-1"></a>The embedding lookup operation is performed using</span>
+<span id="cb9-341"><a href="#cb9-341" aria-hidden="true" tabindex="-1"></a>'tf.nn.embedding_lookup':</span>
+<span id="cb9-342"><a href="#cb9-342" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-343"><a href="#cb9-343" aria-hidden="true" tabindex="-1"></a><span class="in">            embed = tf.nn.embedding_lookup(E, inpt)</span></span>
+<span id="cb9-344"><a href="#cb9-344" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-345"><a href="#cb9-345" aria-hidden="true" tabindex="-1"></a>This operation retrieves the embedding vectors for the input word</span>
+<span id="cb9-346"><a href="#cb9-346" aria-hidden="true" tabindex="-1"></a>indices from the embedding matrix $E$.</span>
+<span id="cb9-347"><a href="#cb9-347" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-348"><a href="#cb9-348" aria-hidden="true" tabindex="-1"></a><span class="fu">### Loss Function: Sparse Softmax Cross-Entropy</span></span>
+<span id="cb9-349"><a href="#cb9-349" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-350"><a href="#cb9-350" aria-hidden="true" tabindex="-1"></a>For the loss function, we use sparse softmax cross-entropy with logits:</span>
+<span id="cb9-351"><a href="#cb9-351" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-352"><a href="#cb9-352" aria-hidden="true" tabindex="-1"></a><span class="in">            xEnt = tf.nn.sparse_softmax_cross_entropy_with_logits(logits=logits, labels=answr)</span></span>
+<span id="cb9-353"><a href="#cb9-353" aria-hidden="true" tabindex="-1"></a><span class="in">            loss = tf.reduce_sum(xEnt)</span></span>
+<span id="cb9-354"><a href="#cb9-354" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-355"><a href="#cb9-355" aria-hidden="true" tabindex="-1"></a>This computes the cross-entropy loss between the predicted logits and</span>
+<span id="cb9-356"><a href="#cb9-356" aria-hidden="true" tabindex="-1"></a>the true labels ('answr'). 'tf.reduce_sum' sums up the cross-entropy</span>
+<span id="cb9-357"><a href="#cb9-357" aria-hidden="true" tabindex="-1"></a>values across the batch to get the total loss.</span>
+<span id="cb9-358"><a href="#cb9-358" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-359"><a href="#cb9-359" aria-hidden="true" tabindex="-1"></a><span class="fu">## Evaluation Metrics</span></span>
+<span id="cb9-360"><a href="#cb9-360" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-361"><a href="#cb9-361" aria-hidden="true" tabindex="-1"></a><span class="fu">### Average Loss per Example</span></span>
+<span id="cb9-362"><a href="#cb9-362" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-363"><a href="#cb9-363" aria-hidden="true" tabindex="-1"></a>A basic evaluation metric is the average loss per example or per word.</span>
+<span id="cb9-364"><a href="#cb9-364" aria-hidden="true" tabindex="-1"></a>This is similar to the approach used in digit recognition. We aim to</span>
+<span id="cb9-365"><a href="#cb9-365" aria-hidden="true" tabindex="-1"></a>minimize this loss during training.</span>
+<span id="cb9-366"><a href="#cb9-366" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-367"><a href="#cb9-367" aria-hidden="true" tabindex="-1"></a><span class="fu">### Perplexity: A Common Language Modeling Metric</span></span>
+<span id="cb9-368"><a href="#cb9-368" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-369"><a href="#cb9-369" aria-hidden="true" tabindex="-1"></a>A more standard metric in language modeling is **perplexity**.</span>
+<span id="cb9-370"><a href="#cb9-370" aria-hidden="true" tabindex="-1"></a>Perplexity measures how well a language model predicts a sample of text.</span>
+<span id="cb9-371"><a href="#cb9-371" aria-hidden="true" tabindex="-1"></a>It is related to the average probability of predicting the correct next</span>
+<span id="cb9-372"><a href="#cb9-372" aria-hidden="true" tabindex="-1"></a>word.</span>
+<span id="cb9-373"><a href="#cb9-373" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-374"><a href="#cb9-374" aria-hidden="true" tabindex="-1"></a>::: tcolorbox</span>
+<span id="cb9-375"><a href="#cb9-375" aria-hidden="true" tabindex="-1"></a>Perplexity is defined as $e^Z$, where $Z$ is the average negative</span>
+<span id="cb9-376"><a href="#cb9-376" aria-hidden="true" tabindex="-1"></a>log-probability of the correct words in a sentence or corpus $d$ of</span>
+<span id="cb9-377"><a href="#cb9-377" aria-hidden="true" tabindex="-1"></a>length $|d|$: $$Z = \frac{1}{|d|} \sum_{i=1}^{|d|} -\log(\Prm_{z_i})$$</span>
+<span id="cb9-378"><a href="#cb9-378" aria-hidden="true" tabindex="-1"></a>Here, $\Prm_{z_i}$ is the probability assigned by the model to the</span>
+<span id="cb9-379"><a href="#cb9-379" aria-hidden="true" tabindex="-1"></a>correct $i$-th word. Perplexity is then:</span>
+<span id="cb9-380"><a href="#cb9-380" aria-hidden="true" tabindex="-1"></a>$$\text{Perplexity} = e^Z = \left( \prod_{i=1}^{|d|} \frac{1}{\Prm_{z_i}} \right)^{1/|d|}$$</span>
+<span id="cb9-381"><a href="#cb9-381" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb9-382"><a href="#cb9-382" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-383"><a href="#cb9-383" aria-hidden="true" tabindex="-1"></a>Lower perplexity indicates a better language model. If the model assigns</span>
+<span id="cb9-384"><a href="#cb9-384" aria-hidden="true" tabindex="-1"></a>a uniform probability $1/|\V|$ to every word, then perplexity becomes:</span>
+<span id="cb9-385"><a href="#cb9-385" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-386"><a href="#cb9-386" aria-hidden="true" tabindex="-1"></a>::: tcolorbox</span>
+<span id="cb9-387"><a href="#cb9-387" aria-hidden="true" tabindex="-1"></a>$$\text{Perplexity} = |\V|$$</span>
+<span id="cb9-388"><a href="#cb9-388" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb9-389"><a href="#cb9-389" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-390"><a href="#cb9-390" aria-hidden="true" tabindex="-1"></a>which is equal to the vocabulary size.</span>
+<span id="cb9-391"><a href="#cb9-391" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-392"><a href="#cb9-392" aria-hidden="true" tabindex="-1"></a><span class="fu">## Beyond Bigrams: Trigrams and Higher-Order N-grams</span></span>
+<span id="cb9-393"><a href="#cb9-393" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-394"><a href="#cb9-394" aria-hidden="true" tabindex="-1"></a>We can extend the bigram model to **trigram models** and higher-order</span>
+<span id="cb9-395"><a href="#cb9-395" aria-hidden="true" tabindex="-1"></a>$n$-gram models by conditioning on more preceding words. For example, a</span>
+<span id="cb9-396"><a href="#cb9-396" aria-hidden="true" tabindex="-1"></a>trigram model considers the two previous words to predict the next word.</span>
+<span id="cb9-397"><a href="#cb9-397" aria-hidden="true" tabindex="-1"></a>This requires adjusting the input to the model to take into account the</span>
+<span id="cb9-398"><a href="#cb9-398" aria-hidden="true" tabindex="-1"></a>additional context words. Adding hidden layers to the neural network can</span>
+<span id="cb9-399"><a href="#cb9-399" aria-hidden="true" tabindex="-1"></a>also improve perplexity.</span>
+<span id="cb9-400"><a href="#cb9-400" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-401"><a href="#cb9-401" aria-hidden="true" tabindex="-1"></a><span class="fu"># Overfitting and Regularization</span></span>
+<span id="cb9-402"><a href="#cb9-402" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-403"><a href="#cb9-403" aria-hidden="true" tabindex="-1"></a><span class="fu">## The Problem of Overfitting in Language Models</span></span>
+<span id="cb9-404"><a href="#cb9-404" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-405"><a href="#cb9-405" aria-hidden="true" tabindex="-1"></a>**Overfitting** is a significant concern in language modeling. Language</span>
+<span id="cb9-406"><a href="#cb9-406" aria-hidden="true" tabindex="-1"></a>models, especially complex ones, can easily overfit to the training</span>
+<span id="cb9-407"><a href="#cb9-407" aria-hidden="true" tabindex="-1"></a>data, performing well on the training set but poorly on unseen data</span>
+<span id="cb9-408"><a href="#cb9-408" aria-hidden="true" tabindex="-1"></a>(development or test sets). This is partly because language data may not</span>
+<span id="cb9-409"><a href="#cb9-409" aria-hidden="true" tabindex="-1"></a>always be perfectly independently and identically distributed (i.i.d.),</span>
+<span id="cb9-410"><a href="#cb9-410" aria-hidden="true" tabindex="-1"></a>and training datasets may not be fully representative of the vastness of</span>
+<span id="cb9-411"><a href="#cb9-411" aria-hidden="true" tabindex="-1"></a>language.</span>
+<span id="cb9-412"><a href="#cb9-412" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-413"><a href="#cb9-413" aria-hidden="true" tabindex="-1"></a>::: tcolorbox</span>
+<span id="cb9-414"><a href="#cb9-414" aria-hidden="true" tabindex="-1"></a>Training perplexity decreases consistently over epochs, but development</span>
+<span id="cb9-415"><a href="#cb9-415" aria-hidden="true" tabindex="-1"></a>perplexity starts to increase after a certain point, indicating</span>
+<span id="cb9-416"><a href="#cb9-416" aria-hidden="true" tabindex="-1"></a>overfitting.</span>
+<span id="cb9-417"><a href="#cb9-417" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb9-418"><a href="#cb9-418" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-419"><a href="#cb9-419" aria-hidden="true" tabindex="-1"></a><span class="fu">## Regularization Techniques to Combat Overfitting</span></span>
+<span id="cb9-420"><a href="#cb9-420" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-421"><a href="#cb9-421" aria-hidden="true" tabindex="-1"></a>**Regularization** techniques are used to mitigate overfitting.</span>
+<span id="cb9-422"><a href="#cb9-422" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-423"><a href="#cb9-423" aria-hidden="true" tabindex="-1"></a><span class="fu">### Early Stopping</span></span>
+<span id="cb9-424"><a href="#cb9-424" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-425"><a href="#cb9-425" aria-hidden="true" tabindex="-1"></a>**Early stopping** is a simple regularization method where training is</span>
+<span id="cb9-426"><a href="#cb9-426" aria-hidden="true" tabindex="-1"></a>stopped when the performance on a validation set (e.g., development</span>
+<span id="cb9-427"><a href="#cb9-427" aria-hidden="true" tabindex="-1"></a>perplexity) starts to degrade. This prevents the model from continuing</span>
+<span id="cb9-428"><a href="#cb9-428" aria-hidden="true" tabindex="-1"></a>to train and overfit to the training data.</span>
+<span id="cb9-429"><a href="#cb9-429" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-430"><a href="#cb9-430" aria-hidden="true" tabindex="-1"></a><span class="fu">### Dropout Regularization</span></span>
+<span id="cb9-431"><a href="#cb9-431" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-432"><a href="#cb9-432" aria-hidden="true" tabindex="-1"></a>**Dropout** is a more advanced regularization technique that involves</span>
+<span id="cb9-433"><a href="#cb9-433" aria-hidden="true" tabindex="-1"></a>randomly dropping out (setting to zero) a fraction of neurons during</span>
+<span id="cb9-434"><a href="#cb9-434" aria-hidden="true" tabindex="-1"></a>training. This forces the network to learn more robust features and</span>
+<span id="cb9-435"><a href="#cb9-435" aria-hidden="true" tabindex="-1"></a>reduces reliance on individual neurons. In TensorFlow, dropout can be</span>
+<span id="cb9-436"><a href="#cb9-436" aria-hidden="true" tabindex="-1"></a>implemented using 'tf.nn.dropout'.</span>
+<span id="cb9-437"><a href="#cb9-437" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-438"><a href="#cb9-438" aria-hidden="true" tabindex="-1"></a>::: tcolorbox</span>
+<span id="cb9-439"><a href="#cb9-439" aria-hidden="true" tabindex="-1"></a>Dropout can be implemented by randomly dropping 50% of the first layer's</span>
+<span id="cb9-440"><a href="#cb9-440" aria-hidden="true" tabindex="-1"></a>output units during training.</span>
+<span id="cb9-441"><a href="#cb9-441" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb9-442"><a href="#cb9-442" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-443"><a href="#cb9-443" aria-hidden="true" tabindex="-1"></a><span class="fu">### L2 Regularization</span></span>
+<span id="cb9-444"><a href="#cb9-444" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-445"><a href="#cb9-445" aria-hidden="true" tabindex="-1"></a>**L2 regularization** adds a penalty term to the loss function that is</span>
+<span id="cb9-446"><a href="#cb9-446" aria-hidden="true" tabindex="-1"></a>proportional to the sum of the squared weights of the network. This</span>
+<span id="cb9-447"><a href="#cb9-447" aria-hidden="true" tabindex="-1"></a>encourages the network to learn smaller weights, which can help prevent</span>
+<span id="cb9-448"><a href="#cb9-448" aria-hidden="true" tabindex="-1"></a>overfitting. The modified loss function becomes:</span>
+<span id="cb9-449"><a href="#cb9-449" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-450"><a href="#cb9-450" aria-hidden="true" tabindex="-1"></a>::: tcolorbox</span>
+<span id="cb9-451"><a href="#cb9-451" aria-hidden="true" tabindex="-1"></a>$$L(\Phi) = -\log(\Prm(c)) + \alpha \sum_{\phi \in \Phi} ||\phi||^2$$</span>
+<span id="cb9-452"><a href="#cb9-452" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb9-453"><a href="#cb9-453" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-454"><a href="#cb9-454" aria-hidden="true" tabindex="-1"></a>where $\Phi$ represents the set of weights, and $\alpha$ is a</span>
+<span id="cb9-455"><a href="#cb9-455" aria-hidden="true" tabindex="-1"></a>hyperparameter controlling the strength of regularization. In</span>
+<span id="cb9-456"><a href="#cb9-456" aria-hidden="true" tabindex="-1"></a>TensorFlow, L2 regularization can be implemented using 'tf.nn.l2_loss'.</span>
+<span id="cb9-457"><a href="#cb9-457" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-458"><a href="#cb9-458" aria-hidden="true" tabindex="-1"></a><span class="in">            keepP = tf.placeholder(tf.float32)</span></span>
+<span id="cb9-459"><a href="#cb9-459" aria-hidden="true" tabindex="-1"></a><span class="in">            w1out = tf.nn.dropout(w1out, keepP) % Dropout implementation</span></span>
+<span id="cb9-460"><a href="#cb9-460" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-461"><a href="#cb9-461" aria-hidden="true" tabindex="-1"></a><span class="in">            l2_loss = 0.01 * tf.nn.l2_loss(W1) % L2 regularization term</span></span>
+<span id="cb9-462"><a href="#cb9-462" aria-hidden="true" tabindex="-1"></a><span class="in">            loss = original_loss + l2_loss % Adding L2 regularization to the loss</span></span>
+<span id="cb9-463"><a href="#cb9-463" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-464"><a href="#cb9-464" aria-hidden="true" tabindex="-1"></a><span class="fu"># Recurrent Neural Networks (RNNs)</span></span>
+<span id="cb9-465"><a href="#cb9-465" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-466"><a href="#cb9-466" aria-hidden="true" tabindex="-1"></a><span class="fu">## Limitations of Feedforward Networks for Sequential Data</span></span>
+<span id="cb9-467"><a href="#cb9-467" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-468"><a href="#cb9-468" aria-hidden="true" tabindex="-1"></a>Feedforward neural networks, even with techniques like word embeddings,</span>
+<span id="cb9-469"><a href="#cb9-469" aria-hidden="true" tabindex="-1"></a>treat each input independently. They lack the ability to maintain state</span>
+<span id="cb9-470"><a href="#cb9-470" aria-hidden="true" tabindex="-1"></a>or memory of past inputs, which is crucial for processing sequential</span>
+<span id="cb9-471"><a href="#cb9-471" aria-hidden="true" tabindex="-1"></a>data like language where context is important.</span>
+<span id="cb9-472"><a href="#cb9-472" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-473"><a href="#cb9-473" aria-hidden="true" tabindex="-1"></a><span class="fu">## Introducing Recurrent Neural Networks</span></span>
+<span id="cb9-474"><a href="#cb9-474" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-475"><a href="#cb9-475" aria-hidden="true" tabindex="-1"></a>**Recurrent Neural Networks (RNNs)** are designed to handle sequential</span>
+<span id="cb9-476"><a href="#cb9-476" aria-hidden="true" tabindex="-1"></a>data by incorporating cycles in their network graph. Unlike feedforward</span>
+<span id="cb9-477"><a href="#cb9-477" aria-hidden="true" tabindex="-1"></a>networks, RNNs have connections that loop back to previous layers,</span>
+<span id="cb9-478"><a href="#cb9-478" aria-hidden="true" tabindex="-1"></a>allowing information to persist over time.</span>
+<span id="cb9-479"><a href="#cb9-479" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-480"><a href="#cb9-480" aria-hidden="true" tabindex="-1"></a><span class="fu">## The Concept of State and Memory in RNNs</span></span>
+<span id="cb9-481"><a href="#cb9-481" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-482"><a href="#cb9-482" aria-hidden="true" tabindex="-1"></a>RNNs introduce the concept of **state** or **memory**. This state allows</span>
+<span id="cb9-483"><a href="#cb9-483" aria-hidden="true" tabindex="-1"></a>the network to remember information from previous inputs and use it to</span>
+<span id="cb9-484"><a href="#cb9-484" aria-hidden="true" tabindex="-1"></a>influence the processing of current inputs. This memory is essential for</span>
+<span id="cb9-485"><a href="#cb9-485" aria-hidden="true" tabindex="-1"></a>understanding context and dependencies in sequential data.</span>
+<span id="cb9-486"><a href="#cb9-486" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-487"><a href="#cb9-487" aria-hidden="true" tabindex="-1"></a><span class="fu">## A Simple RNN Model</span></span>
+<span id="cb9-488"><a href="#cb9-488" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-489"><a href="#cb9-489" aria-hidden="true" tabindex="-1"></a><span class="fu">### State Update Rule</span></span>
+<span id="cb9-490"><a href="#cb9-490" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-491"><a href="#cb9-491" aria-hidden="true" tabindex="-1"></a>A simple RNN model can be defined by the following equations:</span>
+<span id="cb9-492"><a href="#cb9-492" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-493"><a href="#cb9-493" aria-hidden="true" tabindex="-1"></a>::: tcolorbox</span>
+<span id="cb9-494"><a href="#cb9-494" aria-hidden="true" tabindex="-1"></a>$$\mathbf{s}_0 = \mathbf{0} \quad \text{(initial state is zero vector)}$$</span>
+<span id="cb9-495"><a href="#cb9-495" aria-hidden="true" tabindex="-1"></a>$$\mathbf{s}_{t+1} = \rho((\mathbf{e}_{t+1} \cdot \mathbf{s}_t)W_r + \mathbf{b}_r) \quad \text{(state update rule)}$$</span>
+<span id="cb9-496"><a href="#cb9-496" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb9-497"><a href="#cb9-497" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-498"><a href="#cb9-498" aria-hidden="true" tabindex="-1"></a>Here, $t$ represents time, $\mathbf{s}_t$ is the state vector at time</span>
+<span id="cb9-499"><a href="#cb9-499" aria-hidden="true" tabindex="-1"></a>$t$, $\mathbf{e}_{t+1}$ is the embedding vector of the input word at</span>
+<span id="cb9-500"><a href="#cb9-500" aria-hidden="true" tabindex="-1"></a>time $t+1$, $W_r$ and $\mathbf{b}_r$ are the weight matrix and bias</span>
+<span id="cb9-501"><a href="#cb9-501" aria-hidden="true" tabindex="-1"></a>vector for the recurrent layer, and $\rho$ is an activation function,</span>
+<span id="cb9-502"><a href="#cb9-502" aria-hidden="true" tabindex="-1"></a>such as tanh.</span>
+<span id="cb9-503"><a href="#cb9-503" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-504"><a href="#cb9-504" aria-hidden="true" tabindex="-1"></a><span class="fu">### Output Calculation</span></span>
+<span id="cb9-505"><a href="#cb9-505" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-506"><a href="#cb9-506" aria-hidden="true" tabindex="-1"></a>The output $\mathbf{o}$ is calculated from the updated state:</span>
+<span id="cb9-507"><a href="#cb9-507" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-508"><a href="#cb9-508" aria-hidden="true" tabindex="-1"></a>::: tcolorbox</span>
+<span id="cb9-509"><a href="#cb9-509" aria-hidden="true" tabindex="-1"></a>$$\mathbf{o} = \mathbf{s}_{t+1}W_o + \mathbf{b}_o \quad \text{(output calculation)}$$</span>
+<span id="cb9-510"><a href="#cb9-510" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb9-511"><a href="#cb9-511" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-512"><a href="#cb9-512" aria-hidden="true" tabindex="-1"></a>where $W_o$ and $\mathbf{b}_o$ are the weight matrix and bias vector for</span>
+<span id="cb9-513"><a href="#cb9-513" aria-hidden="true" tabindex="-1"></a>the output layer. The output $\mathbf{o}$ can then be passed through a</span>
+<span id="cb9-514"><a href="#cb9-514" aria-hidden="true" tabindex="-1"></a>softmax layer to obtain a probability distribution over the vocabulary</span>
+<span id="cb9-515"><a href="#cb9-515" aria-hidden="true" tabindex="-1"></a>for the next word prediction.</span>
+<span id="cb9-516"><a href="#cb9-516" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-517"><a href="#cb9-517" aria-hidden="true" tabindex="-1"></a>::: tcolorbox</span>
+<span id="cb9-518"><a href="#cb9-518" aria-hidden="true" tabindex="-1"></a>The state vector $\mathbf{s}_t$ summarizes information from all previous</span>
+<span id="cb9-519"><a href="#cb9-519" aria-hidden="true" tabindex="-1"></a>inputs up to time $t$. The dimension of the state vector is a</span>
+<span id="cb9-520"><a href="#cb9-520" aria-hidden="true" tabindex="-1"></a>hyperparameter. New states are computed recursively, incorporating the</span>
+<span id="cb9-521"><a href="#cb9-521" aria-hidden="true" tabindex="-1"></a>current input and the previous state.</span>
+<span id="cb9-522"><a href="#cb9-522" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb9-523"><a href="#cb9-523" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-524"><a href="#cb9-524" aria-hidden="true" tabindex="-1"></a><span class="fu">## Backpropagation Through Time (BPTT)</span></span>
+<span id="cb9-525"><a href="#cb9-525" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-526"><a href="#cb9-526" aria-hidden="true" tabindex="-1"></a>Training RNNs involves **Backpropagation Through Time (BPTT)**. Since</span>
+<span id="cb9-527"><a href="#cb9-527" aria-hidden="true" tabindex="-1"></a>RNNs have cycles, standard backpropagation cannot be directly applied.</span>
+<span id="cb9-528"><a href="#cb9-528" aria-hidden="true" tabindex="-1"></a>BPTT unfolds the RNN over a fixed number of time steps (window size) and</span>
+<span id="cb9-529"><a href="#cb9-529" aria-hidden="true" tabindex="-1"></a>then applies backpropagation as if it were a deep feedforward network.</span>
+<span id="cb9-530"><a href="#cb9-530" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-531"><a href="#cb9-531" aria-hidden="true" tabindex="-1"></a>::: tcolorbox</span>
+<span id="cb9-532"><a href="#cb9-532" aria-hidden="true" tabindex="-1"></a>A simple approach is to unfold the RNN for a fixed number of steps $N$</span>
+<span id="cb9-533"><a href="#cb9-533" aria-hidden="true" tabindex="-1"></a>and then perform backpropagation. This is an approximation, as true</span>
+<span id="cb9-534"><a href="#cb9-534" aria-hidden="true" tabindex="-1"></a>recurrence implies potentially infinite unfolding.</span>
+<span id="cb9-535"><a href="#cb9-535" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb9-536"><a href="#cb9-536" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-537"><a href="#cb9-537" aria-hidden="true" tabindex="-1"></a><span class="fu">## Batching and Windowing for RNN Training</span></span>
+<span id="cb9-538"><a href="#cb9-538" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-539"><a href="#cb9-539" aria-hidden="true" tabindex="-1"></a>To train RNNs efficiently, we use batching and windowing. The corpus is</span>
+<span id="cb9-540"><a href="#cb9-540" aria-hidden="true" tabindex="-1"></a>first split into batches and then further divided into windows of a</span>
+<span id="cb9-541"><a href="#cb9-541" aria-hidden="true" tabindex="-1"></a>fixed size. For example, with a window size of 3, we process sequences</span>
+<span id="cb9-542"><a href="#cb9-542" aria-hidden="true" tabindex="-1"></a>of 3 words at a time.</span>
+<span id="cb9-543"><a href="#cb9-543" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-544"><a href="#cb9-544" aria-hidden="true" tabindex="-1"></a>Data is processed in batches, and within each batch, sequences of words</span>
+<span id="cb9-545"><a href="#cb9-545" aria-hidden="true" tabindex="-1"></a>are processed in windows. This approach allows for parallel processing</span>
+<span id="cb9-546"><a href="#cb9-546" aria-hidden="true" tabindex="-1"></a>within a batch and manages the computational complexity of BPTT.</span>
+<span id="cb9-547"><a href="#cb9-547" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-548"><a href="#cb9-548" aria-hidden="true" tabindex="-1"></a>::: tcolorbox</span>
+<span id="cb9-549"><a href="#cb9-549" aria-hidden="true" tabindex="-1"></a>When the batch size is 2 and the window size is 3, the corpus is divided</span>
+<span id="cb9-550"><a href="#cb9-550" aria-hidden="true" tabindex="-1"></a>into chunks of 2x3 words. Each chunk is processed sequentially, and the</span>
+<span id="cb9-551"><a href="#cb9-551" aria-hidden="true" tabindex="-1"></a>final state of one chunk is used as the initial state for the next</span>
+<span id="cb9-552"><a href="#cb9-552" aria-hidden="true" tabindex="-1"></a>chunk.</span>
+<span id="cb9-553"><a href="#cb9-553" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb9-554"><a href="#cb9-554" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-555"><a href="#cb9-555" aria-hidden="true" tabindex="-1"></a><span class="fu">## TensorFlow Implementation of RNNs</span></span>
+<span id="cb9-556"><a href="#cb9-556" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-557"><a href="#cb9-557" aria-hidden="true" tabindex="-1"></a>In TensorFlow, a basic RNN cell can be created using:</span>
+<span id="cb9-558"><a href="#cb9-558" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-559"><a href="#cb9-559" aria-hidden="true" tabindex="-1"></a><span class="in">        rnn = tf.contrib.rnn.BasicRNNCell(rnnSz)</span></span>
+<span id="cb9-560"><a href="#cb9-560" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-561"><a href="#cb9-561" aria-hidden="true" tabindex="-1"></a>where 'rnnSz' is the size of the RNN state. The initial state is set to</span>
+<span id="cb9-562"><a href="#cb9-562" aria-hidden="true" tabindex="-1"></a>zero:</span>
+<span id="cb9-563"><a href="#cb9-563" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-564"><a href="#cb9-564" aria-hidden="true" tabindex="-1"></a><span class="in">        initialState = rnn.zero_state(batchSz, tf.float32)</span></span>
+<span id="cb9-565"><a href="#cb9-565" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-566"><a href="#cb9-566" aria-hidden="true" tabindex="-1"></a>and the dynamic RNN is created using 'tf.nn.dynamic_rnn':</span>
+<span id="cb9-567"><a href="#cb9-567" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-568"><a href="#cb9-568" aria-hidden="true" tabindex="-1"></a><span class="in">        outputs, nextState = tf.nn.dynamic_rnn(rnn, embeddings, initial_state=initialState)</span></span>
+<span id="cb9-569"><a href="#cb9-569" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-570"><a href="#cb9-570" aria-hidden="true" tabindex="-1"></a>'embeddings' is the input word embeddings, and 'initialState' is the</span>
+<span id="cb9-571"><a href="#cb9-571" aria-hidden="true" tabindex="-1"></a>initial RNN state. 'tf.nn.dynamic_rnn' handles the unfolding and</span>
+<span id="cb9-572"><a href="#cb9-572" aria-hidden="true" tabindex="-1"></a>recurrence over the input sequence.</span>
+<span id="cb9-573"><a href="#cb9-573" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-574"><a href="#cb9-574" aria-hidden="true" tabindex="-1"></a><span class="fu">## Complexity Analysis of RNNs</span></span>
+<span id="cb9-575"><a href="#cb9-575" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-576"><a href="#cb9-576" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**Time Complexity**: The time complexity of training an RNN with</span>
+<span id="cb9-577"><a href="#cb9-577" aria-hidden="true" tabindex="-1"></a>    BPTT is $O(N \times B \times T)$, where $N$ is the number of steps</span>
+<span id="cb9-578"><a href="#cb9-578" aria-hidden="true" tabindex="-1"></a>    to unfold, $B$ is the batch size, and $T$ is the length of the</span>
+<span id="cb9-579"><a href="#cb9-579" aria-hidden="true" tabindex="-1"></a>    sequence.</span>
+<span id="cb9-580"><a href="#cb9-580" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-581"><a href="#cb9-581" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**Space Complexity**: The space complexity is primarily determined</span>
+<span id="cb9-582"><a href="#cb9-582" aria-hidden="true" tabindex="-1"></a>    by the size of the state vector and the number of parameters in the</span>
+<span id="cb9-583"><a href="#cb9-583" aria-hidden="true" tabindex="-1"></a>    network. It is $O(S + P)$, where $S$ is the size of the state vector</span>
+<span id="cb9-584"><a href="#cb9-584" aria-hidden="true" tabindex="-1"></a>    and $P$ is the number of parameters.</span>
+<span id="cb9-585"><a href="#cb9-585" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-586"><a href="#cb9-586" aria-hidden="true" tabindex="-1"></a><span class="fu"># Long Short-Term Memory (LSTM) Networks</span></span>
+<span id="cb9-587"><a href="#cb9-587" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-588"><a href="#cb9-588" aria-hidden="true" tabindex="-1"></a><span class="fu">## Motivation for LSTMs: Addressing RNN Limitations</span></span>
+<span id="cb9-589"><a href="#cb9-589" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-590"><a href="#cb9-590" aria-hidden="true" tabindex="-1"></a>Simple RNNs suffer from vanishing gradient and exploding gradient</span>
+<span id="cb9-591"><a href="#cb9-591" aria-hidden="true" tabindex="-1"></a>problems, especially when dealing with long sequences. This makes it</span>
+<span id="cb9-592"><a href="#cb9-592" aria-hidden="true" tabindex="-1"></a>difficult for them to learn long-range dependencies. **Long Short-Term</span>
+<span id="cb9-593"><a href="#cb9-593" aria-hidden="true" tabindex="-1"></a>Memory (LSTM)** networks are a type of RNN designed to address these</span>
+<span id="cb9-594"><a href="#cb9-594" aria-hidden="true" tabindex="-1"></a>limitations and effectively capture long-range dependencies.</span>
+<span id="cb9-595"><a href="#cb9-595" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-596"><a href="#cb9-596" aria-hidden="true" tabindex="-1"></a><span class="fu">## LSTM Architecture and Components</span></span>
+<span id="cb9-597"><a href="#cb9-597" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-598"><a href="#cb9-598" aria-hidden="true" tabindex="-1"></a>LSTMs introduce a more complex cell structure with a **cell state**</span>
+<span id="cb9-599"><a href="#cb9-599" aria-hidden="true" tabindex="-1"></a>(long-term memory) and **gates** that control the flow of information.</span>
+<span id="cb9-600"><a href="#cb9-600" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-601"><a href="#cb9-601" aria-hidden="true" tabindex="-1"></a><span class="fu">### Cell State: Long-Term Memory</span></span>
+<span id="cb9-602"><a href="#cb9-602" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-603"><a href="#cb9-603" aria-hidden="true" tabindex="-1"></a>The **cell state** acts as a long-term memory, carrying information</span>
+<span id="cb9-604"><a href="#cb9-604" aria-hidden="true" tabindex="-1"></a>across time steps. It is a central component that LSTM gates manipulate.</span>
+<span id="cb9-605"><a href="#cb9-605" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-606"><a href="#cb9-606" aria-hidden="true" tabindex="-1"></a><span class="fu">### Gates: Forget, Input, and Output</span></span>
+<span id="cb9-607"><a href="#cb9-607" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-608"><a href="#cb9-608" aria-hidden="true" tabindex="-1"></a>LSTMs use three main types of gates to regulate information flow:</span>
+<span id="cb9-609"><a href="#cb9-609" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-610"><a href="#cb9-610" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**Forget Gate**: Determines what information to discard from the</span>
+<span id="cb9-611"><a href="#cb9-611" aria-hidden="true" tabindex="-1"></a>    cell state.</span>
+<span id="cb9-612"><a href="#cb9-612" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-613"><a href="#cb9-613" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**Input Gate**: Determines what new information to add to the cell</span>
+<span id="cb9-614"><a href="#cb9-614" aria-hidden="true" tabindex="-1"></a>    state.</span>
+<span id="cb9-615"><a href="#cb9-615" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-616"><a href="#cb9-616" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**Output Gate**: Determines what information to output based on the</span>
+<span id="cb9-617"><a href="#cb9-617" aria-hidden="true" tabindex="-1"></a>    cell state and input.</span>
+<span id="cb9-618"><a href="#cb9-618" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-619"><a href="#cb9-619" aria-hidden="true" tabindex="-1"></a>These gates are implemented using sigmoid and tanh activation functions</span>
+<span id="cb9-620"><a href="#cb9-620" aria-hidden="true" tabindex="-1"></a>and pointwise multiplication.</span>
+<span id="cb9-621"><a href="#cb9-621" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-622"><a href="#cb9-622" aria-hidden="true" tabindex="-1"></a><span class="fu">## Detailed LSTM Equations and Operations</span></span>
+<span id="cb9-623"><a href="#cb9-623" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-624"><a href="#cb9-624" aria-hidden="true" tabindex="-1"></a><span class="fu">### Forget Gate: Controlling Information Retention</span></span>
+<span id="cb9-625"><a href="#cb9-625" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-626"><a href="#cb9-626" aria-hidden="true" tabindex="-1"></a>The forget gate $f_t$ decides what information to forget from the</span>
+<span id="cb9-627"><a href="#cb9-627" aria-hidden="true" tabindex="-1"></a>previous cell state $c_{t-1}$. It is calculated as:</span>
+<span id="cb9-628"><a href="#cb9-628" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-629"><a href="#cb9-629" aria-hidden="true" tabindex="-1"></a>::: tcolorbox</span>
+<span id="cb9-630"><a href="#cb9-630" aria-hidden="true" tabindex="-1"></a>$$f_t = \sigma(\mathbf{h}'W_f + \mathbf{b}_f)$$</span>
+<span id="cb9-631"><a href="#cb9-631" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb9-632"><a href="#cb9-632" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-633"><a href="#cb9-633" aria-hidden="true" tabindex="-1"></a>where $\mathbf{h}' = <span class="co">[</span><span class="ot">\mathbf{h}_{t-1}, \mathbf{e}_t</span><span class="co">]</span>$ is the</span>
+<span id="cb9-634"><a href="#cb9-634" aria-hidden="true" tabindex="-1"></a>concatenation of the previous hidden state and the current input</span>
+<span id="cb9-635"><a href="#cb9-635" aria-hidden="true" tabindex="-1"></a>embedding, $W_f$ and $\mathbf{b}_f$ are weights and biases for the</span>
+<span id="cb9-636"><a href="#cb9-636" aria-hidden="true" tabindex="-1"></a>forget gate, and $\sigma$ is the sigmoid function.</span>
+<span id="cb9-637"><a href="#cb9-637" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-638"><a href="#cb9-638" aria-hidden="true" tabindex="-1"></a><span class="fu">### Input Gate: Adding New Information</span></span>
+<span id="cb9-639"><a href="#cb9-639" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-640"><a href="#cb9-640" aria-hidden="true" tabindex="-1"></a>The input gate has two parts: an input gate layer $a_{1,t}$ and a</span>
+<span id="cb9-641"><a href="#cb9-641" aria-hidden="true" tabindex="-1"></a>candidate cell state $\tilde{c}_t$.</span>
+<span id="cb9-642"><a href="#cb9-642" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-643"><a href="#cb9-643" aria-hidden="true" tabindex="-1"></a>::: tcolorbox</span>
+<span id="cb9-644"><a href="#cb9-644" aria-hidden="true" tabindex="-1"></a>$$a_{1,t} = \sigma(\mathbf{h}'W_{a1} + \mathbf{b}_{a1})$$</span>
+<span id="cb9-645"><a href="#cb9-645" aria-hidden="true" tabindex="-1"></a>$$a_{2,t} = \tanh(\mathbf{h}'W_{a2} + \mathbf{b}_{a2})$$</span>
+<span id="cb9-646"><a href="#cb9-646" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb9-647"><a href="#cb9-647" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-648"><a href="#cb9-648" aria-hidden="true" tabindex="-1"></a>where $W_{a1}, \mathbf{b}_{a1}, W_{a2}, \mathbf{b}_{a2}$ are weights and</span>
+<span id="cb9-649"><a href="#cb9-649" aria-hidden="true" tabindex="-1"></a>biases for the input gate components.</span>
+<span id="cb9-650"><a href="#cb9-650" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-651"><a href="#cb9-651" aria-hidden="true" tabindex="-1"></a><span class="fu">### Cell State Update: Combining Old and New Information</span></span>
+<span id="cb9-652"><a href="#cb9-652" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-653"><a href="#cb9-653" aria-hidden="true" tabindex="-1"></a>The cell state $c_t$ is updated by combining the forgotten information</span>
+<span id="cb9-654"><a href="#cb9-654" aria-hidden="true" tabindex="-1"></a>from $c_{t-1}$ and the new information from the input gate:</span>
+<span id="cb9-655"><a href="#cb9-655" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-656"><a href="#cb9-656" aria-hidden="true" tabindex="-1"></a>::: tcolorbox</span>
+<span id="cb9-657"><a href="#cb9-657" aria-hidden="true" tabindex="-1"></a>$$c_t = c_{t-1} \odot f_t + (a_{1,t} \odot a_{2,t})$$</span>
+<span id="cb9-658"><a href="#cb9-658" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb9-659"><a href="#cb9-659" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-660"><a href="#cb9-660" aria-hidden="true" tabindex="-1"></a>where $\odot$ denotes element-wise multiplication.</span>
+<span id="cb9-661"><a href="#cb9-661" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-662"><a href="#cb9-662" aria-hidden="true" tabindex="-1"></a><span class="fu">### Output Gate: Controlling Information Output</span></span>
+<span id="cb9-663"><a href="#cb9-663" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-664"><a href="#cb9-664" aria-hidden="true" tabindex="-1"></a>The output gate $o_t$ decides what parts of the cell state to output:</span>
+<span id="cb9-665"><a href="#cb9-665" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-666"><a href="#cb9-666" aria-hidden="true" tabindex="-1"></a>::: tcolorbox</span>
+<span id="cb9-667"><a href="#cb9-667" aria-hidden="true" tabindex="-1"></a>$$\mathbf{h}''_t = \mathbf{h}'W_h + \mathbf{b}_h$$</span>
+<span id="cb9-668"><a href="#cb9-668" aria-hidden="true" tabindex="-1"></a>$$o_t = \sigma(\mathbf{h}''_t W_o + \mathbf{b}_o)$$</span>
+<span id="cb9-669"><a href="#cb9-669" aria-hidden="true" tabindex="-1"></a>$$\mathbf{h}_t = \tanh(c_t) \odot o_t$$</span>
+<span id="cb9-670"><a href="#cb9-670" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb9-671"><a href="#cb9-671" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-672"><a href="#cb9-672" aria-hidden="true" tabindex="-1"></a>where $W_h, \mathbf{b}_h, W_o, \mathbf{b}_o$ are weights and biases for</span>
+<span id="cb9-673"><a href="#cb9-673" aria-hidden="true" tabindex="-1"></a>the output gate components, and $\mathbf{h}_t$ is the hidden state</span>
+<span id="cb9-674"><a href="#cb9-674" aria-hidden="true" tabindex="-1"></a>output at time $t$.</span>
+<span id="cb9-675"><a href="#cb9-675" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-676"><a href="#cb9-676" aria-hidden="true" tabindex="-1"></a>::: tcolorbox</span>
+<span id="cb9-677"><a href="#cb9-677" aria-hidden="true" tabindex="-1"></a>The sigmoid gates (forget, input, output) produce values between 0 and</span>
+<span id="cb9-678"><a href="#cb9-678" aria-hidden="true" tabindex="-1"></a>1, acting as \"smooth\" controls to regulate information flow.</span>
+<span id="cb9-679"><a href="#cb9-679" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb9-680"><a href="#cb9-680" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-681"><a href="#cb9-681" aria-hidden="true" tabindex="-1"></a><span class="fu">## Complexity Analysis of LSTMs</span></span>
+<span id="cb9-682"><a href="#cb9-682" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-683"><a href="#cb9-683" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**Time Complexity**: The time complexity of training an LSTM is</span>
+<span id="cb9-684"><a href="#cb9-684" aria-hidden="true" tabindex="-1"></a>    similar to that of a simple RNN, but with a larger constant factor</span>
+<span id="cb9-685"><a href="#cb9-685" aria-hidden="true" tabindex="-1"></a>    due to the more complex operations within each LSTM cell. It is</span>
+<span id="cb9-686"><a href="#cb9-686" aria-hidden="true" tabindex="-1"></a>    $O(N \times B \times T \times G)$, where $N$ is the number of steps</span>
+<span id="cb9-687"><a href="#cb9-687" aria-hidden="true" tabindex="-1"></a>    to unfold, $B$ is the batch size, $T$ is the length of the sequence,</span>
+<span id="cb9-688"><a href="#cb9-688" aria-hidden="true" tabindex="-1"></a>    and $G$ represents the complexity factor due to gates.</span>
+<span id="cb9-689"><a href="#cb9-689" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-690"><a href="#cb9-690" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**Space Complexity**: The space complexity of an LSTM is higher than</span>
+<span id="cb9-691"><a href="#cb9-691" aria-hidden="true" tabindex="-1"></a>    that of a simple RNN due to the additional parameters in the gates</span>
+<span id="cb9-692"><a href="#cb9-692" aria-hidden="true" tabindex="-1"></a>    and the cell state. It is $O(S + P + G)$, where $S$ is the size of</span>
+<span id="cb9-693"><a href="#cb9-693" aria-hidden="true" tabindex="-1"></a>    the state vector, $P$ is the number of parameters in the basic RNN,</span>
+<span id="cb9-694"><a href="#cb9-694" aria-hidden="true" tabindex="-1"></a>    and $G$ is the additional parameters due to the LSTM gates.</span>
+<span id="cb9-695"><a href="#cb9-695" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-696"><a href="#cb9-696" aria-hidden="true" tabindex="-1"></a><span class="fu"># Conclusion</span></span>
+<span id="cb9-697"><a href="#cb9-697" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-698"><a href="#cb9-698" aria-hidden="true" tabindex="-1"></a>In this lecture, we covered the basics of language modeling, word</span>
+<span id="cb9-699"><a href="#cb9-699" aria-hidden="true" tabindex="-1"></a>embeddings, and recurrent neural networks, focusing on RNNs and LSTMs.</span>
+<span id="cb9-700"><a href="#cb9-700" aria-hidden="true" tabindex="-1"></a>We discussed how word embeddings provide numerical representations of</span>
+<span id="cb9-701"><a href="#cb9-701" aria-hidden="true" tabindex="-1"></a>wordsthat capture semantic meaning, and how RNNs and LSTMs are designed</span>
+<span id="cb9-702"><a href="#cb9-702" aria-hidden="true" tabindex="-1"></a>to process sequential data by maintaining state and memory. We also</span>
+<span id="cb9-703"><a href="#cb9-703" aria-hidden="true" tabindex="-1"></a>explored techniques to address overfitting, such as dropout and L2</span>
+<span id="cb9-704"><a href="#cb9-704" aria-hidden="true" tabindex="-1"></a>regularization.</span>
+<span id="cb9-705"><a href="#cb9-705" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-706"><a href="#cb9-706" aria-hidden="true" tabindex="-1"></a>Key takeaways include:</span>
+<span id="cb9-707"><a href="#cb9-707" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-708"><a href="#cb9-708" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Language models aim to predict the probability of word sequences.</span>
+<span id="cb9-709"><a href="#cb9-709" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-710"><a href="#cb9-710" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Word embeddings are crucial for representing words as numerical</span>
+<span id="cb9-711"><a href="#cb9-711" aria-hidden="true" tabindex="-1"></a>    vectors in deep learning models.</span>
+<span id="cb9-712"><a href="#cb9-712" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-713"><a href="#cb9-713" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>RNNs and LSTMs are powerful architectures for handling sequential</span>
+<span id="cb9-714"><a href="#cb9-714" aria-hidden="true" tabindex="-1"></a>    data and capturing long-range dependencies.</span>
+<span id="cb9-715"><a href="#cb9-715" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-716"><a href="#cb9-716" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Regularization techniques are essential to prevent overfitting in</span>
+<span id="cb9-717"><a href="#cb9-717" aria-hidden="true" tabindex="-1"></a>    language models.</span>
+<span id="cb9-718"><a href="#cb9-718" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-719"><a href="#cb9-719" aria-hidden="true" tabindex="-1"></a>Further topics to explore might include attention mechanisms,</span>
+<span id="cb9-720"><a href="#cb9-720" aria-hidden="true" tabindex="-1"></a>transformers, and more advanced applications of RNNs and LSTMs in</span>
+<span id="cb9-721"><a href="#cb9-721" aria-hidden="true" tabindex="-1"></a>natural language processing. Understanding these concepts is crucial for</span>
+<span id="cb9-722"><a href="#cb9-722" aria-hidden="true" tabindex="-1"></a>building sophisticated NLP systems.</span></code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></pre></div>
+</div></div></div></div></div>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

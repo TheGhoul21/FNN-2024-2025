@@ -1,0 +1,1485 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.40">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Your Name">
+<meta name="dcterms.date" content="2025-02-01">
+
+<title>Lecture Notes on Eigenvalues, Eigenvectors, and Matrix Decompositions – Your Site Name</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-549806ee2085284f45b00abea8c6df48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-6bd9cfa162949bde0a231f530c97869d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">Your Site Name</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="./index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+    <div class="dropdown">
+      <a href="" title="" id="quarto-navigation-tool-dropdown-0" class="quarto-navigation-tool dropdown-toggle px-1" data-bs-toggle="dropdown" aria-expanded="false" role="link" aria-label=""><i class="bi bi-list"></i></a>
+      <ul class="dropdown-menu" aria-labelledby="quarto-navigation-tool-dropdown-0">
+          <li>
+            <a class="dropdown-item quarto-navbar-tools-item" href="./Note_-_FNN_24-25_(01-02).pdf.html">
+            Introduction to Neural Networks
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item quarto-navbar-tools-item" href="./Note_-_FNN_24-25_(03-04).pdf.html">
+            Lecture Notes on Perceptrons and Feedforward Neural Networks
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item quarto-navbar-tools-item" href="./Note_-_FNN_24-25_(05-06).pdf.html">
+            Lecture Notes on Vector Spaces and Subspaces
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item quarto-navbar-tools-item" href="./Note_-_FNN_24-25_(07-08).pdf.html">
+            General Inner Products
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item quarto-navbar-tools-item" href="./Note_-_FNN_24-25_(09-10).pdf.html">
+            Lecture Notes on the Perceptron Algorithm
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item quarto-navbar-tools-item" href="./Note_-_FNN_24-25_(11-12).pdf.html">
+            Lecture Notes on Multilayer Perceptrons and Backpropagation
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item quarto-navbar-tools-item" href="./Note_-_FNN_24-25_(13-14).pdf.html">
+            Lecture Notes on Eigenvalues, Eigenvectors, and Matrix Decompositions
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item quarto-navbar-tools-item" href="./Note_-_FNN_24-25_(15-16).pdf.html">
+            Lecture Notes on Convolutional Neural Networks
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item quarto-navbar-tools-item" href="./Note_-_FNN_24-25_(17-18).pdf.html">
+            Lecture Notes on Word Embeddings and Recurrent Neural Networks
+            </a>
+          </li>
+      </ul>
+    </div>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul class="collapse">
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
+  <li><a href="#eigenvalues-and-eigenvectors" id="toc-eigenvalues-and-eigenvectors" class="nav-link" data-scroll-target="#eigenvalues-and-eigenvectors">Eigenvalues and Eigenvectors</a>
+  <ul class="collapse">
+  <li><a href="#linear-independence-of-eigenvectors" id="toc-linear-independence-of-eigenvectors" class="nav-link" data-scroll-target="#linear-independence-of-eigenvectors">Linear Independence of Eigenvectors</a></li>
+  <li><a href="#repeated-eigenvalues-and-defective-matrices" id="toc-repeated-eigenvalues-and-defective-matrices" class="nav-link" data-scroll-target="#repeated-eigenvalues-and-defective-matrices">Repeated Eigenvalues and Defective Matrices</a></li>
+  <li><a href="#symmetric-matrices-and-the-spectral-theorem" id="toc-symmetric-matrices-and-the-spectral-theorem" class="nav-link" data-scroll-target="#symmetric-matrices-and-the-spectral-theorem">Symmetric Matrices and the Spectral Theorem</a></li>
+  <li><a href="#eigendecomposition-of-symmetric-matrices" id="toc-eigendecomposition-of-symmetric-matrices" class="nav-link" data-scroll-target="#eigendecomposition-of-symmetric-matrices">Eigendecomposition of Symmetric Matrices</a></li>
+  <li><a href="#geometric-interpretation-of-eigenvalues-and-eigenvectors" id="toc-geometric-interpretation-of-eigenvalues-and-eigenvectors" class="nav-link" data-scroll-target="#geometric-interpretation-of-eigenvalues-and-eigenvectors">Geometric Interpretation of Eigenvalues and Eigenvectors</a></li>
+  <li><a href="#relationships-between-eigenvalues-and-matrix-properties" id="toc-relationships-between-eigenvalues-and-matrix-properties" class="nav-link" data-scroll-target="#relationships-between-eigenvalues-and-matrix-properties">Relationships Between Eigenvalues and Matrix Properties</a></li>
+  <li><a href="#eigenvalues-and-linear-transformations" id="toc-eigenvalues-and-linear-transformations" class="nav-link" data-scroll-target="#eigenvalues-and-linear-transformations">Eigenvalues and Linear Transformations</a></li>
+  </ul></li>
+  <li><a href="#matrix-decompositions" id="toc-matrix-decompositions" class="nav-link" data-scroll-target="#matrix-decompositions">Matrix Decompositions</a>
+  <ul class="collapse">
+  <li><a href="#cholesky-decomposition" id="toc-cholesky-decomposition" class="nav-link" data-scroll-target="#cholesky-decomposition">Cholesky Decomposition</a></li>
+  <li><a href="#diagonalization" id="toc-diagonalization" class="nav-link" data-scroll-target="#diagonalization">Diagonalization</a></li>
+  <li><a href="#singular-value-decomposition-svd" id="toc-singular-value-decomposition-svd" class="nav-link" data-scroll-target="#singular-value-decomposition-svd">Singular Value Decomposition (SVD)</a></li>
+  </ul></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<div class="quarto-title-block"><div><h1 class="title">Lecture Notes on Eigenvalues, Eigenvectors, and Matrix Decompositions</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Your Name </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">February 1, 2025</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="introduction" class="level1">
+<h1>Introduction</h1>
+<p>This lecture explores the fundamental concepts of eigenvalues and eigenvectors, their properties, and their significance in linear algebra. We will examine the linear independence of eigenvectors, the special characteristics of symmetric matrices, and the geometric interpretation of eigenvalues and eigenvectors. We will also discuss important matrix decompositions, including Cholesky decomposition, diagonalization, and Singular Value Decomposition (SVD), highlighting their computational aspects and applications in fields such as data analysis and machine learning. This lecture aims to provide a comprehensive understanding of these essential linear algebra tools and their practical implications.</p>
+</section>
+<section id="eigenvalues-and-eigenvectors" class="level1">
+<h1>Eigenvalues and Eigenvectors</h1>
+<section id="linear-independence-of-eigenvectors" class="level2">
+<h2 class="anchored" data-anchor-id="linear-independence-of-eigenvectors">Linear Independence of Eigenvectors</h2>
+<div class="tcolorbox">
+<p><span id="thm:linear_independence_eigenvalues" data-label="thm:linear_independence_eigenvalues"></span> The eigenvectors <span class="math inline">\(\mathbf{x}_1, \dots, \mathbf{x}_n\)</span> of a matrix <span class="math inline">\(A \in \mathbb{R}^{n \times n}\)</span> with <span class="math inline">\(n\)</span> distinct eigenvalues <span class="math inline">\(\lambda_1, \dots, \lambda_n\)</span> are linearly independent.</p>
+</div>
+<div class="tcolorbox">
+<p>Theorem <a href="#thm:linear_independence_eigenvalues" data-reference-type="ref" data-reference="thm:linear_independence_eigenvalues">[thm:linear_independence_eigenvalues]</a> states that if a matrix has distinct eigenvalues, the corresponding eigenvectors will always be linearly independent. This is a crucial property because linearly independent vectors can form a basis for a vector space. For an <span class="math inline">\(n \times n\)</span> matrix, finding <span class="math inline">\(n\)</span> distinct eigenvalues guarantees <span class="math inline">\(n\)</span> linearly independent eigenvectors, which can form a basis for <span class="math inline">\(\mathbb{R}^n\)</span>.</p>
+</div>
+<div class="tcolorbox">
+<p>If a matrix does not have <span class="math inline">\(n\)</span> linearly independent eigenvectors (which can happen when eigenvalues are repeated), it is called a <em>defective matrix</em>. For defective matrices, it is not possible to form a basis of eigenvectors for the entire vector space.</p>
+</div>
+</section>
+<section id="repeated-eigenvalues-and-defective-matrices" class="level2">
+<h2 class="anchored" data-anchor-id="repeated-eigenvalues-and-defective-matrices">Repeated Eigenvalues and Defective Matrices</h2>
+<div class="tcolorbox">
+<p>When eigenvalues are repeated, the corresponding eigenvectors may or may not be linearly independent. A matrix is called defective if it does not possess a complete set of linearly independent eigenvectors, meaning it’s impossible to find <span class="math inline">\(n\)</span> linearly independent eigenvectors for an <span class="math inline">\(n \times n\)</span> matrix.</p>
+</div>
+</section>
+<section id="symmetric-matrices-and-the-spectral-theorem" class="level2">
+<h2 class="anchored" data-anchor-id="symmetric-matrices-and-the-spectral-theorem">Symmetric Matrices and the Spectral Theorem</h2>
+<div class="tcolorbox">
+<p><span id="thm:spectral_theorem" data-label="thm:spectral_theorem"></span> If <span class="math inline">\(A \in \mathbb{R}^{n \times n}\)</span> is a symmetric matrix (i.e., <span class="math inline">\(A = \transpose{A}\)</span>), then:</p>
+<ol type="1">
+<li><p>All eigenvalues of <span class="math inline">\(A\)</span> are real.</p></li>
+<li><p>There exists an orthonormal basis of <span class="math inline">\(\mathbb{R}^n\)</span> consisting of eigenvectors of <span class="math inline">\(A\)</span>.</p></li>
+</ol>
+</div>
+<div class="tcolorbox">
+<p>The Spectral Theorem (<a href="#thm:spectral_theorem" data-reference-type="ref+Label" data-reference="thm:spectral_theorem">[thm:spectral_theorem]</a>) is a cornerstone result for symmetric matrices. It guarantees two significant properties: first, the eigenvalues are real numbers, and second, we can find an orthonormal basis composed of eigenvectors. An orthonormal basis simplifies many calculations, especially in projections and coordinate transformations.</p>
+</div>
+<section id="properties-of-symmetric-matrices" class="level3">
+<h3 class="anchored" data-anchor-id="properties-of-symmetric-matrices">Properties of Symmetric Matrices</h3>
+<div class="mdframed">
+<p><strong>Real Eigenvalues:</strong> For any symmetric matrix, all eigenvalues are real numbers, which simplifies analysis as we do not need to deal with complex eigenvalues.</p>
+<p><strong>Orthonormal Eigenbasis:</strong> The existence of an orthonormal eigenbasis means that the eigenvectors are mutually orthogonal (perpendicular) and normalized (unit length). This is highly beneficial for simplifying calculations and understanding the geometric action of symmetric matrices.</p>
+</div>
+</section>
+</section>
+<section id="eigendecomposition-of-symmetric-matrices" class="level2">
+<h2 class="anchored" data-anchor-id="eigendecomposition-of-symmetric-matrices">Eigendecomposition of Symmetric Matrices</h2>
+<div class="mdframed">
+<p><strong>Decomposition:</strong> For a symmetric matrix <span class="math inline">\(A\)</span>, the Spectral Theorem ensures it can be diagonalized as: <span class="math display">\[A = P D \transpose{P}\]</span> where:</p>
+<ul>
+<li><p><span class="math inline">\(D\)</span> is a diagonal matrix with the eigenvalues of <span class="math inline">\(A\)</span> on the diagonal.</p></li>
+<li><p><span class="math inline">\(P\)</span> is an orthogonal matrix whose columns are the orthonormal eigenvectors of <span class="math inline">\(A\)</span>. Since <span class="math inline">\(P\)</span> is orthogonal, <span class="math inline">\(\inverse{P} = \transpose{P}\)</span>.</p></li>
+</ul>
+<p>This decomposition is known as <em>eigendecomposition</em> or <em>spectral decomposition</em>.</p>
+</div>
+<div class="tcolorbox">
+<p>Eigendecomposition reveals how a symmetric matrix transformation acts geometrically. It stretches or compresses space along orthogonal directions defined by the eigenvectors. The eigenvalues represent the scaling factors in these directions.</p>
+</div>
+</section>
+<section id="geometric-interpretation-of-eigenvalues-and-eigenvectors" class="level2">
+<h2 class="anchored" data-anchor-id="geometric-interpretation-of-eigenvalues-and-eigenvectors">Geometric Interpretation of Eigenvalues and Eigenvectors</h2>
+<p>Eigenvectors represent the directions that remain unchanged (up to scaling) when a linear transformation is applied, and eigenvalues are the scaling factors in these directions. For a symmetric matrix, these directions are orthogonal. Geometrically, a symmetric matrix transformation stretches or compresses space along these orthogonal eigenvector directions.</p>
+</section>
+<section id="relationships-between-eigenvalues-and-matrix-properties" class="level2">
+<h2 class="anchored" data-anchor-id="relationships-between-eigenvalues-and-matrix-properties">Relationships Between Eigenvalues and Matrix Properties</h2>
+<div class="tcolorbox">
+<p><span id="thm:determinant_eigenvalues" data-label="thm:determinant_eigenvalues"></span> The determinant of a matrix <span class="math inline">\(A \in \mathbb{R}^{n \times n}\)</span> is the product of its eigenvalues, i.e., <span class="math display">\[\det(A) = \prod_{i=1}^{n} \lambda_i\]</span> where <span class="math inline">\(\lambda_i \in \C\)</span> are the (possibly repeated) eigenvalues of <span class="math inline">\(A\)</span>.</p>
+</div>
+<div class="tcolorbox">
+<p>Theorem <a href="#thm:determinant_eigenvalues" data-reference-type="ref" data-reference="thm:determinant_eigenvalues">[thm:determinant_eigenvalues]</a> provides a straightforward way to compute the determinant using eigenvalues. Instead of direct computation, which can be complex for large matrices, we can find the eigenvalues and multiply them.</p>
+</div>
+<div class="tcolorbox">
+<p><span id="thm:trace_eigenvalues" data-label="thm:trace_eigenvalues"></span> The trace of a matrix <span class="math inline">\(A \in \mathbb{R}^{n \times n}\)</span> is the sum of its eigenvalues, i.e., <span class="math display">\[\text{tr}(A) = \sum_{i=1}^{n} \lambda_i\]</span> where <span class="math inline">\(\lambda_i \in \C\)</span> are the (possibly repeated) eigenvalues of <span class="math inline">\(A\)</span>.</p>
+</div>
+<div class="tcolorbox">
+<p>Theorem <a href="#thm:trace_eigenvalues" data-reference-type="ref" data-reference="thm:trace_eigenvalues">[thm:trace_eigenvalues]</a> relates the trace of a matrix (sum of diagonal elements) to the sum of its eigenvalues. This provides another elegant connection between eigenvalues and fundamental matrix properties.</p>
+</div>
+</section>
+<section id="eigenvalues-and-linear-transformations" class="level2">
+<h2 class="anchored" data-anchor-id="eigenvalues-and-linear-transformations">Eigenvalues and Linear Transformations</h2>
+<div class="mdframed">
+<p><strong>Scaling of Area/Volume by the Determinant:</strong> Eigenvalues describe how linear transformations affect area and volume. For a <span class="math inline">\(2 \times 2\)</span> matrix with eigenvalues <span class="math inline">\(\lambda_1\)</span> and <span class="math inline">\(\lambda_2\)</span>, the determinant <span class="math inline">\(\det(A) = \lambda_1 \lambda_2\)</span> represents the factor by which areas are scaled under the transformation. In <span class="math inline">\(n\)</span> dimensions, the determinant (product of all eigenvalues) scales the <span class="math inline">\(n\)</span>-dimensional volume.</p>
+</div>
+<div class="tcolorbox">
+<p>Methods to analyze and learn from network data are essential in machine learning. Connectivity matrices capture network node connections. For the worm <em>C. elegans</em>, a <span class="math inline">\(277 \times 277\)</span> connectivity matrix <span class="math inline">\(A \in \mathbb{R}^{277 \times 277}\)</span> represents neuron connections. <span class="math inline">\(A_{ij} = 1\)</span> if neuron <span class="math inline">\(i\)</span> connects to neuron <span class="math inline">\(j\)</span>, and <span class="math inline">\(0\)</span> otherwise. Since <span class="math inline">\(A\)</span> is not symmetric, eigenvalues may be complex. A symmetrized matrix <span class="math inline">\(A_{\text{sym}} = A + \transpose{A}\)</span> is considered, where <span class="math inline">\(A_{\text{sym}_{ij}} \neq 0\)</span> if neurons are connected regardless of direction.</p>
+<figure id="fig:neural_network_connectivity" class="figure">
+<figcaption>
+Example of a simplified neural network connectivity diagram.
+</figcaption>
+</figure>
+<figure id="fig:eigenspectrum_plot" class="figure">
+<figcaption>
+Example of an eigenspectrum plot for a symmetrized connectivity matrix.
+</figcaption>
+</figure>
+<p>Figures <a href="#fig:neural_network_connectivity" data-reference-type="ref" data-reference="fig:neural_network_connectivity">1</a> and <a href="#fig:eigenspectrum_plot" data-reference-type="ref" data-reference="fig:eigenspectrum_plot">2</a> show a simplified neural network connectivity diagram and its corresponding eigenspectrum. The S-like shape of the eigenspectrum is typical for biological neural networks and is an area of active neuroscience research.</p>
+</div>
+</section>
+</section>
+<section id="matrix-decompositions" class="level1">
+<h1>Matrix Decompositions</h1>
+<section id="cholesky-decomposition" class="level2">
+<h2 class="anchored" data-anchor-id="cholesky-decomposition">Cholesky Decomposition</h2>
+<div class="tcolorbox">
+<p><span id="thm:cholesky_decomposition" data-label="thm:cholesky_decomposition"></span> A symmetric, positive definite matrix <span class="math inline">\(A\)</span> can be factorized into a product <span class="math inline">\(A = L \transpose{L}\)</span>, where <span class="math inline">\(L\)</span> is a lower triangular matrix with positive diagonal elements. This decomposition is unique.</p>
+</div>
+<div class="tcolorbox">
+<p>A symmetric matrix <span class="math inline">\(A\)</span> is positive definite if for any non-zero vector <span class="math inline">\(\mathbf{x}\)</span>, <span class="math inline">\(\transpose{\mathbf{x}} A \mathbf{x} &gt; 0\)</span>. Positive definite matrices are important in optimization and statistics.</p>
+</div>
+<div class="mdframed">
+<p><strong>Decomposition:</strong> The Cholesky decomposition expresses a symmetric positive definite matrix <span class="math inline">\(A\)</span> as a product of a lower triangular matrix <span class="math inline">\(L\)</span> and its transpose <span class="math inline">\(\transpose{L}\)</span>: <span class="math display">\[A = L \transpose{L}\]</span></p>
+</div>
+<section id="recursive-computation-of-the-lower-triangular-matrix-l" class="level3">
+<h3 class="anchored" data-anchor-id="recursive-computation-of-the-lower-triangular-matrix-l">Recursive Computation of the Lower Triangular Matrix <span class="math inline">\(L\)</span></h3>
+<p>The matrix <span class="math inline">\(L\)</span> can be computed recursively. For a <span class="math inline">\(3 \times 3\)</span> matrix <span class="math inline">\(A = L \transpose{L}\)</span>, we can write: Let <span class="math display">\[A = \begin{pmatrix} a_{11} &amp; a_{12} &amp; a_{13} \\ a_{21} &amp; a_{22} &amp; a_{23} \\ a_{31} &amp; a_{32} &amp; a_{33} \end{pmatrix}, \quad
+L = \begin{pmatrix} l_{11} &amp; 0 &amp; 0 \\ l_{21} &amp; l_{22} &amp; 0 \\ l_{31} &amp; l_{32} &amp; l_{33} \end{pmatrix}\]</span> Then <span class="math inline">\(A = L\transpose{L}\)</span> gives: <span class="math display">\[\begin{pmatrix} a_{11} &amp; a_{12} &amp; a_{13} \\ a_{21} &amp; a_{22} &amp; a_{23} \\ a_{31} &amp; a_{32} &amp; a_{33} \end{pmatrix} =
+\begin{pmatrix} l_{11} &amp; 0 &amp; 0 \\ l_{21} &amp; l_{22} &amp; 0 \\ l_{31} &amp; l_{32} &amp; l_{33} \end{pmatrix}
+\begin{pmatrix} l_{11} &amp; l_{21} &amp; l_{31} \\ 0 &amp; l_{22} &amp; l_{32} \\ 0 &amp; 0 &amp; l_{33} \end{pmatrix} =
+\begin{pmatrix}
+    l_{11}^2 &amp; l_{11}l_{21} &amp; l_{11}l_{31} \\
+    l_{21}l_{11} &amp; l_{21}^2 + l_{22}^2 &amp; l_{21}l_{31} + l_{22}l_{32} \\
+    l_{31}l_{11} &amp; l_{31}l_{21} + l_{32}l_{22} &amp; l_{31}^2 + l_{32}^2 + l_{33}^2
+\end{pmatrix}\]</span> From these equations, entries of <span class="math inline">\(L\)</span> can be solved recursively, starting with <span class="math inline">\(l_{11} = \sqrt{a_{11}}\)</span>, then <span class="math inline">\(l_{21} = a_{21} / l_{11}\)</span>, <span class="math inline">\(l_{22}=\sqrt{a_{22}-l_{21}^2}\)</span>, and so on.</p>
+</section>
+<section id="complexity-analysis-of-cholesky-decomposition" class="level3">
+<h3 class="anchored" data-anchor-id="complexity-analysis-of-cholesky-decomposition">Complexity Analysis of Cholesky Decomposition</h3>
+<p>The computational complexity of Cholesky decomposition is approximately <span class="math inline">\(\frac{1}{3}n^3\)</span> flops (floating-point operations), making it more efficient than LU decomposition for symmetric positive definite matrices.</p>
+</section>
+<section id="applications-of-cholesky-decomposition" class="level3">
+<h3 class="anchored" data-anchor-id="applications-of-cholesky-decomposition">Applications of Cholesky Decomposition</h3>
+<div class="mdframed">
+<p>Cholesky decomposition is used in:</p>
+<ul>
+<li><p>Solving linear least squares problems.</p></li>
+<li><p>Monte Carlo simulations.</p></li>
+<li><p>Optimization algorithms.</p></li>
+</ul>
+<p>It is efficient for symmetric positive definite matrices because solving linear systems with triangular matrices is faster and determinant/inverse calculations are simpler.</p>
+</div>
+</section>
+</section>
+<section id="diagonalization" class="level2">
+<h2 class="anchored" data-anchor-id="diagonalization">Diagonalization</h2>
+<div class="tcolorbox">
+<p><span id="def:diagonalizable_matrix" data-label="def:diagonalizable_matrix"></span> A matrix <span class="math inline">\(A \in \mathbb{R}^{n \times n}\)</span> is diagonalizable if it is similar to a diagonal matrix, i.e., if there exists an invertible matrix <span class="math inline">\(P \in \mathbb{R}^{n \times n}\)</span> such that <span class="math inline">\(D = \inverse{P} A P\)</span>, where <span class="math inline">\(D\)</span> is a diagonal matrix.</p>
+</div>
+<div class="tcolorbox">
+<p>The transformation <span class="math inline">\(A \mapsto \inverse{P} A P\)</span> is called a similarity transformation. Similar matrices represent the same linear transformation under different bases.</p>
+</div>
+<div class="mdframed">
+<p><strong>Diagonalization:</strong> Diagonalization transforms a matrix <span class="math inline">\(A\)</span> into a diagonal matrix <span class="math inline">\(D\)</span> using a similarity transformation: <span class="math display">\[D = \inverse{P} A P\]</span> The diagonal matrix <span class="math inline">\(D\)</span> contains the eigenvalues of <span class="math inline">\(A\)</span>, and the columns of <span class="math inline">\(P\)</span> are the corresponding eigenvectors.</p>
+</div>
+<section id="diagonalization-as-a-change-of-basis-to-the-eigenbasis" class="level3">
+<h3 class="anchored" data-anchor-id="diagonalization-as-a-change-of-basis-to-the-eigenbasis">Diagonalization as a Change of Basis to the Eigenbasis</h3>
+<p>Diagonalization can be viewed as changing the basis to the eigenbasis. In the eigenbasis, the linear transformation represented by <span class="math inline">\(A\)</span> acts simply as scaling along each eigenvector direction, which is represented by the diagonal matrix <span class="math inline">\(D\)</span>.</p>
+</section>
+<section id="the-equation-ap-pd-and-its-relation-to-eigenvectors" class="level3">
+<h3 class="anchored" data-anchor-id="the-equation-ap-pd-and-its-relation-to-eigenvectors">The Equation <span class="math inline">\(AP = PD\)</span> and its Relation to Eigenvectors</h3>
+<p>The equation <span class="math inline">\(AP = PD\)</span> is fundamental to diagonalization. If we write <span class="math inline">\(P = [\mathbf{p}_1, \mathbf{p}_2, \dots, \mathbf{p}_n]\)</span> where <span class="math inline">\(\mathbf{p}_i\)</span> are the columns of <span class="math inline">\(P\)</span> (eigenvectors), and <span class="math inline">\(D = \text{diag}(\lambda_1, \lambda_2, \dots, \lambda_n)\)</span> where <span class="math inline">\(\lambda_i\)</span> are eigenvalues, then <span class="math inline">\(AP = PD\)</span> is equivalent to the set of eigenvector equations: <span class="math display">\[A\mathbf{p}_i = \lambda_i \mathbf{p}_i, \quad i = 1, 2, \dots, n\]</span> Diagonalization is thus intrinsically linked to finding eigenvectors and eigenvalues.</p>
+</section>
+</section>
+<section id="singular-value-decomposition-svd" class="level2">
+<h2 class="anchored" data-anchor-id="singular-value-decomposition-svd">Singular Value Decomposition (SVD)</h2>
+<div class="tcolorbox">
+<p><span id="thm:svd_theorem" data-label="thm:svd_theorem"></span> Let <span class="math inline">\(A \in \mathbb{R}^{m \times n}\)</span> be a rectangular matrix of rank <span class="math inline">\(r \in [0, \min(m, n)]\)</span>. The Singular Value Decomposition (SVD) of <span class="math inline">\(A\)</span> is a factorization of the form <span class="math display">\[A = U \Sigma \transpose{V}\]</span> where:</p>
+<ul>
+<li><p><span class="math inline">\(U \in \mathbb{R}^{m \times m}\)</span> is an orthogonal matrix.</p></li>
+<li><p><span class="math inline">\(\Sigma \in \mathbb{R}^{m \times n}\)</span> is a rectangular diagonal matrix with non-negative diagonal entries <span class="math inline">\(\sigma_i\)</span> (singular values).</p></li>
+<li><p><span class="math inline">\(V \in \mathbb{R}^{n \times n}\)</span> is an orthogonal matrix.</p></li>
+</ul>
+</div>
+<div class="tcolorbox">
+<p><strong>Orthogonal Matrices:</strong> Matrices <span class="math inline">\(U\)</span> and <span class="math inline">\(V\)</span> are orthogonal, meaning their columns are orthonormal vectors. For an orthogonal matrix <span class="math inline">\(Q\)</span>, <span class="math inline">\(\transpose{Q} = \inverse{Q}\)</span>.</p>
+<p><strong>Rectangular Diagonal Matrix <span class="math inline">\(\Sigma\)</span>:</strong> <span class="math inline">\(\Sigma\)</span> is an <span class="math inline">\(m \times n\)</span> matrix with diagonal entries <span class="math inline">\(\sigma_1 \geq \sigma_2 \geq \dots \geq \sigma_r &gt; 0\)</span> and zeros elsewhere. The <span class="math inline">\(\sigma_i\)</span>’s are called singular values.</p>
+</div>
+<div class="mdframed">
+<p><strong>Decomposition:</strong> SVD decomposes any matrix <span class="math inline">\(A\)</span> (even rectangular) into a product of three matrices: <span class="math display">\[A = U \Sigma \transpose{V}\]</span> where <span class="math inline">\(U\)</span> and <span class="math inline">\(V\)</span> are orthogonal and <span class="math inline">\(\Sigma\)</span> is rectangular diagonal.</p>
+</div>
+<section id="components-of-the-svd" class="level3">
+<h3 class="anchored" data-anchor-id="components-of-the-svd">Components of the SVD</h3>
+<ul>
+<li><p><span class="math inline">\(U\)</span>: Columns are left singular vectors, which are eigenvectors of <span class="math inline">\(A \transpose{A}\)</span>.</p></li>
+<li><p><span class="math inline">\(V\)</span>: Columns are right singular vectors, which are eigenvectors of <span class="math inline">\(\transpose{A} A\)</span>.</p></li>
+<li><p><span class="math inline">\(\Sigma\)</span>: Diagonal entries are singular values <span class="math inline">\(\sigma_i\)</span>, where <span class="math inline">\(\sigma_i^2\)</span> are eigenvalues of both <span class="math inline">\(\transpose{A} A\)</span> and <span class="math inline">\(A \transpose{A}\)</span>.</p></li>
+</ul>
+</section>
+<section id="geometric-interpretation-of-svd" class="level3">
+<h3 class="anchored" data-anchor-id="geometric-interpretation-of-svd">Geometric Interpretation of SVD</h3>
+<p>Geometrically, SVD decomposes a linear transformation into three steps:</p>
+<ol type="1">
+<li><p>Rotation/Reflection (by <span class="math inline">\(\transpose{V}\)</span>).</p></li>
+<li><p>Scaling along orthogonal axes (by <span class="math inline">\(\Sigma\)</span>).</p></li>
+<li><p>Rotation/Reflection (by <span class="math inline">\(U\)</span>).</p></li>
+</ol>
+<p><span class="math inline">\(\transpose{V}\)</span> rotates the input space, <span class="math inline">\(\Sigma\)</span> scales along coordinate axes, and <span class="math inline">\(U\)</span> rotates the output space.</p>
+</section>
+<section id="singular-values-as-generalized-eigenvalues" class="level3">
+<h3 class="anchored" data-anchor-id="singular-values-as-generalized-eigenvalues">Singular Values as Generalized Eigenvalues</h3>
+<p>Singular values are generalized eigenvalues for rectangular matrices, indicating the "strengths" of transformation in different directions.</p>
+</section>
+<section id="computation-of-svd" class="level3">
+<h3 class="anchored" data-anchor-id="computation-of-svd">Computation of SVD</h3>
+<p>To compute SVD:</p>
+<ol type="1">
+<li><p>Compute <span class="math inline">\(\transpose{A} A\)</span> and <span class="math inline">\(A \transpose{A}\)</span>.</p></li>
+<li><p>Find eigenvectors and eigenvalues of <span class="math inline">\(\transpose{A} A\)</span> and <span class="math inline">\(A \transpose{A}\)</span>.</p></li>
+<li><p>Construct <span class="math inline">\(V\)</span> from eigenvectors of <span class="math inline">\(\transpose{A} A\)</span>, <span class="math inline">\(U\)</span> from eigenvectors of <span class="math inline">\(A \transpose{A}\)</span>, and <span class="math inline">\(\Sigma\)</span> from the square roots of non-zero eigenvalues.</p></li>
+</ol>
+<p>More efficient algorithms exist for direct SVD computation.</p>
+</section>
+<section id="applications-of-svd" class="level3">
+<h3 class="anchored" data-anchor-id="applications-of-svd">Applications of SVD</h3>
+<div class="mdframed">
+<p>SVD is a versatile tool used in:</p>
+<ul>
+<li><p>Dimensionality reduction.</p></li>
+<li><p>Image compression.</p></li>
+<li><p>Recommendation systems.</p></li>
+</ul>
+<p>It’s often called the "Fundamental Theorem of Linear Algebra" due to its broad applicability.</p>
+</div>
+<section id="example-movie-rating-analysis" class="level4">
+<h4 class="anchored" data-anchor-id="example-movie-rating-analysis">Example: Movie Rating Analysis</h4>
+<p>In movie rating analysis, SVD can be applied to a matrix of movie ratings by viewers to find patterns. Left-singular vectors in <span class="math inline">\(U\)</span> represent "stereotypical movies," right-singular vectors in <span class="math inline">\(V\)</span> represent "stereotypical viewers," and singular values in <span class="math inline">\(\Sigma\)</span> indicate their importance.</p>
+</section>
+</section>
+<section id="low-rank-approximation-and-the-eckart-young-theorem" class="level3">
+<h3 class="anchored" data-anchor-id="low-rank-approximation-and-the-eckart-young-theorem">Low-Rank Approximation and the Eckart-Young Theorem</h3>
+<div class="tcolorbox">
+<p><span id="thm:eckart_young_theorem" data-label="thm:eckart_young_theorem"></span> Consider a matrix <span class="math inline">\(A \in \mathbb{R}^{m \times n}\)</span> of rank <span class="math inline">\(r\)</span>. For any <span class="math inline">\(k \leq r\)</span>, let <span class="math inline">\(A^{(k)} = \sum_{i=1}^{k} \sigma_i \mathbf{u}_i \transpose{\mathbf{v}}_i\)</span> be the rank-<span class="math inline">\(k\)</span> approximation of <span class="math inline">\(A\)</span> obtained by truncating the SVD. Then <span class="math inline">\(A^{(k)}\)</span> is the best rank-<span class="math inline">\(k\)</span> approximation of <span class="math inline">\(A\)</span> in terms of the spectral norm, and the error is given by: <span class="math display">\[A^{(k)} = \underset{\substack{B \in \mathbb{R}^{m \times n} \\ \text{rank}(B) = k}}{\text{argmin}} \| A - B \|_2, \quad \| A - A^{(k)} \|_2 = \sigma_{k+1}\]</span></p>
+</div>
+<div class="tcolorbox">
+<p>The Eckart-Young Theorem (<a href="#thm:eckart_young_theorem" data-reference-type="ref+Label" data-reference="thm:eckart_young_theorem">[thm:eckart_young_theorem]</a>) states that truncated SVD provides the best low-rank approximation of a matrix in the spectral norm sense.</p>
+</div>
+<section id="example-image-compression-using-svd" class="level4">
+<h4 class="anchored" data-anchor-id="example-image-compression-using-svd">Example: Image Compression using SVD</h4>
+<p>SVD is used for image compression. An image matrix can be approximated by a lower-rank matrix using truncated SVD, retaining only the top singular values and vectors. This reduces data while preserving essential image features.</p>
+<figure id="fig:example_image_compression" class="figure">
+<figcaption>
+Example of Image Compression using SVD
+</figcaption>
+</figure>
+<p>Figure <a href="#fig:example_image_compression" data-reference-type="ref" data-reference="fig:example_image_compression">3</a> demonstrates how image quality improves with increasing rank approximations using SVD.</p>
+</section>
+</section>
+</section>
+</section>
+<section id="conclusion" class="level1">
+<h1>Conclusion</h1>
+<p>This lecture covered essential concepts in linear algebra, including eigenvalues, eigenvectors, and various matrix decompositions. We explored the properties of eigenvalues and eigenvectors, particularly for symmetric matrices as described by the Spectral Theorem. We discussed Cholesky decomposition for symmetric positive definite matrices, diagonalization for simplifying linear transformations, and Singular Value Decomposition (SVD) as a powerful tool for general matrices, including rectangular ones. Key takeaways include the relationships between eigenvalues and matrix determinants and traces, the geometric interpretations of these concepts, and the wide-ranging applications of matrix decompositions in data analysis, machine learning, and engineering. Further study could explore the computational algorithms for these decompositions and delve deeper into their applications in specific domains.</p>
+
+
+<!-- -->
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+  const viewSource = window.document.getElementById('quarto-view-source') ||
+                     window.document.getElementById('quarto-code-tools-source');
+  if (viewSource) {
+    const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+    viewSource.addEventListener("click", function(e) {
+      if (sourceUrl) {
+        // rstudio viewer pane
+        if (/\bcapabilities=\b/.test(window.location)) {
+          window.open(sourceUrl);
+        } else {
+          window.location.href = sourceUrl;
+        }
+      } else {
+        const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+        modal.show();
+      }
+      return false;
+    });
+  }
+  function toggleCodeHandler(show) {
+    return function(e) {
+      const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+      for (let i=0; i<detailsSrc.length; i++) {
+        const details = detailsSrc[i].parentElement;
+        if (show) {
+          details.open = true;
+        } else {
+          details.removeAttribute("open");
+        }
+      }
+      const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+      const fromCls = show ? "hidden" : "unhidden";
+      const toCls = show ? "unhidden" : "hidden";
+      for (let i=0; i<cellCodeDivs.length; i++) {
+        const codeDiv = cellCodeDivs[i];
+        if (codeDiv.classList.contains(fromCls)) {
+          codeDiv.classList.remove(fromCls);
+          codeDiv.classList.add(toCls);
+        } 
+      }
+      return false;
+    }
+  }
+  const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+  if (hideAllCode) {
+    hideAllCode.addEventListener("click", toggleCodeHandler(false));
+  }
+  const showAllCode = window.document.getElementById("quarto-show-all-code");
+  if (showAllCode) {
+    showAllCode.addEventListener("click", toggleCodeHandler(true));
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("git@github\.com-TheGhoul21:TheGhoul21\/FNN-2024-2025\.git");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="sourceCode" id="cb1" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Lecture Notes on Eigenvalues, Eigenvectors, and Matrix Decompositions"</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="an">author:</span><span class="co"> "Your Name"</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="an">date:</span><span class="co"> "2025-02-01"</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co">  html:</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co">    toc: true  # Table of Contents</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co">    toc-depth: 2</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co">    code-tools: true</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co">    theme: cosmo  # Or "journal" for Distill-like minimalism</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="fu"># Introduction</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>This lecture explores the fundamental concepts of eigenvalues and</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>eigenvectors, their properties, and their significance in linear</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>algebra. We will examine the linear independence of eigenvectors, the</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>special characteristics of symmetric matrices, and the geometric</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>interpretation of eigenvalues and eigenvectors. We will also discuss</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>important matrix decompositions, including Cholesky decomposition,</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>diagonalization, and Singular Value Decomposition (SVD), highlighting</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>their computational aspects and applications in fields such as data</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>analysis and machine learning. This lecture aims to provide a</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>comprehensive understanding of these essential linear algebra tools and</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>their practical implications.</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="fu"># Eigenvalues and Eigenvectors</span></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a><span class="fu">## Linear Independence of Eigenvectors</span></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>::: tcolorbox</span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>[]{#thm:linear_independence_eigenvalues</span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>label="thm:linear_independence_eigenvalues"} The eigenvectors</span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>$\mathbf{x}_1, \dots, \mathbf{x}_n$ of a matrix</span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>$A \in \mathbb{R}^{n \times n}$ with $n$ distinct eigenvalues</span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>$\lambda_1, \dots, \lambda_n$ are linearly independent.</span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>::: tcolorbox</span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>Theorem</span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">\[thm:linear_independence_eigenvalues\]</span><span class="co">](#thm:linear_independence_eigenvalues)</span>{reference-type="ref"</span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>reference="thm:linear_independence_eigenvalues"} states that if a matrix</span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>has distinct eigenvalues, the corresponding eigenvectors will always be</span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a>linearly independent. This is a crucial property because linearly</span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a>independent vectors can form a basis for a vector space. For an</span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a>$n \times n$ matrix, finding $n$ distinct eigenvalues guarantees $n$</span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a>linearly independent eigenvectors, which can form a basis for</span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a>$\mathbb{R}^n$.</span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a>::: tcolorbox</span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a>If a matrix does not have $n$ linearly independent eigenvectors (which</span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a>can happen when eigenvalues are repeated), it is called a *defective</span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a>matrix*. For defective matrices, it is not possible to form a basis of</span>
+<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a>eigenvectors for the entire vector space.</span>
+<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a><span class="fu">## Repeated Eigenvalues and Defective Matrices</span></span>
+<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a>::: tcolorbox</span>
+<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a>When eigenvalues are repeated, the corresponding eigenvectors may or may</span>
+<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a>not be linearly independent. A matrix is called defective if it does not</span>
+<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a>possess a complete set of linearly independent eigenvectors, meaning</span>
+<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a>it's impossible to find $n$ linearly independent eigenvectors for an</span>
+<span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a>$n \times n$ matrix.</span>
+<span id="cb1-66"><a href="#cb1-66" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-67"><a href="#cb1-67" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-68"><a href="#cb1-68" aria-hidden="true" tabindex="-1"></a><span class="fu">## Symmetric Matrices and the Spectral Theorem</span></span>
+<span id="cb1-69"><a href="#cb1-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-70"><a href="#cb1-70" aria-hidden="true" tabindex="-1"></a>::: tcolorbox</span>
+<span id="cb1-71"><a href="#cb1-71" aria-hidden="true" tabindex="-1"></a>[]{#thm:spectral_theorem label="thm:spectral_theorem"} If</span>
+<span id="cb1-72"><a href="#cb1-72" aria-hidden="true" tabindex="-1"></a>$A \in \mathbb{R}^{n \times n}$ is a symmetric matrix (i.e.,</span>
+<span id="cb1-73"><a href="#cb1-73" aria-hidden="true" tabindex="-1"></a>$A = \transpose{A}$), then:</span>
+<span id="cb1-74"><a href="#cb1-74" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-75"><a href="#cb1-75" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>All eigenvalues of $A$ are real.</span>
+<span id="cb1-76"><a href="#cb1-76" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-77"><a href="#cb1-77" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>There exists an orthonormal basis of $\mathbb{R}^n$ consisting of</span>
+<span id="cb1-78"><a href="#cb1-78" aria-hidden="true" tabindex="-1"></a>    eigenvectors of $A$.</span>
+<span id="cb1-79"><a href="#cb1-79" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-80"><a href="#cb1-80" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-81"><a href="#cb1-81" aria-hidden="true" tabindex="-1"></a>::: tcolorbox</span>
+<span id="cb1-82"><a href="#cb1-82" aria-hidden="true" tabindex="-1"></a>The Spectral Theorem</span>
+<span id="cb1-83"><a href="#cb1-83" aria-hidden="true" tabindex="-1"></a>(<span class="co">[</span><span class="ot">\[thm:spectral_theorem\]</span><span class="co">](#thm:spectral_theorem)</span>{reference-type="ref+Label"</span>
+<span id="cb1-84"><a href="#cb1-84" aria-hidden="true" tabindex="-1"></a>reference="thm:spectral_theorem"}) is a cornerstone result for symmetric</span>
+<span id="cb1-85"><a href="#cb1-85" aria-hidden="true" tabindex="-1"></a>matrices. It guarantees two significant properties: first, the</span>
+<span id="cb1-86"><a href="#cb1-86" aria-hidden="true" tabindex="-1"></a>eigenvalues are real numbers, and second, we can find an orthonormal</span>
+<span id="cb1-87"><a href="#cb1-87" aria-hidden="true" tabindex="-1"></a>basis composed of eigenvectors. An orthonormal basis simplifies many</span>
+<span id="cb1-88"><a href="#cb1-88" aria-hidden="true" tabindex="-1"></a>calculations, especially in projections and coordinate transformations.</span>
+<span id="cb1-89"><a href="#cb1-89" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-90"><a href="#cb1-90" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-91"><a href="#cb1-91" aria-hidden="true" tabindex="-1"></a><span class="fu">### Properties of Symmetric Matrices</span></span>
+<span id="cb1-92"><a href="#cb1-92" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-93"><a href="#cb1-93" aria-hidden="true" tabindex="-1"></a>::: mdframed</span>
+<span id="cb1-94"><a href="#cb1-94" aria-hidden="true" tabindex="-1"></a>**Real Eigenvalues:** For any symmetric matrix, all eigenvalues are real</span>
+<span id="cb1-95"><a href="#cb1-95" aria-hidden="true" tabindex="-1"></a>numbers, which simplifies analysis as we do not need to deal with</span>
+<span id="cb1-96"><a href="#cb1-96" aria-hidden="true" tabindex="-1"></a>complex eigenvalues.</span>
+<span id="cb1-97"><a href="#cb1-97" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-98"><a href="#cb1-98" aria-hidden="true" tabindex="-1"></a>**Orthonormal Eigenbasis:** The existence of an orthonormal eigenbasis</span>
+<span id="cb1-99"><a href="#cb1-99" aria-hidden="true" tabindex="-1"></a>means that the eigenvectors are mutually orthogonal (perpendicular) and</span>
+<span id="cb1-100"><a href="#cb1-100" aria-hidden="true" tabindex="-1"></a>normalized (unit length). This is highly beneficial for simplifying</span>
+<span id="cb1-101"><a href="#cb1-101" aria-hidden="true" tabindex="-1"></a>calculations and understanding the geometric action of symmetric</span>
+<span id="cb1-102"><a href="#cb1-102" aria-hidden="true" tabindex="-1"></a>matrices.</span>
+<span id="cb1-103"><a href="#cb1-103" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-104"><a href="#cb1-104" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-105"><a href="#cb1-105" aria-hidden="true" tabindex="-1"></a><span class="fu">## Eigendecomposition of Symmetric Matrices</span></span>
+<span id="cb1-106"><a href="#cb1-106" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-107"><a href="#cb1-107" aria-hidden="true" tabindex="-1"></a>::: mdframed</span>
+<span id="cb1-108"><a href="#cb1-108" aria-hidden="true" tabindex="-1"></a>**Decomposition:** For a symmetric matrix $A$, the Spectral Theorem</span>
+<span id="cb1-109"><a href="#cb1-109" aria-hidden="true" tabindex="-1"></a>ensures it can be diagonalized as: $$A = P D \transpose{P}$$ where:</span>
+<span id="cb1-110"><a href="#cb1-110" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-111"><a href="#cb1-111" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>$D$ is a diagonal matrix with the eigenvalues of $A$ on the</span>
+<span id="cb1-112"><a href="#cb1-112" aria-hidden="true" tabindex="-1"></a>    diagonal.</span>
+<span id="cb1-113"><a href="#cb1-113" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-114"><a href="#cb1-114" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>$P$ is an orthogonal matrix whose columns are the orthonormal</span>
+<span id="cb1-115"><a href="#cb1-115" aria-hidden="true" tabindex="-1"></a>    eigenvectors of $A$. Since $P$ is orthogonal,</span>
+<span id="cb1-116"><a href="#cb1-116" aria-hidden="true" tabindex="-1"></a>    $\inverse{P} = \transpose{P}$.</span>
+<span id="cb1-117"><a href="#cb1-117" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-118"><a href="#cb1-118" aria-hidden="true" tabindex="-1"></a>This decomposition is known as *eigendecomposition* or *spectral</span>
+<span id="cb1-119"><a href="#cb1-119" aria-hidden="true" tabindex="-1"></a>decomposition*.</span>
+<span id="cb1-120"><a href="#cb1-120" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-121"><a href="#cb1-121" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-122"><a href="#cb1-122" aria-hidden="true" tabindex="-1"></a>::: tcolorbox</span>
+<span id="cb1-123"><a href="#cb1-123" aria-hidden="true" tabindex="-1"></a>Eigendecomposition reveals how a symmetric matrix transformation acts</span>
+<span id="cb1-124"><a href="#cb1-124" aria-hidden="true" tabindex="-1"></a>geometrically. It stretches or compresses space along orthogonal</span>
+<span id="cb1-125"><a href="#cb1-125" aria-hidden="true" tabindex="-1"></a>directions defined by the eigenvectors. The eigenvalues represent the</span>
+<span id="cb1-126"><a href="#cb1-126" aria-hidden="true" tabindex="-1"></a>scaling factors in these directions.</span>
+<span id="cb1-127"><a href="#cb1-127" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-128"><a href="#cb1-128" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-129"><a href="#cb1-129" aria-hidden="true" tabindex="-1"></a><span class="fu">## Geometric Interpretation of Eigenvalues and Eigenvectors</span></span>
+<span id="cb1-130"><a href="#cb1-130" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-131"><a href="#cb1-131" aria-hidden="true" tabindex="-1"></a>Eigenvectors represent the directions that remain unchanged (up to</span>
+<span id="cb1-132"><a href="#cb1-132" aria-hidden="true" tabindex="-1"></a>scaling) when a linear transformation is applied, and eigenvalues are</span>
+<span id="cb1-133"><a href="#cb1-133" aria-hidden="true" tabindex="-1"></a>the scaling factors in these directions. For a symmetric matrix, these</span>
+<span id="cb1-134"><a href="#cb1-134" aria-hidden="true" tabindex="-1"></a>directions are orthogonal. Geometrically, a symmetric matrix</span>
+<span id="cb1-135"><a href="#cb1-135" aria-hidden="true" tabindex="-1"></a>transformation stretches or compresses space along these orthogonal</span>
+<span id="cb1-136"><a href="#cb1-136" aria-hidden="true" tabindex="-1"></a>eigenvector directions.</span>
+<span id="cb1-137"><a href="#cb1-137" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-138"><a href="#cb1-138" aria-hidden="true" tabindex="-1"></a><span class="fu">## Relationships Between Eigenvalues and Matrix Properties</span></span>
+<span id="cb1-139"><a href="#cb1-139" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-140"><a href="#cb1-140" aria-hidden="true" tabindex="-1"></a>::: tcolorbox</span>
+<span id="cb1-141"><a href="#cb1-141" aria-hidden="true" tabindex="-1"></a>[]{#thm:determinant_eigenvalues label="thm:determinant_eigenvalues"} The</span>
+<span id="cb1-142"><a href="#cb1-142" aria-hidden="true" tabindex="-1"></a>determinant of a matrix $A \in \mathbb{R}^{n \times n}$ is the product</span>
+<span id="cb1-143"><a href="#cb1-143" aria-hidden="true" tabindex="-1"></a>of its eigenvalues, i.e., $$\det(A) = \prod_{i=1}^{n} \lambda_i$$ where</span>
+<span id="cb1-144"><a href="#cb1-144" aria-hidden="true" tabindex="-1"></a>$\lambda_i \in \C$ are the (possibly repeated) eigenvalues of $A$.</span>
+<span id="cb1-145"><a href="#cb1-145" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-146"><a href="#cb1-146" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-147"><a href="#cb1-147" aria-hidden="true" tabindex="-1"></a>::: tcolorbox</span>
+<span id="cb1-148"><a href="#cb1-148" aria-hidden="true" tabindex="-1"></a>Theorem</span>
+<span id="cb1-149"><a href="#cb1-149" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">\[thm:determinant_eigenvalues\]</span><span class="co">](#thm:determinant_eigenvalues)</span>{reference-type="ref"</span>
+<span id="cb1-150"><a href="#cb1-150" aria-hidden="true" tabindex="-1"></a>reference="thm:determinant_eigenvalues"} provides a straightforward way</span>
+<span id="cb1-151"><a href="#cb1-151" aria-hidden="true" tabindex="-1"></a>to compute the determinant using eigenvalues. Instead of direct</span>
+<span id="cb1-152"><a href="#cb1-152" aria-hidden="true" tabindex="-1"></a>computation, which can be complex for large matrices, we can find the</span>
+<span id="cb1-153"><a href="#cb1-153" aria-hidden="true" tabindex="-1"></a>eigenvalues and multiply them.</span>
+<span id="cb1-154"><a href="#cb1-154" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-155"><a href="#cb1-155" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-156"><a href="#cb1-156" aria-hidden="true" tabindex="-1"></a>::: tcolorbox</span>
+<span id="cb1-157"><a href="#cb1-157" aria-hidden="true" tabindex="-1"></a>[]{#thm:trace_eigenvalues label="thm:trace_eigenvalues"} The trace of a</span>
+<span id="cb1-158"><a href="#cb1-158" aria-hidden="true" tabindex="-1"></a>matrix $A \in \mathbb{R}^{n \times n}$ is the sum of its eigenvalues,</span>
+<span id="cb1-159"><a href="#cb1-159" aria-hidden="true" tabindex="-1"></a>i.e., $$\text{tr}(A) = \sum_{i=1}^{n} \lambda_i$$ where</span>
+<span id="cb1-160"><a href="#cb1-160" aria-hidden="true" tabindex="-1"></a>$\lambda_i \in \C$ are the (possibly repeated) eigenvalues of $A$.</span>
+<span id="cb1-161"><a href="#cb1-161" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-162"><a href="#cb1-162" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-163"><a href="#cb1-163" aria-hidden="true" tabindex="-1"></a>::: tcolorbox</span>
+<span id="cb1-164"><a href="#cb1-164" aria-hidden="true" tabindex="-1"></a>Theorem</span>
+<span id="cb1-165"><a href="#cb1-165" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">\[thm:trace_eigenvalues\]</span><span class="co">](#thm:trace_eigenvalues)</span>{reference-type="ref"</span>
+<span id="cb1-166"><a href="#cb1-166" aria-hidden="true" tabindex="-1"></a>reference="thm:trace_eigenvalues"} relates the trace of a matrix (sum of</span>
+<span id="cb1-167"><a href="#cb1-167" aria-hidden="true" tabindex="-1"></a>diagonal elements) to the sum of its eigenvalues. This provides another</span>
+<span id="cb1-168"><a href="#cb1-168" aria-hidden="true" tabindex="-1"></a>elegant connection between eigenvalues and fundamental matrix</span>
+<span id="cb1-169"><a href="#cb1-169" aria-hidden="true" tabindex="-1"></a>properties.</span>
+<span id="cb1-170"><a href="#cb1-170" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-171"><a href="#cb1-171" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-172"><a href="#cb1-172" aria-hidden="true" tabindex="-1"></a><span class="fu">## Eigenvalues and Linear Transformations</span></span>
+<span id="cb1-173"><a href="#cb1-173" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-174"><a href="#cb1-174" aria-hidden="true" tabindex="-1"></a>::: mdframed</span>
+<span id="cb1-175"><a href="#cb1-175" aria-hidden="true" tabindex="-1"></a>**Scaling of Area/Volume by the Determinant:** Eigenvalues describe how</span>
+<span id="cb1-176"><a href="#cb1-176" aria-hidden="true" tabindex="-1"></a>linear transformations affect area and volume. For a $2 \times 2$ matrix</span>
+<span id="cb1-177"><a href="#cb1-177" aria-hidden="true" tabindex="-1"></a>with eigenvalues $\lambda_1$ and $\lambda_2$, the determinant</span>
+<span id="cb1-178"><a href="#cb1-178" aria-hidden="true" tabindex="-1"></a>$\det(A) = \lambda_1 \lambda_2$ represents the factor by which areas are</span>
+<span id="cb1-179"><a href="#cb1-179" aria-hidden="true" tabindex="-1"></a>scaled under the transformation. In $n$ dimensions, the determinant</span>
+<span id="cb1-180"><a href="#cb1-180" aria-hidden="true" tabindex="-1"></a>(product of all eigenvalues) scales the $n$-dimensional volume.</span>
+<span id="cb1-181"><a href="#cb1-181" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-182"><a href="#cb1-182" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-183"><a href="#cb1-183" aria-hidden="true" tabindex="-1"></a>::: tcolorbox</span>
+<span id="cb1-184"><a href="#cb1-184" aria-hidden="true" tabindex="-1"></a>Methods to analyze and learn from network data are essential in machine</span>
+<span id="cb1-185"><a href="#cb1-185" aria-hidden="true" tabindex="-1"></a>learning. Connectivity matrices capture network node connections. For</span>
+<span id="cb1-186"><a href="#cb1-186" aria-hidden="true" tabindex="-1"></a>the worm *C. elegans*, a $277 \times 277$ connectivity matrix</span>
+<span id="cb1-187"><a href="#cb1-187" aria-hidden="true" tabindex="-1"></a>$A \in \mathbb{R}^{277 \times 277}$ represents neuron connections.</span>
+<span id="cb1-188"><a href="#cb1-188" aria-hidden="true" tabindex="-1"></a>$A_{ij} = 1$ if neuron $i$ connects to neuron $j$, and $0$ otherwise.</span>
+<span id="cb1-189"><a href="#cb1-189" aria-hidden="true" tabindex="-1"></a>Since $A$ is not symmetric, eigenvalues may be complex. A symmetrized</span>
+<span id="cb1-190"><a href="#cb1-190" aria-hidden="true" tabindex="-1"></a>matrix $A_{\text{sym}} = A + \transpose{A}$ is considered, where</span>
+<span id="cb1-191"><a href="#cb1-191" aria-hidden="true" tabindex="-1"></a>$A_{\text{sym}_{ij}} \neq 0$ if neurons are connected regardless of</span>
+<span id="cb1-192"><a href="#cb1-192" aria-hidden="true" tabindex="-1"></a>direction.</span>
+<span id="cb1-193"><a href="#cb1-193" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-194"><a href="#cb1-194" aria-hidden="true" tabindex="-1"></a>&lt;figure id="fig:neural_network_connectivity"&gt;</span>
+<span id="cb1-195"><a href="#cb1-195" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-196"><a href="#cb1-196" aria-hidden="true" tabindex="-1"></a>&lt;figcaption&gt;Example of a simplified neural network connectivity</span>
+<span id="cb1-197"><a href="#cb1-197" aria-hidden="true" tabindex="-1"></a>diagram.&lt;/figcaption&gt;</span>
+<span id="cb1-198"><a href="#cb1-198" aria-hidden="true" tabindex="-1"></a>&lt;/figure&gt;</span>
+<span id="cb1-199"><a href="#cb1-199" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-200"><a href="#cb1-200" aria-hidden="true" tabindex="-1"></a>&lt;figure id="fig:eigenspectrum_plot"&gt;</span>
+<span id="cb1-201"><a href="#cb1-201" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-202"><a href="#cb1-202" aria-hidden="true" tabindex="-1"></a>&lt;figcaption&gt;Example of an eigenspectrum plot for a symmetrized</span>
+<span id="cb1-203"><a href="#cb1-203" aria-hidden="true" tabindex="-1"></a>connectivity matrix.&lt;/figcaption&gt;</span>
+<span id="cb1-204"><a href="#cb1-204" aria-hidden="true" tabindex="-1"></a>&lt;/figure&gt;</span>
+<span id="cb1-205"><a href="#cb1-205" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-206"><a href="#cb1-206" aria-hidden="true" tabindex="-1"></a>Figures <span class="co">[</span><span class="ot">1</span><span class="co">](#fig:neural_network_connectivity)</span>{reference-type="ref"</span>
+<span id="cb1-207"><a href="#cb1-207" aria-hidden="true" tabindex="-1"></a>reference="fig:neural_network_connectivity"} and</span>
+<span id="cb1-208"><a href="#cb1-208" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">2</span><span class="co">](#fig:eigenspectrum_plot)</span>{reference-type="ref"</span>
+<span id="cb1-209"><a href="#cb1-209" aria-hidden="true" tabindex="-1"></a>reference="fig:eigenspectrum_plot"} show a simplified neural network</span>
+<span id="cb1-210"><a href="#cb1-210" aria-hidden="true" tabindex="-1"></a>connectivity diagram and its corresponding eigenspectrum. The S-like</span>
+<span id="cb1-211"><a href="#cb1-211" aria-hidden="true" tabindex="-1"></a>shape of the eigenspectrum is typical for biological neural networks and</span>
+<span id="cb1-212"><a href="#cb1-212" aria-hidden="true" tabindex="-1"></a>is an area of active neuroscience research.</span>
+<span id="cb1-213"><a href="#cb1-213" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-214"><a href="#cb1-214" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-215"><a href="#cb1-215" aria-hidden="true" tabindex="-1"></a><span class="fu"># Matrix Decompositions</span></span>
+<span id="cb1-216"><a href="#cb1-216" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-217"><a href="#cb1-217" aria-hidden="true" tabindex="-1"></a><span class="fu">## Cholesky Decomposition</span></span>
+<span id="cb1-218"><a href="#cb1-218" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-219"><a href="#cb1-219" aria-hidden="true" tabindex="-1"></a>::: tcolorbox</span>
+<span id="cb1-220"><a href="#cb1-220" aria-hidden="true" tabindex="-1"></a>[]{#thm:cholesky_decomposition label="thm:cholesky_decomposition"} A</span>
+<span id="cb1-221"><a href="#cb1-221" aria-hidden="true" tabindex="-1"></a>symmetric, positive definite matrix $A$ can be factorized into a product</span>
+<span id="cb1-222"><a href="#cb1-222" aria-hidden="true" tabindex="-1"></a>$A = L \transpose{L}$, where $L$ is a lower triangular matrix with</span>
+<span id="cb1-223"><a href="#cb1-223" aria-hidden="true" tabindex="-1"></a>positive diagonal elements. This decomposition is unique.</span>
+<span id="cb1-224"><a href="#cb1-224" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-225"><a href="#cb1-225" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-226"><a href="#cb1-226" aria-hidden="true" tabindex="-1"></a>::: tcolorbox</span>
+<span id="cb1-227"><a href="#cb1-227" aria-hidden="true" tabindex="-1"></a>A symmetric matrix $A$ is positive definite if for any non-zero vector</span>
+<span id="cb1-228"><a href="#cb1-228" aria-hidden="true" tabindex="-1"></a>$\mathbf{x}$, $\transpose{\mathbf{x}} A \mathbf{x} &gt; 0$. Positive</span>
+<span id="cb1-229"><a href="#cb1-229" aria-hidden="true" tabindex="-1"></a>definite matrices are important in optimization and statistics.</span>
+<span id="cb1-230"><a href="#cb1-230" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-231"><a href="#cb1-231" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-232"><a href="#cb1-232" aria-hidden="true" tabindex="-1"></a>::: mdframed</span>
+<span id="cb1-233"><a href="#cb1-233" aria-hidden="true" tabindex="-1"></a>**Decomposition:** The Cholesky decomposition expresses a symmetric</span>
+<span id="cb1-234"><a href="#cb1-234" aria-hidden="true" tabindex="-1"></a>positive definite matrix $A$ as a product of a lower triangular matrix</span>
+<span id="cb1-235"><a href="#cb1-235" aria-hidden="true" tabindex="-1"></a>$L$ and its transpose $\transpose{L}$: $$A = L \transpose{L}$$</span>
+<span id="cb1-236"><a href="#cb1-236" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-237"><a href="#cb1-237" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-238"><a href="#cb1-238" aria-hidden="true" tabindex="-1"></a><span class="fu">### Recursive Computation of the Lower Triangular Matrix $L$</span></span>
+<span id="cb1-239"><a href="#cb1-239" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-240"><a href="#cb1-240" aria-hidden="true" tabindex="-1"></a>The matrix $L$ can be computed recursively. For a $3 \times 3$ matrix</span>
+<span id="cb1-241"><a href="#cb1-241" aria-hidden="true" tabindex="-1"></a>$A = L \transpose{L}$, we can write: Let</span>
+<span id="cb1-242"><a href="#cb1-242" aria-hidden="true" tabindex="-1"></a>$$A = \begin{pmatrix} a_{11} &amp; a_{12} &amp; a_{13} <span class="sc">\\</span> a_{21} &amp; a_{22} &amp; a_{23} <span class="sc">\\</span> a_{31} &amp; a_{32} &amp; a_{33} \end{pmatrix}, \quad</span>
+<span id="cb1-243"><a href="#cb1-243" aria-hidden="true" tabindex="-1"></a>L = \begin{pmatrix} l_{11} &amp; 0 &amp; 0 <span class="sc">\\</span> l_{21} &amp; l_{22} &amp; 0 <span class="sc">\\</span> l_{31} &amp; l_{32} &amp; l_{33} \end{pmatrix}$$</span>
+<span id="cb1-244"><a href="#cb1-244" aria-hidden="true" tabindex="-1"></a>Then $A = L\transpose{L}$ gives:</span>
+<span id="cb1-245"><a href="#cb1-245" aria-hidden="true" tabindex="-1"></a>$$\begin{pmatrix} a_{11} &amp; a_{12} &amp; a_{13} <span class="sc">\\</span> a_{21} &amp; a_{22} &amp; a_{23} <span class="sc">\\</span> a_{31} &amp; a_{32} &amp; a_{33} \end{pmatrix} =</span>
+<span id="cb1-246"><a href="#cb1-246" aria-hidden="true" tabindex="-1"></a>\begin{pmatrix} l_{11} &amp; 0 &amp; 0 <span class="sc">\\</span> l_{21} &amp; l_{22} &amp; 0 <span class="sc">\\</span> l_{31} &amp; l_{32} &amp; l_{33} \end{pmatrix}</span>
+<span id="cb1-247"><a href="#cb1-247" aria-hidden="true" tabindex="-1"></a>\begin{pmatrix} l_{11} &amp; l_{21} &amp; l_{31} <span class="sc">\\</span> 0 &amp; l_{22} &amp; l_{32} <span class="sc">\\</span> 0 &amp; 0 &amp; l_{33} \end{pmatrix} =</span>
+<span id="cb1-248"><a href="#cb1-248" aria-hidden="true" tabindex="-1"></a>\begin{pmatrix}</span>
+<span id="cb1-249"><a href="#cb1-249" aria-hidden="true" tabindex="-1"></a>    l_{11}^2 &amp; l_{11}l_{21} &amp; l_{11}l_{31} <span class="sc">\\</span></span>
+<span id="cb1-250"><a href="#cb1-250" aria-hidden="true" tabindex="-1"></a>    l_{21}l_{11} &amp; l_{21}^2 + l_{22}^2 &amp; l_{21}l_{31} + l_{22}l_{32} <span class="sc">\\</span></span>
+<span id="cb1-251"><a href="#cb1-251" aria-hidden="true" tabindex="-1"></a>    l_{31}l_{11} &amp; l_{31}l_{21} + l_{32}l_{22} &amp; l_{31}^2 + l_{32}^2 + l_{33}^2</span>
+<span id="cb1-252"><a href="#cb1-252" aria-hidden="true" tabindex="-1"></a>\end{pmatrix}$$ From these equations, entries of $L$ can be solved</span>
+<span id="cb1-253"><a href="#cb1-253" aria-hidden="true" tabindex="-1"></a>recursively, starting with $l_{11} = \sqrt{a_{11}}$, then</span>
+<span id="cb1-254"><a href="#cb1-254" aria-hidden="true" tabindex="-1"></a>$l_{21} = a_{21} / l_{11}$, $l_{22}=\sqrt{a_{22}-l_{21}^2}$, and so on.</span>
+<span id="cb1-255"><a href="#cb1-255" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-256"><a href="#cb1-256" aria-hidden="true" tabindex="-1"></a><span class="fu">### Complexity Analysis of Cholesky Decomposition</span></span>
+<span id="cb1-257"><a href="#cb1-257" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-258"><a href="#cb1-258" aria-hidden="true" tabindex="-1"></a>The computational complexity of Cholesky decomposition is approximately</span>
+<span id="cb1-259"><a href="#cb1-259" aria-hidden="true" tabindex="-1"></a>$\frac{1}{3}n^3$ flops (floating-point operations), making it more</span>
+<span id="cb1-260"><a href="#cb1-260" aria-hidden="true" tabindex="-1"></a>efficient than LU decomposition for symmetric positive definite</span>
+<span id="cb1-261"><a href="#cb1-261" aria-hidden="true" tabindex="-1"></a>matrices.</span>
+<span id="cb1-262"><a href="#cb1-262" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-263"><a href="#cb1-263" aria-hidden="true" tabindex="-1"></a><span class="fu">### Applications of Cholesky Decomposition</span></span>
+<span id="cb1-264"><a href="#cb1-264" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-265"><a href="#cb1-265" aria-hidden="true" tabindex="-1"></a>::: mdframed</span>
+<span id="cb1-266"><a href="#cb1-266" aria-hidden="true" tabindex="-1"></a>Cholesky decomposition is used in:</span>
+<span id="cb1-267"><a href="#cb1-267" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-268"><a href="#cb1-268" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Solving linear least squares problems.</span>
+<span id="cb1-269"><a href="#cb1-269" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-270"><a href="#cb1-270" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Monte Carlo simulations.</span>
+<span id="cb1-271"><a href="#cb1-271" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-272"><a href="#cb1-272" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Optimization algorithms.</span>
+<span id="cb1-273"><a href="#cb1-273" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-274"><a href="#cb1-274" aria-hidden="true" tabindex="-1"></a>It is efficient for symmetric positive definite matrices because solving</span>
+<span id="cb1-275"><a href="#cb1-275" aria-hidden="true" tabindex="-1"></a>linear systems with triangular matrices is faster and</span>
+<span id="cb1-276"><a href="#cb1-276" aria-hidden="true" tabindex="-1"></a>determinant/inverse calculations are simpler.</span>
+<span id="cb1-277"><a href="#cb1-277" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-278"><a href="#cb1-278" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-279"><a href="#cb1-279" aria-hidden="true" tabindex="-1"></a><span class="fu">## Diagonalization</span></span>
+<span id="cb1-280"><a href="#cb1-280" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-281"><a href="#cb1-281" aria-hidden="true" tabindex="-1"></a>::: tcolorbox</span>
+<span id="cb1-282"><a href="#cb1-282" aria-hidden="true" tabindex="-1"></a>[]{#def:diagonalizable_matrix label="def:diagonalizable_matrix"} A</span>
+<span id="cb1-283"><a href="#cb1-283" aria-hidden="true" tabindex="-1"></a>matrix $A \in \mathbb{R}^{n \times n}$ is diagonalizable if it is</span>
+<span id="cb1-284"><a href="#cb1-284" aria-hidden="true" tabindex="-1"></a>similar to a diagonal matrix, i.e., if there exists an invertible matrix</span>
+<span id="cb1-285"><a href="#cb1-285" aria-hidden="true" tabindex="-1"></a>$P \in \mathbb{R}^{n \times n}$ such that $D = \inverse{P} A P$, where</span>
+<span id="cb1-286"><a href="#cb1-286" aria-hidden="true" tabindex="-1"></a>$D$ is a diagonal matrix.</span>
+<span id="cb1-287"><a href="#cb1-287" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-288"><a href="#cb1-288" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-289"><a href="#cb1-289" aria-hidden="true" tabindex="-1"></a>::: tcolorbox</span>
+<span id="cb1-290"><a href="#cb1-290" aria-hidden="true" tabindex="-1"></a>The transformation $A \mapsto \inverse{P} A P$ is called a similarity</span>
+<span id="cb1-291"><a href="#cb1-291" aria-hidden="true" tabindex="-1"></a>transformation. Similar matrices represent the same linear</span>
+<span id="cb1-292"><a href="#cb1-292" aria-hidden="true" tabindex="-1"></a>transformation under different bases.</span>
+<span id="cb1-293"><a href="#cb1-293" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-294"><a href="#cb1-294" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-295"><a href="#cb1-295" aria-hidden="true" tabindex="-1"></a>::: mdframed</span>
+<span id="cb1-296"><a href="#cb1-296" aria-hidden="true" tabindex="-1"></a>**Diagonalization:** Diagonalization transforms a matrix $A$ into a</span>
+<span id="cb1-297"><a href="#cb1-297" aria-hidden="true" tabindex="-1"></a>diagonal matrix $D$ using a similarity transformation:</span>
+<span id="cb1-298"><a href="#cb1-298" aria-hidden="true" tabindex="-1"></a>$$D = \inverse{P} A P$$ The diagonal matrix $D$ contains the eigenvalues</span>
+<span id="cb1-299"><a href="#cb1-299" aria-hidden="true" tabindex="-1"></a>of $A$, and the columns of $P$ are the corresponding eigenvectors.</span>
+<span id="cb1-300"><a href="#cb1-300" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-301"><a href="#cb1-301" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-302"><a href="#cb1-302" aria-hidden="true" tabindex="-1"></a><span class="fu">### Diagonalization as a Change of Basis to the Eigenbasis</span></span>
+<span id="cb1-303"><a href="#cb1-303" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-304"><a href="#cb1-304" aria-hidden="true" tabindex="-1"></a>Diagonalization can be viewed as changing the basis to the eigenbasis.</span>
+<span id="cb1-305"><a href="#cb1-305" aria-hidden="true" tabindex="-1"></a>In the eigenbasis, the linear transformation represented by $A$ acts</span>
+<span id="cb1-306"><a href="#cb1-306" aria-hidden="true" tabindex="-1"></a>simply as scaling along each eigenvector direction, which is represented</span>
+<span id="cb1-307"><a href="#cb1-307" aria-hidden="true" tabindex="-1"></a>by the diagonal matrix $D$.</span>
+<span id="cb1-308"><a href="#cb1-308" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-309"><a href="#cb1-309" aria-hidden="true" tabindex="-1"></a><span class="fu">### The Equation $AP = PD$ and its Relation to Eigenvectors</span></span>
+<span id="cb1-310"><a href="#cb1-310" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-311"><a href="#cb1-311" aria-hidden="true" tabindex="-1"></a>The equation $AP = PD$ is fundamental to diagonalization. If we write</span>
+<span id="cb1-312"><a href="#cb1-312" aria-hidden="true" tabindex="-1"></a>$P = <span class="co">[</span><span class="ot">\mathbf{p}_1, \mathbf{p}_2, \dots, \mathbf{p}_n</span><span class="co">]</span>$ where</span>
+<span id="cb1-313"><a href="#cb1-313" aria-hidden="true" tabindex="-1"></a>$\mathbf{p}_i$ are the columns of $P$ (eigenvectors), and</span>
+<span id="cb1-314"><a href="#cb1-314" aria-hidden="true" tabindex="-1"></a>$D = \text{diag}(\lambda_1, \lambda_2, \dots, \lambda_n)$ where</span>
+<span id="cb1-315"><a href="#cb1-315" aria-hidden="true" tabindex="-1"></a>$\lambda_i$ are eigenvalues, then $AP = PD$ is equivalent to the set of</span>
+<span id="cb1-316"><a href="#cb1-316" aria-hidden="true" tabindex="-1"></a>eigenvector equations:</span>
+<span id="cb1-317"><a href="#cb1-317" aria-hidden="true" tabindex="-1"></a>$$A\mathbf{p}_i = \lambda_i \mathbf{p}_i, \quad i = 1, 2, \dots, n$$</span>
+<span id="cb1-318"><a href="#cb1-318" aria-hidden="true" tabindex="-1"></a>Diagonalization is thus intrinsically linked to finding eigenvectors and</span>
+<span id="cb1-319"><a href="#cb1-319" aria-hidden="true" tabindex="-1"></a>eigenvalues.</span>
+<span id="cb1-320"><a href="#cb1-320" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-321"><a href="#cb1-321" aria-hidden="true" tabindex="-1"></a><span class="fu">## Singular Value Decomposition (SVD)</span></span>
+<span id="cb1-322"><a href="#cb1-322" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-323"><a href="#cb1-323" aria-hidden="true" tabindex="-1"></a>::: tcolorbox</span>
+<span id="cb1-324"><a href="#cb1-324" aria-hidden="true" tabindex="-1"></a>[]{#thm:svd_theorem label="thm:svd_theorem"} Let</span>
+<span id="cb1-325"><a href="#cb1-325" aria-hidden="true" tabindex="-1"></a>$A \in \mathbb{R}^{m \times n}$ be a rectangular matrix of rank</span>
+<span id="cb1-326"><a href="#cb1-326" aria-hidden="true" tabindex="-1"></a>$r \in <span class="co">[</span><span class="ot">0, \min(m, n)</span><span class="co">]</span>$. The Singular Value Decomposition (SVD) of $A$</span>
+<span id="cb1-327"><a href="#cb1-327" aria-hidden="true" tabindex="-1"></a>is a factorization of the form $$A = U \Sigma \transpose{V}$$ where:</span>
+<span id="cb1-328"><a href="#cb1-328" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-329"><a href="#cb1-329" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>$U \in \mathbb{R}^{m \times m}$ is an orthogonal matrix.</span>
+<span id="cb1-330"><a href="#cb1-330" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-331"><a href="#cb1-331" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>$\Sigma \in \mathbb{R}^{m \times n}$ is a rectangular diagonal</span>
+<span id="cb1-332"><a href="#cb1-332" aria-hidden="true" tabindex="-1"></a>    matrix with non-negative diagonal entries $\sigma_i$ (singular</span>
+<span id="cb1-333"><a href="#cb1-333" aria-hidden="true" tabindex="-1"></a>    values).</span>
+<span id="cb1-334"><a href="#cb1-334" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-335"><a href="#cb1-335" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>$V \in \mathbb{R}^{n \times n}$ is an orthogonal matrix.</span>
+<span id="cb1-336"><a href="#cb1-336" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-337"><a href="#cb1-337" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-338"><a href="#cb1-338" aria-hidden="true" tabindex="-1"></a>::: tcolorbox</span>
+<span id="cb1-339"><a href="#cb1-339" aria-hidden="true" tabindex="-1"></a>**Orthogonal Matrices:** Matrices $U$ and $V$ are orthogonal, meaning</span>
+<span id="cb1-340"><a href="#cb1-340" aria-hidden="true" tabindex="-1"></a>their columns are orthonormal vectors. For an orthogonal matrix $Q$,</span>
+<span id="cb1-341"><a href="#cb1-341" aria-hidden="true" tabindex="-1"></a>$\transpose{Q} = \inverse{Q}$.</span>
+<span id="cb1-342"><a href="#cb1-342" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-343"><a href="#cb1-343" aria-hidden="true" tabindex="-1"></a>**Rectangular Diagonal Matrix $\Sigma$:** $\Sigma$ is an $m \times n$</span>
+<span id="cb1-344"><a href="#cb1-344" aria-hidden="true" tabindex="-1"></a>matrix with diagonal entries</span>
+<span id="cb1-345"><a href="#cb1-345" aria-hidden="true" tabindex="-1"></a>$\sigma_1 \geq \sigma_2 \geq \dots \geq \sigma_r &gt; 0$ and zeros</span>
+<span id="cb1-346"><a href="#cb1-346" aria-hidden="true" tabindex="-1"></a>elsewhere. The $\sigma_i$'s are called singular values.</span>
+<span id="cb1-347"><a href="#cb1-347" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-348"><a href="#cb1-348" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-349"><a href="#cb1-349" aria-hidden="true" tabindex="-1"></a>::: mdframed</span>
+<span id="cb1-350"><a href="#cb1-350" aria-hidden="true" tabindex="-1"></a>**Decomposition:** SVD decomposes any matrix $A$ (even rectangular) into</span>
+<span id="cb1-351"><a href="#cb1-351" aria-hidden="true" tabindex="-1"></a>a product of three matrices: $$A = U \Sigma \transpose{V}$$ where $U$</span>
+<span id="cb1-352"><a href="#cb1-352" aria-hidden="true" tabindex="-1"></a>and $V$ are orthogonal and $\Sigma$ is rectangular diagonal.</span>
+<span id="cb1-353"><a href="#cb1-353" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-354"><a href="#cb1-354" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-355"><a href="#cb1-355" aria-hidden="true" tabindex="-1"></a><span class="fu">### Components of the SVD</span></span>
+<span id="cb1-356"><a href="#cb1-356" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-357"><a href="#cb1-357" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>$U$: Columns are left singular vectors, which are eigenvectors of</span>
+<span id="cb1-358"><a href="#cb1-358" aria-hidden="true" tabindex="-1"></a>    $A \transpose{A}$.</span>
+<span id="cb1-359"><a href="#cb1-359" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-360"><a href="#cb1-360" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>$V$: Columns are right singular vectors, which are eigenvectors of</span>
+<span id="cb1-361"><a href="#cb1-361" aria-hidden="true" tabindex="-1"></a>    $\transpose{A} A$.</span>
+<span id="cb1-362"><a href="#cb1-362" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-363"><a href="#cb1-363" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>$\Sigma$: Diagonal entries are singular values $\sigma_i$, where</span>
+<span id="cb1-364"><a href="#cb1-364" aria-hidden="true" tabindex="-1"></a>    $\sigma_i^2$ are eigenvalues of both $\transpose{A} A$ and</span>
+<span id="cb1-365"><a href="#cb1-365" aria-hidden="true" tabindex="-1"></a>    $A \transpose{A}$.</span>
+<span id="cb1-366"><a href="#cb1-366" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-367"><a href="#cb1-367" aria-hidden="true" tabindex="-1"></a><span class="fu">### Geometric Interpretation of SVD</span></span>
+<span id="cb1-368"><a href="#cb1-368" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-369"><a href="#cb1-369" aria-hidden="true" tabindex="-1"></a>Geometrically, SVD decomposes a linear transformation into three steps:</span>
+<span id="cb1-370"><a href="#cb1-370" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-371"><a href="#cb1-371" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>Rotation/Reflection (by $\transpose{V}$).</span>
+<span id="cb1-372"><a href="#cb1-372" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-373"><a href="#cb1-373" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>Scaling along orthogonal axes (by $\Sigma$).</span>
+<span id="cb1-374"><a href="#cb1-374" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-375"><a href="#cb1-375" aria-hidden="true" tabindex="-1"></a><span class="ss">3.  </span>Rotation/Reflection (by $U$).</span>
+<span id="cb1-376"><a href="#cb1-376" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-377"><a href="#cb1-377" aria-hidden="true" tabindex="-1"></a>$\transpose{V}$ rotates the input space, $\Sigma$ scales along</span>
+<span id="cb1-378"><a href="#cb1-378" aria-hidden="true" tabindex="-1"></a>coordinate axes, and $U$ rotates the output space.</span>
+<span id="cb1-379"><a href="#cb1-379" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-380"><a href="#cb1-380" aria-hidden="true" tabindex="-1"></a><span class="fu">### Singular Values as Generalized Eigenvalues</span></span>
+<span id="cb1-381"><a href="#cb1-381" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-382"><a href="#cb1-382" aria-hidden="true" tabindex="-1"></a>Singular values are generalized eigenvalues for rectangular matrices,</span>
+<span id="cb1-383"><a href="#cb1-383" aria-hidden="true" tabindex="-1"></a>indicating the \"strengths\" of transformation in different directions.</span>
+<span id="cb1-384"><a href="#cb1-384" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-385"><a href="#cb1-385" aria-hidden="true" tabindex="-1"></a><span class="fu">### Computation of SVD</span></span>
+<span id="cb1-386"><a href="#cb1-386" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-387"><a href="#cb1-387" aria-hidden="true" tabindex="-1"></a>To compute SVD:</span>
+<span id="cb1-388"><a href="#cb1-388" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-389"><a href="#cb1-389" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>Compute $\transpose{A} A$ and $A \transpose{A}$.</span>
+<span id="cb1-390"><a href="#cb1-390" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-391"><a href="#cb1-391" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>Find eigenvectors and eigenvalues of $\transpose{A} A$ and</span>
+<span id="cb1-392"><a href="#cb1-392" aria-hidden="true" tabindex="-1"></a>    $A \transpose{A}$.</span>
+<span id="cb1-393"><a href="#cb1-393" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-394"><a href="#cb1-394" aria-hidden="true" tabindex="-1"></a><span class="ss">3.  </span>Construct $V$ from eigenvectors of $\transpose{A} A$, $U$ from</span>
+<span id="cb1-395"><a href="#cb1-395" aria-hidden="true" tabindex="-1"></a>    eigenvectors of $A \transpose{A}$, and $\Sigma$ from the square</span>
+<span id="cb1-396"><a href="#cb1-396" aria-hidden="true" tabindex="-1"></a>    roots of non-zero eigenvalues.</span>
+<span id="cb1-397"><a href="#cb1-397" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-398"><a href="#cb1-398" aria-hidden="true" tabindex="-1"></a>More efficient algorithms exist for direct SVD computation.</span>
+<span id="cb1-399"><a href="#cb1-399" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-400"><a href="#cb1-400" aria-hidden="true" tabindex="-1"></a><span class="fu">### Applications of SVD</span></span>
+<span id="cb1-401"><a href="#cb1-401" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-402"><a href="#cb1-402" aria-hidden="true" tabindex="-1"></a>::: mdframed</span>
+<span id="cb1-403"><a href="#cb1-403" aria-hidden="true" tabindex="-1"></a>SVD is a versatile tool used in:</span>
+<span id="cb1-404"><a href="#cb1-404" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-405"><a href="#cb1-405" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Dimensionality reduction.</span>
+<span id="cb1-406"><a href="#cb1-406" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-407"><a href="#cb1-407" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Image compression.</span>
+<span id="cb1-408"><a href="#cb1-408" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-409"><a href="#cb1-409" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Recommendation systems.</span>
+<span id="cb1-410"><a href="#cb1-410" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-411"><a href="#cb1-411" aria-hidden="true" tabindex="-1"></a>It's often called the \"Fundamental Theorem of Linear Algebra\" due to</span>
+<span id="cb1-412"><a href="#cb1-412" aria-hidden="true" tabindex="-1"></a>its broad applicability.</span>
+<span id="cb1-413"><a href="#cb1-413" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-414"><a href="#cb1-414" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-415"><a href="#cb1-415" aria-hidden="true" tabindex="-1"></a><span class="fu">#### Example: Movie Rating Analysis</span></span>
+<span id="cb1-416"><a href="#cb1-416" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-417"><a href="#cb1-417" aria-hidden="true" tabindex="-1"></a>In movie rating analysis, SVD can be applied to a matrix of movie</span>
+<span id="cb1-418"><a href="#cb1-418" aria-hidden="true" tabindex="-1"></a>ratings by viewers to find patterns. Left-singular vectors in $U$</span>
+<span id="cb1-419"><a href="#cb1-419" aria-hidden="true" tabindex="-1"></a>represent \"stereotypical movies,\" right-singular vectors in $V$</span>
+<span id="cb1-420"><a href="#cb1-420" aria-hidden="true" tabindex="-1"></a>represent \"stereotypical viewers,\" and singular values in $\Sigma$</span>
+<span id="cb1-421"><a href="#cb1-421" aria-hidden="true" tabindex="-1"></a>indicate their importance.</span>
+<span id="cb1-422"><a href="#cb1-422" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-423"><a href="#cb1-423" aria-hidden="true" tabindex="-1"></a><span class="fu">### Low-Rank Approximation and the Eckart-Young Theorem</span></span>
+<span id="cb1-424"><a href="#cb1-424" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-425"><a href="#cb1-425" aria-hidden="true" tabindex="-1"></a>::: tcolorbox</span>
+<span id="cb1-426"><a href="#cb1-426" aria-hidden="true" tabindex="-1"></a>[]{#thm:eckart_young_theorem label="thm:eckart_young_theorem"} Consider</span>
+<span id="cb1-427"><a href="#cb1-427" aria-hidden="true" tabindex="-1"></a>a matrix $A \in \mathbb{R}^{m \times n}$ of rank $r$. For any</span>
+<span id="cb1-428"><a href="#cb1-428" aria-hidden="true" tabindex="-1"></a>$k \leq r$, let</span>
+<span id="cb1-429"><a href="#cb1-429" aria-hidden="true" tabindex="-1"></a>$A^{(k)} = \sum_{i=1}^{k} \sigma_i \mathbf{u}_i \transpose{\mathbf{v}}_i$</span>
+<span id="cb1-430"><a href="#cb1-430" aria-hidden="true" tabindex="-1"></a>be the rank-$k$ approximation of $A$ obtained by truncating the SVD.</span>
+<span id="cb1-431"><a href="#cb1-431" aria-hidden="true" tabindex="-1"></a>Then $A^{(k)}$ is the best rank-$k$ approximation of $A$ in terms of the</span>
+<span id="cb1-432"><a href="#cb1-432" aria-hidden="true" tabindex="-1"></a>spectral norm, and the error is given by:</span>
+<span id="cb1-433"><a href="#cb1-433" aria-hidden="true" tabindex="-1"></a>$$A^{(k)} = \underset{\substack{B \in \mathbb{R}^{m \times n} <span class="sc">\\</span> \text{rank}(B) = k}}{\text{argmin}} \| A - B \|_2, \quad \| A - A^{(k)} \|_2 = \sigma_{k+1}$$</span>
+<span id="cb1-434"><a href="#cb1-434" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-435"><a href="#cb1-435" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-436"><a href="#cb1-436" aria-hidden="true" tabindex="-1"></a>::: tcolorbox</span>
+<span id="cb1-437"><a href="#cb1-437" aria-hidden="true" tabindex="-1"></a>The Eckart-Young Theorem</span>
+<span id="cb1-438"><a href="#cb1-438" aria-hidden="true" tabindex="-1"></a>(<span class="co">[</span><span class="ot">\[thm:eckart_young_theorem\]</span><span class="co">](#thm:eckart_young_theorem)</span>{reference-type="ref+Label"</span>
+<span id="cb1-439"><a href="#cb1-439" aria-hidden="true" tabindex="-1"></a>reference="thm:eckart_young_theorem"}) states that truncated SVD</span>
+<span id="cb1-440"><a href="#cb1-440" aria-hidden="true" tabindex="-1"></a>provides the best low-rank approximation of a matrix in the spectral</span>
+<span id="cb1-441"><a href="#cb1-441" aria-hidden="true" tabindex="-1"></a>norm sense.</span>
+<span id="cb1-442"><a href="#cb1-442" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-443"><a href="#cb1-443" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-444"><a href="#cb1-444" aria-hidden="true" tabindex="-1"></a><span class="fu">#### Example: Image Compression using SVD</span></span>
+<span id="cb1-445"><a href="#cb1-445" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-446"><a href="#cb1-446" aria-hidden="true" tabindex="-1"></a>SVD is used for image compression. An image matrix can be approximated</span>
+<span id="cb1-447"><a href="#cb1-447" aria-hidden="true" tabindex="-1"></a>by a lower-rank matrix using truncated SVD, retaining only the top</span>
+<span id="cb1-448"><a href="#cb1-448" aria-hidden="true" tabindex="-1"></a>singular values and vectors. This reduces data while preserving</span>
+<span id="cb1-449"><a href="#cb1-449" aria-hidden="true" tabindex="-1"></a>essential image features.</span>
+<span id="cb1-450"><a href="#cb1-450" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-451"><a href="#cb1-451" aria-hidden="true" tabindex="-1"></a>&lt;figure id="fig:example_image_compression"&gt;</span>
+<span id="cb1-452"><a href="#cb1-452" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-453"><a href="#cb1-453" aria-hidden="true" tabindex="-1"></a>&lt;figcaption&gt;Example of Image Compression using SVD&lt;/figcaption&gt;</span>
+<span id="cb1-454"><a href="#cb1-454" aria-hidden="true" tabindex="-1"></a>&lt;/figure&gt;</span>
+<span id="cb1-455"><a href="#cb1-455" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-456"><a href="#cb1-456" aria-hidden="true" tabindex="-1"></a>Figure <span class="co">[</span><span class="ot">3</span><span class="co">](#fig:example_image_compression)</span>{reference-type="ref"</span>
+<span id="cb1-457"><a href="#cb1-457" aria-hidden="true" tabindex="-1"></a>reference="fig:example_image_compression"} demonstrates how image</span>
+<span id="cb1-458"><a href="#cb1-458" aria-hidden="true" tabindex="-1"></a>quality improves with increasing rank approximations using SVD.</span>
+<span id="cb1-459"><a href="#cb1-459" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-460"><a href="#cb1-460" aria-hidden="true" tabindex="-1"></a><span class="fu"># Conclusion</span></span>
+<span id="cb1-461"><a href="#cb1-461" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-462"><a href="#cb1-462" aria-hidden="true" tabindex="-1"></a>This lecture covered essential concepts in linear algebra, including</span>
+<span id="cb1-463"><a href="#cb1-463" aria-hidden="true" tabindex="-1"></a>eigenvalues, eigenvectors, and various matrix decompositions. We</span>
+<span id="cb1-464"><a href="#cb1-464" aria-hidden="true" tabindex="-1"></a>explored the properties of eigenvalues and eigenvectors, particularly</span>
+<span id="cb1-465"><a href="#cb1-465" aria-hidden="true" tabindex="-1"></a>for symmetric matrices as described by the Spectral Theorem. We</span>
+<span id="cb1-466"><a href="#cb1-466" aria-hidden="true" tabindex="-1"></a>discussed Cholesky decomposition for symmetric positive definite</span>
+<span id="cb1-467"><a href="#cb1-467" aria-hidden="true" tabindex="-1"></a>matrices, diagonalization for simplifying linear transformations, and</span>
+<span id="cb1-468"><a href="#cb1-468" aria-hidden="true" tabindex="-1"></a>Singular Value Decomposition (SVD) as a powerful tool for general</span>
+<span id="cb1-469"><a href="#cb1-469" aria-hidden="true" tabindex="-1"></a>matrices, including rectangular ones. Key takeaways include the</span>
+<span id="cb1-470"><a href="#cb1-470" aria-hidden="true" tabindex="-1"></a>relationships between eigenvalues and matrix determinants and traces,</span>
+<span id="cb1-471"><a href="#cb1-471" aria-hidden="true" tabindex="-1"></a>the geometric interpretations of these concepts, and the wide-ranging</span>
+<span id="cb1-472"><a href="#cb1-472" aria-hidden="true" tabindex="-1"></a>applications of matrix decompositions in data analysis, machine</span>
+<span id="cb1-473"><a href="#cb1-473" aria-hidden="true" tabindex="-1"></a>learning, and engineering. Further study could explore the computational</span>
+<span id="cb1-474"><a href="#cb1-474" aria-hidden="true" tabindex="-1"></a>algorithms for these decompositions and delve deeper into their</span>
+<span id="cb1-475"><a href="#cb1-475" aria-hidden="true" tabindex="-1"></a>applications in specific domains.</span></code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></pre></div>
+</div></div></div></div></div>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
