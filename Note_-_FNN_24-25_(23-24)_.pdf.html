@@ -1,0 +1,1774 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.40">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Your Name">
+<meta name="dcterms.date" content="2025-02-01">
+
+<title>Lecture Notes on Graph Representation Learning – Your Site Name</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-549806ee2085284f45b00abea8c6df48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-6bd9cfa162949bde0a231f530c97869d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">Your Site Name</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="./index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+    <div class="dropdown">
+      <a href="" title="" id="quarto-navigation-tool-dropdown-0" class="quarto-navigation-tool dropdown-toggle px-1" data-bs-toggle="dropdown" aria-expanded="false" role="link" aria-label=""><i class="bi bi-list"></i></a>
+      <ul class="dropdown-menu" aria-labelledby="quarto-navigation-tool-dropdown-0">
+          <li>
+            <a class="dropdown-item quarto-navbar-tools-item" href="./Note_-_FNN_24-25_(01-02).pdf.html">
+            Introduction to Neural Networks
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item quarto-navbar-tools-item" href="./Note_-_FNN_24-25_(03-04).pdf.html">
+            Lecture Notes on Perceptrons and Feedforward Neural Networks
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item quarto-navbar-tools-item" href="./Note_-_FNN_24-25_(05-06).pdf.html">
+            Lecture Notes on Vector Spaces and Subspaces
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item quarto-navbar-tools-item" href="./Note_-_FNN_24-25_(07-08).pdf.html">
+            General Inner Products
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item quarto-navbar-tools-item" href="./Note_-_FNN_24-25_(09-10).pdf.html">
+            Lecture Notes on the Perceptron Algorithm
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item quarto-navbar-tools-item" href="./Note_-_FNN_24-25_(11-12).pdf.html">
+            Lecture Notes on Multilayer Perceptrons and Backpropagation
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item quarto-navbar-tools-item" href="./Note_-_FNN_24-25_(13-14).pdf.html">
+            Lecture Notes on Eigenvalues, Eigenvectors, and Matrix Decompositions
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item quarto-navbar-tools-item" href="./Note_-_FNN_24-25_(15-16).pdf.html">
+            Lecture Notes on Convolutional Neural Networks
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item quarto-navbar-tools-item" href="./Note_-_FNN_24-25_(17-18).pdf.html">
+            Lecture Notes on Word Embeddings and Recurrent Neural Networks
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item quarto-navbar-tools-item" href="./Note_-_FNN_24-25_(19-20).pdf.html">
+            Lecture Notes on Sequence-to-Sequence Learning and Transformers
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item quarto-navbar-tools-item" href="./Note_-_FNN_24-25_(21-22).pdf.html">
+            Deep Reinforcement Learning: Foundations and Frontiers
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item quarto-navbar-tools-item" href="./Note_-_FNN_24-25_(23-24)_.pdf.html">
+            Lecture Notes on Graph Representation Learning
+            </a>
+          </li>
+      </ul>
+    </div>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul class="collapse">
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
+  <li><a href="#traditional-graph-analysis" id="toc-traditional-graph-analysis" class="nav-link" data-scroll-target="#traditional-graph-analysis">Traditional Graph Analysis</a>
+  <ul class="collapse">
+  <li><a href="#limitations-of-hand-engineered-features" id="toc-limitations-of-hand-engineered-features" class="nav-link" data-scroll-target="#limitations-of-hand-engineered-features">Limitations of Hand-Engineered Features</a></li>
+  <li><a href="#inflexibility-and-lack-of-adaptability" id="toc-inflexibility-and-lack-of-adaptability" class="nav-link" data-scroll-target="#inflexibility-and-lack-of-adaptability">Inflexibility and Lack of Adaptability</a></li>
+  <li><a href="#example-spectral-methods" id="toc-example-spectral-methods" class="nav-link" data-scroll-target="#example-spectral-methods">Example: Spectral Methods</a></li>
+  </ul></li>
+  <li><a href="#graph-representation-learning" id="toc-graph-representation-learning" class="nav-link" data-scroll-target="#graph-representation-learning">Graph Representation Learning</a>
+  <ul class="collapse">
+  <li><a href="#learning-embeddings" id="toc-learning-embeddings" class="nav-link" data-scroll-target="#learning-embeddings">Learning Embeddings</a></li>
+  <li><a href="#encoding-and-decoding-neighborhoods" id="toc-encoding-and-decoding-neighborhoods" class="nav-link" data-scroll-target="#encoding-and-decoding-neighborhoods">Encoding and Decoding Neighborhoods</a></li>
+  <li><a href="#latent-space" id="toc-latent-space" class="nav-link" data-scroll-target="#latent-space">Latent Space</a></li>
+  <li><a href="#desiderata-for-latent-space" id="toc-desiderata-for-latent-space" class="nav-link" data-scroll-target="#desiderata-for-latent-space">Desiderata for Latent Space</a></li>
+  <li><a href="#encoder-decoder-framework" id="toc-encoder-decoder-framework" class="nav-link" data-scroll-target="#encoder-decoder-framework">Encoder-Decoder Framework</a></li>
+  <li><a href="#shallow-embedding-approaches" id="toc-shallow-embedding-approaches" class="nav-link" data-scroll-target="#shallow-embedding-approaches">Shallow Embedding Approaches</a></li>
+  <li><a href="#factorization-based-approaches" id="toc-factorization-based-approaches" class="nav-link" data-scroll-target="#factorization-based-approaches">Factorization-Based Approaches</a></li>
+  <li><a href="#stochastic-decoders-and-random-walks" id="toc-stochastic-decoders-and-random-walks" class="nav-link" data-scroll-target="#stochastic-decoders-and-random-walks">Stochastic Decoders and Random Walks</a></li>
+  <li><a href="#limitations-of-shallow-embeddings" id="toc-limitations-of-shallow-embeddings" class="nav-link" data-scroll-target="#limitations-of-shallow-embeddings">Limitations of Shallow Embeddings</a></li>
+  </ul></li>
+  <li><a href="#graph-neural-networks-gnns" id="toc-graph-neural-networks-gnns" class="nav-link" data-scroll-target="#graph-neural-networks-gnns">Graph Neural Networks (GNNs)</a>
+  <ul class="collapse">
+  <li><a href="#moving-beyond-shallow-embeddings" id="toc-moving-beyond-shallow-embeddings" class="nav-link" data-scroll-target="#moving-beyond-shallow-embeddings">Moving Beyond Shallow Embeddings</a></li>
+  <li><a href="#gnn-formalism" id="toc-gnn-formalism" class="nav-link" data-scroll-target="#gnn-formalism">GNN Formalism</a></li>
+  <li><a href="#challenges-with-cnns-and-rnns-on-graphs" id="toc-challenges-with-cnns-and-rnns-on-graphs" class="nav-link" data-scroll-target="#challenges-with-cnns-and-rnns-on-graphs">Challenges with CNNs and RNNs on Graphs</a></li>
+  <li><a href="#neural-message-passing" id="toc-neural-message-passing" class="nav-link" data-scroll-target="#neural-message-passing">Neural Message Passing</a></li>
+  <li><a href="#ingredients-of-message-passing" id="toc-ingredients-of-message-passing" class="nav-link" data-scroll-target="#ingredients-of-message-passing">Ingredients of Message Passing</a></li>
+  <li><a href="#mathematical-formulation-of-message-passing" id="toc-mathematical-formulation-of-message-passing" class="nav-link" data-scroll-target="#mathematical-formulation-of-message-passing">Mathematical Formulation of Message Passing</a></li>
+  <li><a href="#node-features" id="toc-node-features" class="nav-link" data-scroll-target="#node-features">Node Features</a></li>
+  <li><a href="#types-of-information-passed" id="toc-types-of-information-passed" class="nav-link" data-scroll-target="#types-of-information-passed">Types of Information Passed</a></li>
+  <li><a href="#implementation-of-aggregate-and-update" id="toc-implementation-of-aggregate-and-update" class="nav-link" data-scroll-target="#implementation-of-aggregate-and-update">Implementation of AGGREGATE and UPDATE</a></li>
+  <li><a href="#neighborhood-normalization" id="toc-neighborhood-normalization" class="nav-link" data-scroll-target="#neighborhood-normalization">Neighborhood Normalization</a></li>
+  <li><a href="#set-aggregators" id="toc-set-aggregators" class="nav-link" data-scroll-target="#set-aggregators">Set Aggregators</a></li>
+  </ul></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<div class="quarto-title-block"><div><h1 class="title">Lecture Notes on Graph Representation Learning</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Your Name </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">February 1, 2025</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="introduction" class="level1">
+<h1>Introduction</h1>
+<p>This lecture transitions from traditional graph analysis methods to modern graph representation learning techniques. Traditional approaches often depend on hand-engineered features, which are inflexible and necessitate substantial manual effort. We will examine the limitations of these traditional methods and introduce graph representation learning as a powerful alternative. The central idea is to automatically learn node embeddings that capture the structural information of a graph. We will discuss the encoder-decoder framework for learning these embeddings, beginning with shallow embedding methods and progressing towards more complex Graph Neural Networks (GNNs). Key concepts include latent spaces, neighborhood aggregation, message passing, and different types of aggregation and update functions used in GNNs.</p>
+</section>
+<section id="traditional-graph-analysis" class="level1">
+<h1>Traditional Graph Analysis</h1>
+<section id="limitations-of-hand-engineered-features" class="level2">
+<h2 class="anchored" data-anchor-id="limitations-of-hand-engineered-features">Limitations of Hand-Engineered Features</h2>
+<p>Traditional graph analysis often relies on hand-engineered features, such as node and graph-level statistics. These approaches are limited because they require carefully designed, specific statistics and measures. Designing these features is a time-consuming and expensive process.</p>
+</section>
+<section id="inflexibility-and-lack-of-adaptability" class="level2">
+<h2 class="anchored" data-anchor-id="inflexibility-and-lack-of-adaptability">Inflexibility and Lack of Adaptability</h2>
+<p>Hand-engineered features are inflexible and cannot adapt or learn from data dynamically. Once designed, they remain static and may not generalize well to new data or different graph structures.</p>
+</section>
+<section id="example-spectral-methods" class="level2">
+<h2 class="anchored" data-anchor-id="example-spectral-methods">Example: Spectral Methods</h2>
+<p>Spectral methods, briefly mentioned earlier, exemplify traditional approaches that often rely on hand-engineered features. While powerful, they can be limited by their reliance on fixed feature representations.</p>
+</section>
+</section>
+<section id="graph-representation-learning" class="level1">
+<h1>Graph Representation Learning</h1>
+<p>To overcome the limitations of traditional methods, we introduce graph representation learning. This approach aims to learn representations that automatically encode the structural information of the graph, moving from static, hand-engineered features to dynamic, learning-based approaches.</p>
+<section id="learning-embeddings" class="level2">
+<h2 class="anchored" data-anchor-id="learning-embeddings">Learning Embeddings</h2>
+<p>In graph representation learning, we learn vectors of features and adjust their coordinates in a meaningful latent space. This involves embedding nodes into a vector space where the geometry of the space reflects the graph structure.</p>
+</section>
+<section id="encoding-and-decoding-neighborhoods" class="level2">
+<h2 class="anchored" data-anchor-id="encoding-and-decoding-neighborhoods">Encoding and Decoding Neighborhoods</h2>
+<p>A crucial concept in graph representation learning is encoding and decoding neighborhoods. We aim to embed graph nodes into a latent space by considering their neighborhoods.</p>
+</section>
+<section id="latent-space" class="level2">
+<h2 class="anchored" data-anchor-id="latent-space">Latent Space</h2>
+<p>We embed nodes and their neighborhoods into a <em>latent space</em>. This space is designed to capture the essential structural information of the graph in a compressed form. As illustrated in Figure 3.1 (Not provided, detail missing: Figure 3.1 not in transcription), we map nodes from the original network into this embedding space.</p>
+<section id="low-dimensionality" class="level3">
+<h3 class="anchored" data-anchor-id="low-dimensionality">Low-Dimensionality</h3>
+<p>The latent space must be low-dimensional to simplify and compress the information, retaining only the essential structural aspects of the graph.</p>
+</section>
+</section>
+<section id="desiderata-for-latent-space" class="level2">
+<h2 class="anchored" data-anchor-id="desiderata-for-latent-space">Desiderata for Latent Space</h2>
+<p>The desired properties for a latent space are:</p>
+<ol type="1">
+<li><p>Significant and interesting properties of nodes and their neighborhoods should be transformed into geometric or vectorial properties in this space.</p></li>
+<li><p>The latent space must be as low-dimensional as possible, providing a distilled and efficient representation.</p></li>
+</ol>
+</section>
+<section id="encoder-decoder-framework" class="level2">
+<h2 class="anchored" data-anchor-id="encoder-decoder-framework">Encoder-Decoder Framework</h2>
+<p>We organize our discussion of node embeddings based on the encoder-decoder framework. This approach is a recurring theme in graph representation learning. As shown in Figure 3.2 (Not provided, detail missing: Figure 3.2 not in transcription), the encoder maps nodes to a low-dimensional embedding, and the decoder reconstructs the local neighborhood information from these embeddings.</p>
+<section id="encoding-step" class="level3">
+<h3 class="anchored" data-anchor-id="encoding-step">Encoding Step</h3>
+<div class="definition">
+<p><strong>Definition 1</strong> (Encoder). <em>The encoder, denoted as <span class="math inline">\(\ENC\)</span>, takes a node <span class="math inline">\(u\)</span> and maps it to a low-dimensional embedding <span class="math inline">\(\mathbf{z}_u \in \mathbb{R}^d\)</span>. For shallow embedding approaches, this mapping is often a direct mapping. Mathematically, <span class="math inline">\(\ENC : \mathcal{V} \rightarrow \mathbb{R}^d\)</span>.</em></p>
+</div>
+</section>
+<section id="decoding-step" class="level3">
+<h3 class="anchored" data-anchor-id="decoding-step">Decoding Step</h3>
+<div class="definition">
+<p><strong>Definition 2</strong> (Decoder). <em>The decoder, denoted as <span class="math inline">\(\DEC\)</span>, takes an embedding <span class="math inline">\(\mathbf{z}_u\)</span> (and potentially <span class="math inline">\(\mathbf{z}_v\)</span>) and reconstructs the local neighborhood information of node <span class="math inline">\(u\)</span>. For pairwise decoders, <span class="math inline">\(\DEC\)</span> takes two embeddings <span class="math inline">\(\mathbf{z}_u\)</span> and <span class="math inline">\(\mathbf{z}_v\)</span> and outputs a real number that approximates the similarity <span class="math inline">\(S_{u,v}\)</span> between nodes <span class="math inline">\(u\)</span> and <span class="math inline">\(v\)</span>. Mathematically, <span class="math inline">\(\DEC(\ENC(u), \ENC(v)) = \DEC(\mathbf{z}_u, \mathbf{z}_v) \approx S_{u,v}\)</span>. We focus on reconstructing the local neighborhood, not the entire graph structure at once.</em></p>
+</div>
+</section>
+</section>
+<section id="shallow-embedding-approaches" class="level2">
+<h2 class="anchored" data-anchor-id="shallow-embedding-approaches">Shallow Embedding Approaches</h2>
+<p>Shallow embedding approaches use a direct mapping as the encoder. The embedding <span class="math inline">\(\mathbf{z}_u\)</span> is a <span class="math inline">\(d\)</span>-dimensional vector in <span class="math inline">\(\mathbb{R}^d\)</span>. Let <span class="math inline">\(Z \in \mathbb{R}^{|\mathcal{V}| \times d}\)</span> be the matrix of embeddings for all nodes.</p>
+<section id="encoder-direct-mapping" class="level3">
+<h3 class="anchored" data-anchor-id="encoder-direct-mapping">Encoder: Direct Mapping</h3>
+<p>In shallow embedding, the encoder <span class="math inline">\(\ENC(u)\)</span> is a direct mapping to <span class="math inline">\(\mathbb{R}^d\)</span>, using the node itself as the argument without complex transformations or node features.</p>
+</section>
+<section id="pairwise-decoder" class="level3">
+<h3 class="anchored" data-anchor-id="pairwise-decoder">Pairwise Decoder</h3>
+<p>The decoder <span class="math inline">\(\DEC\)</span> predicts relationships or similarities between pairs of nodes based on their embeddings. It is a pairwise decoder that operates on pairs of embeddings <span class="math inline">\(\mathbf{z}_u\)</span> and <span class="math inline">\(\mathbf{z}_v\)</span>, mapping them to a similarity measure <span class="math inline">\(S_{u,v}\)</span>.</p>
+</section>
+<section id="loss-function" class="level3">
+<h3 class="anchored" data-anchor-id="loss-function">Loss Function</h3>
+<p>To learn the parameters of the encoder and decoder, we define a loss function <span class="math inline">\(\mathcal{L}\)</span>. This function measures the discrepancy between the decoder output and the actual similarity measure.</p>
+<section id="empirical-reconstruction-loss" class="level4">
+<h4 class="anchored" data-anchor-id="empirical-reconstruction-loss">Empirical Reconstruction Loss</h4>
+<div class="definition">
+<p><strong>Definition 3</strong> (Empirical Reconstruction Loss). <em>The loss function <span class="math inline">\(\mathcal{L}\)</span> is defined as the sum over pairs of nodes <span class="math inline">\((u, v)\)</span> in a training set <span class="math inline">\(D\)</span>:</em></p>
+<div class="tcolorbox">
+<p><em><span class="math display">\[\mathcal{L} = \sum_{(u,v) \in D} \ell(\DEC(\mathbf{z}_u, \mathbf{z}_v), S_{u,v})\]</span></em></p>
+</div>
+<p><em>where <span class="math inline">\(\ell\)</span> is a loss function (e.g., mean-squared error or cross-entropy), and <span class="math inline">\(D\)</span> is the training set. The goal is to minimize this Empirical Reconstruction Loss (ERM) to find optimal encoder and decoder parameters.</em></p>
+<div class="tcolorbox">
+<p><em><span class="math display">\[\text{ERM}(S) \in \text{argmin}_{h \in \mathcal{H}} \mathcal{L}_S(h)\]</span></em></p>
+</div>
+</div>
+<p>Table 3.1 (Not provided, detail missing: Table 3.1 not in transcription) summarizes well-known shallow embedding algorithms, which differ in their choices of decoder, similarity measure, and loss function.</p>
+</section>
+</section>
+</section>
+<section id="factorization-based-approaches" class="level2">
+<h2 class="anchored" data-anchor-id="factorization-based-approaches">Factorization-Based Approaches</h2>
+<p>Factorization-based approaches view the encoder-decoder framework from the perspective of matrix factorization. The challenge of decoding local neighborhood structure is related to reconstructing entries in a node-node similarity matrix <span class="math inline">\(S\)</span>, which generalizes the adjacency matrix.</p>
+<section id="matrix-factorization" class="level3">
+<h3 class="anchored" data-anchor-id="matrix-factorization">Matrix Factorization</h3>
+<p>Matrix factorization is used to learn a low-dimensional approximation of the similarity matrix <span class="math inline">\(S\)</span>.</p>
+</section>
+<section id="euclidean-distance-decoder" class="level3">
+<h3 class="anchored" data-anchor-id="euclidean-distance-decoder">Euclidean Distance Decoder</h3>
+<div class="example">
+<p><strong>Example 4</strong> (Euclidean Distance Decoder). <em>A common decoder is the squared Euclidean distance:</em></p>
+<div class="tcolorbox">
+<p><em><span class="math display">\[\DEC(\mathbf{z}_u, \mathbf{z}_v) = ||\mathbf{z}_u - \mathbf{z}_v||^2\]</span></em></p>
+</div>
+<p><em>The loss function in this case is:</em></p>
+<div class="tcolorbox">
+<p><em><span class="math display">\[\mathcal{L} = \sum_{(u,v) \in D} \DEC(\mathbf{z}_u, \mathbf{z}_v) \cdot S_{u,v}\]</span></em></p>
+</div>
+<p><em>Minimizing this loss aims to bring embeddings of similar nodes closer in Euclidean space. If <span class="math inline">\(S\)</span> satisfies Laplacian matrix properties, minimizing this loss is equivalent to spectral clustering.</em></p>
+</div>
+</section>
+<section id="inner-product-decoder" class="level3">
+<h3 class="anchored" data-anchor-id="inner-product-decoder">Inner Product Decoder</h3>
+<div class="example">
+<p><strong>Example 5</strong> (Inner Product Decoder). <em>An alternative decoder is the inner product:</em></p>
+<div class="tcolorbox">
+<p><em><span class="math display">\[\DEC(\mathbf{z}_u, \mathbf{z}_v) = \mathbf{z}_u^T \mathbf{z}_v\]</span></em></p>
+</div>
+<p><em>The loss function becomes:</em></p>
+<div class="tcolorbox">
+<p><em><span class="math display">\[\mathcal{L} = \sum_{(u,v) \in D} ||\DEC(\mathbf{z}_u, \mathbf{z}_v) - S_{u,v}||^2\]</span></em></p>
+</div>
+<p><em>The inner product decoder focuses on the alignment of embedding vectors. Different similarity measures, such as the adjacency matrix <span class="math inline">\(A\)</span> or powers of <span class="math inline">\(A\)</span> (e.g., <span class="math inline">\(A^k\)</span>), lead to different loss functions.</em></p>
+</div>
+</section>
+<section id="connection-to-spectral-methods" class="level3">
+<h3 class="anchored" data-anchor-id="connection-to-spectral-methods">Connection to Spectral Methods</h3>
+<div class="proof remark">
+<p><span class="proof-title"><em>Remark</em>. </span><strong>Remark 6</strong>. <em>If <span class="math inline">\(S\)</span> is constructed to satisfy Laplacian matrix properties, minimizing the loss with a Euclidean distance decoder is identical to spectral clustering solutions. The optimal solution is given by the <span class="math inline">\(d\)</span> smallest eigenvectors of the Laplacian (excluding the eigenvector of all ones).</em></p>
+</div>
+</section>
+<section id="singular-value-decomposition-svd" class="level3">
+<h3 class="anchored" data-anchor-id="singular-value-decomposition-svd">Singular Value Decomposition (SVD)</h3>
+<div class="proof remark">
+<p><span class="proof-title"><em>Remark</em>. </span><strong>Remark 7</strong>. <em>Minimization of the loss function in factorization-based approaches is often done using Singular Value Decomposition (SVD). By stacking node embeddings into a matrix <span class="math inline">\(Z \in \mathbb{R}^{|\mathcal{V}|\times d}\)</span>, the reconstruction objective can be written as:</em></p>
+<div class="tcolorbox">
+<p><em><span class="math display">\[\mathcal{L} \approx ||ZZ^T - S||^2_F\]</span></em></p>
+</div>
+<p><em>This corresponds to a low-dimensional factorization of the similarity matrix <span class="math inline">\(S\)</span>. SVD provides a way to find a low-rank approximation of <span class="math inline">\(S\)</span>.</em></p>
+</div>
+</section>
+</section>
+<section id="stochastic-decoders-and-random-walks" class="level2">
+<h2 class="anchored" data-anchor-id="stochastic-decoders-and-random-walks">Stochastic Decoders and Random Walks</h2>
+<p>When a deterministic similarity measure <span class="math inline">\(S_{u,v}\)</span> is not available, stochastic decoders can be used. These approaches optimize embeddings to encode the statistics of random walks.</p>
+<section id="probability-of-visiting-nodes" class="level3">
+<h3 class="anchored" data-anchor-id="probability-of-visiting-nodes">Probability of Visiting Nodes</h3>
+<div class="example">
+<p><strong>Example 8</strong> (Stochastic Decoder). <em>Consider a stochastic decoder based on the probability of visiting node <span class="math inline">\(v\)</span> starting from node <span class="math inline">\(u\)</span> in a random walk of length <span class="math inline">\(T\)</span>, denoted as <span class="math inline">\(p_{G,T}(v|u)\)</span>. A possible decoder is:</em></p>
+<div class="tcolorbox">
+<p><em><span class="math display">\[\DEC(\mathbf{z}_u, \mathbf{z}_v) \approx \frac{\exp(\mathbf{z}_u^T \mathbf{z}_v)}{\sum_{k \in \mathcal{V}} \exp(\mathbf{z}_u^T \mathbf{z}_k)} \approx p_{G,T}(v|u)\]</span></em></p>
+</div>
+<p><em>This decoder is stochastic and asymmetric, capturing directed relationships in graphs.</em></p>
+</div>
+</section>
+<section id="negative-log-likelihood-loss" class="level3">
+<h3 class="anchored" data-anchor-id="negative-log-likelihood-loss">Negative Log-Likelihood Loss</h3>
+<div class="example">
+<p><strong>Example 9</strong> (Negative Log-Likelihood Loss). <em>A common loss function for stochastic decoders is the negative log-likelihood:</em></p>
+<div class="tcolorbox">
+<p><em><span class="math display">\[\mathcal{L} = \sum_{(u,v) \in D} -\log(\DEC(\mathbf{z}_u, \mathbf{z}_v))\]</span></em></p>
+</div>
+<p><em>Here, <span class="math inline">\(D\)</span> is the training set of random walks, generated by sampling random walks starting from each node.</em></p>
+</div>
+</section>
+<section id="computational-challenges" class="level3">
+<h3 class="anchored" data-anchor-id="computational-challenges">Computational Challenges</h3>
+<div class="proof remark">
+<p><span class="proof-title"><em>Remark</em>. </span><strong>Remark 10</strong>. <em>Evaluating the denominator <span class="math inline">\(\sum_{v' \in \mathcal{V}} \exp(\mathbf{z}_u^T \mathbf{z}_{v'})\)</span> in the decoder has a computational cost of <span class="math inline">\(O(|\mathcal{V}|)\)</span>, leading to a high training cost, also <span class="math inline">\(O(|\mathcal{V}|)\)</span>. Techniques like negative sampling are used to address this computational bottleneck.</em></p>
+</div>
+</section>
+</section>
+<section id="limitations-of-shallow-embeddings" class="level2">
+<h2 class="anchored" data-anchor-id="limitations-of-shallow-embeddings">Limitations of Shallow Embeddings</h2>
+<p>Shallow embedding methods have several limitations:</p>
+<section id="lack-of-parameter-sharing" class="level3">
+<h3 class="anchored" data-anchor-id="lack-of-parameter-sharing">Lack of Parameter Sharing</h3>
+<p>Shallow embeddings do not share parameters between nodes in the encoder. Each node has a unique embedding vector optimized independently. This is statistically and computationally inefficient, especially for large graphs where the number of parameters grows as <span class="math inline">\(O(|\mathcal{V}|)\)</span>.</p>
+</section>
+<section id="ignoring-node-features" class="level3">
+<h3 class="anchored" data-anchor-id="ignoring-node-features">Ignoring Node Features</h3>
+<p>Shallow embedding approaches do not leverage node features in the encoder. Many real-world graphs have rich node features that could be informative for encoding.</p>
+</section>
+<section id="transductive-nature" class="level3">
+<h3 class="anchored" data-anchor-id="transductive-nature">Transductive Nature</h3>
+<p>Shallow embedding methods are inherently transductive. They can only generate embeddings for nodes present during training. Generalizing to new, unseen nodes is not possible without additional optimizations. This limits their applicability in inductive settings.</p>
+</section>
+</section>
+</section>
+<section id="graph-neural-networks-gnns" class="level1">
+<h1>Graph Neural Networks (GNNs)</h1>
+<p>To overcome the limitations of shallow embeddings, we move to more complex encoder models, specifically Graph Neural Networks (GNNs). GNNs provide a general framework for defining deep neural networks on graph data.</p>
+<section id="moving-beyond-shallow-embeddings" class="level2">
+<h2 class="anchored" data-anchor-id="moving-beyond-shallow-embeddings">Moving Beyond Shallow Embeddings</h2>
+<p>GNNs address the limitations of shallow embeddings by generating node representations that depend on the graph structure and node features.</p>
+</section>
+<section id="gnn-formalism" class="level2">
+<h2 class="anchored" data-anchor-id="gnn-formalism">GNN Formalism</h2>
+<p>The key idea of GNNs is to learn node representations that are functions of both the graph structure and node features. This is achieved through neural message passing.</p>
+</section>
+<section id="challenges-with-cnns-and-rnns-on-graphs" class="level2">
+<h2 class="anchored" data-anchor-id="challenges-with-cnns-and-rnns-on-graphs">Challenges with CNNs and RNNs on Graphs</h2>
+<p>Convolutional Neural Networks (CNNs) and Recurrent Neural Networks (RNNs), while powerful, are not directly applicable to general graphs. CNNs are designed for grids, and RNNs for sequences. Applying them directly to graphs is problematic because of the irregular structure of graphs compared to grids or sequences. A naive approach to linearize the graph and use Multilayer Perceptrons (MLPs) is order-dependent. Representing a graph using adjacency matrices <span class="math inline">\(A_1, A_2, ..., A_{|\mathcal{V}|}\)</span> and feeding them into an MLP, <span class="math inline">\(\mathbf{z}_G = \text{MLP}(A_1 \oplus A_2 \oplus ... \oplus A_{|\mathcal{V}|})\)</span>, depends on the node ordering, which is undesirable.</p>
+<p>We need permutation invariant or equivariant functions for graph representations.</p>
+<ul>
+<li><p>Permutation Invariance: <span class="math inline">\(f(PAP^T) = f(A)\)</span></p></li>
+<li><p>Permutation Equivariance: <span class="math inline">\(f(PAP^T) = Pf(A)\)</span></p></li>
+</ul>
+<p>where <span class="math inline">\(P\)</span> is a permutation matrix applied to the adjacency matrix <span class="math inline">\(A\)</span>.</p>
+</section>
+<section id="neural-message-passing" class="level2">
+<h2 class="anchored" data-anchor-id="neural-message-passing">Neural Message Passing</h2>
+<p>Neural Message Passing is a framework for performing computations directly on the graph structure, forming the foundation of GNNs.</p>
+<section id="convolution-on-manifolds" class="level3">
+<h3 class="anchored" data-anchor-id="convolution-on-manifolds">Convolution on Manifolds</h3>
+<p>GNNs can be viewed as a form of convolution on topological spaces with weights, homeomorphic to Euclidean spaces. This perspective connects GNNs to geometric deep learning.</p>
+</section>
+<section id="differentiable-belief-propagation" class="level3">
+<h3 class="anchored" data-anchor-id="differentiable-belief-propagation">Differentiable Belief Propagation</h3>
+<p>GNNs can also be seen as differentiable variants of belief propagation algorithms, highlighting their connection to probabilistic graphical models.</p>
+</section>
+<section id="connection-to-the-weisfeiler-lehman-test" class="level3">
+<h3 class="anchored" data-anchor-id="connection-to-the-weisfeiler-lehman-test">Connection to the Weisfeiler-Lehman Test</h3>
+<p>GNNs have connections to the Weisfeiler-Lehman (WL) graph isomorphism test, which is crucial for understanding their representational power.</p>
+</section>
+</section>
+<section id="ingredients-of-message-passing" class="level2">
+<h2 class="anchored" data-anchor-id="ingredients-of-message-passing">Ingredients of Message Passing</h2>
+<p>The core ingredients of the message passing framework are:</p>
+<section id="iterations-layers" class="level3">
+<h3 class="anchored" data-anchor-id="iterations-layers">Iterations (Layers)</h3>
+<p>GNNs operate in layers, similar to deep neural networks.</p>
+</section>
+<section id="hidden-embeddings" class="level3">
+<h3 class="anchored" data-anchor-id="hidden-embeddings">Hidden Embeddings</h3>
+<p>Each node <span class="math inline">\(u\)</span> has a hidden embedding <span class="math inline">\(\mathbf{h}^{(k)}_u\)</span> at the <span class="math inline">\(k\)</span>-th iteration (layer).</p>
+</section>
+<section id="messages" class="level3">
+<h3 class="anchored" data-anchor-id="messages">Messages</h3>
+<p>Nodes exchange messages with their neighbors.</p>
+</section>
+<section id="aggregate-and-update-functions" class="level3">
+<h3 class="anchored" data-anchor-id="aggregate-and-update-functions">AGGREGATE and UPDATE Functions</h3>
+<p>Two key functions in each layer are:</p>
+<ul>
+<li><p><span class="math inline">\(\text{AGGREGATE}^{(k)}\)</span>: Aggregates messages from neighbors.</p></li>
+<li><p><span class="math inline">\(\text{UPDATE}^{(k)}\)</span>: Updates a node’s embedding based on the aggregated message.</p></li>
+</ul>
+<p>These functions are differentiable, allowing GNN training via backpropagation. Figure 5.1 (Not provided, detail missing: Figure 5.1 not in transcription) illustrates how a node aggregates messages from its local neighborhood.</p>
+</section>
+</section>
+<section id="mathematical-formulation-of-message-passing" class="level2">
+<h2 class="anchored" data-anchor-id="mathematical-formulation-of-message-passing">Mathematical Formulation of Message Passing</h2>
+<div class="theorem">
+<p><strong>Theorem 11</strong> (Message Passing Process). <em>The message passing process can be mathematically formulated as:</em></p>
+<div class="tcolorbox">
+<p><em><span class="math display">\[\mathbf{h}^{(k+1)}_u = \text{UPDATE}^{(k)} \left( \mathbf{h}^{(k)}_u, \text{AGGREGATE}^{(k)} \left( \{ \mathbf{h}^{(k)}_v, \forall v \in \mathcal{N}(u) \} \right) \right)\]</span></em></p>
+</div>
+<p><em>Let <span class="math inline">\(\mathbf{m}^{(k)}_{\mathcal{N}(u)} = \text{AGGREGATE}^{(k)} \left( \{ \mathbf{h}^{(k)}_v, \forall v \in \mathcal{N}(u) \} \right)\)</span> be the aggregated message. Then,</em></p>
+<div class="tcolorbox">
+<p><em><span class="math display">\[\mathbf{h}^{(k+1)}_u = \text{UPDATE}^{(k)} \left( \mathbf{h}^{(k)}_u, \mathbf{m}^{(k)}_{\mathcal{N}(u)} \right)\]</span></em></p>
+</div>
+<p><em>Starting with input representations at layer <span class="math inline">\(k=0\)</span>, after <span class="math inline">\(K\)</span> iterations, we obtain the final node embeddings: <span class="math inline">\(\mathbf{z}_u = \mathbf{h}^{(K)}_u, \forall u \in \mathcal{V}\)</span>. GNNs defined this way are permutation equivariant because the <span class="math inline">\(\text{AGGREGATE}\)</span> function operates on a set of neighbors.</em></p>
+</div>
+</section>
+<section id="node-features" class="level2">
+<h2 class="anchored" data-anchor-id="node-features">Node Features</h2>
+<p>Unlike shallow embedding methods, GNNs typically require node features <span class="math inline">\(\mathbf{x}_u, \forall u \in \mathcal{V}\)</span> as input.</p>
+<section id="options-when-node-features-are-unavailable" class="level3">
+<h3 class="anchored" data-anchor-id="options-when-node-features-are-unavailable">Options When Node Features Are Unavailable</h3>
+<p>If node features are not available, options include:</p>
+<ol type="1">
+<li><p>Using node statistics (e.g., from Section 2.1, detail missing: Section 2.1 not in transcription) to define features.</p></li>
+<li><p>Using identity features: associating each node with a one-hot indicator feature. However, using identity features makes the model transductive.</p></li>
+</ol>
+</section>
+</section>
+<section id="types-of-information-passed" class="level2">
+<h2 class="anchored" data-anchor-id="types-of-information-passed">Types of Information Passed</h2>
+<p>Two main types of information are passed in messages:</p>
+<section id="structural-information" class="level3">
+<h3 class="anchored" data-anchor-id="structural-information">Structural Information</h3>
+<p>Graph topological information is inherently passed through the message aggregation process.</p>
+</section>
+<section id="feature-based-information" class="level3">
+<h3 class="anchored" data-anchor-id="feature-based-information">Feature-Based Information</h3>
+<p>Feature information is also aggregated from the neighborhoods. After <span class="math inline">\(k\)</span> iterations, embeddings encode information about features in the <span class="math inline">\(k\)</span>-hop neighborhood. This is analogous to convolutional kernels in CNNs, but GNNs aggregate information based on graph neighborhoods instead of spatial patches.</p>
+</section>
+</section>
+<section id="implementation-of-aggregate-and-update" class="level2">
+<h2 class="anchored" data-anchor-id="implementation-of-aggregate-and-update">Implementation of AGGREGATE and UPDATE</h2>
+<p>Common choices for implementing <span class="math inline">\(\text{AGGREGATE}\)</span> and <span class="math inline">\(\text{UPDATE}\)</span> functions include vector/matrix operations.</p>
+<section id="vectormatrix-operations" class="level3">
+<h3 class="anchored" data-anchor-id="vectormatrix-operations">Vector/Matrix Operations</h3>
+<div class="algorithm">
+<p>A common formulation is:</p>
+<div class="tcolorbox">
+<p><span class="math display">\[\mathbf{h}^{(k)}_u = \sigma \left( \mathbf{W}^{(k)}_{\text{self}} \mathbf{h}^{(k-1)}_u + \mathbf{W}^{(k)}_{\text{neigh}} \sum_{v \in \mathcal{N}(u)} \mathbf{h}^{(k-1)}_v + \mathbf{b}^{(k)} \right)\]</span></p>
+</div>
+<p>where <span class="math inline">\(\mathbf{W}^{(k)}_{\text{self}}, \mathbf{W}^{(k)}_{\text{neigh}} \in \mathbb{R}^{d^{(k)} \times d^{(k-1)}}\)</span> are weight matrices, <span class="math inline">\(\mathbf{b}^{(k)}\)</span> is a bias vector, and <span class="math inline">\(\sigma\)</span> is a non-linear activation function. This is a node-based formulation using an Elman-style update.</p>
+</div>
+</section>
+<section id="elman-style-update" class="level3">
+<h3 class="anchored" data-anchor-id="elman-style-update">Elman-Style Update</h3>
+<p>This update is similar to those used in MLPs, involving linear transformations and non-linear activation. We can express it using explicit message aggregation: <span class="math display">\[\begin{aligned}
+    \mathbf{m}^{(k-1)}_{\mathcal{N}(u)} &amp;= \sum_{v \in \mathcal{N}(u)} \mathbf{h}^{(k-1)}_v \\
+    \mathbf{h}^{(k)}_u &amp;= \sigma \left( \mathbf{W}^{(k)}_{\text{self}} \mathbf{h}^{(k-1)}_u + \mathbf{W}^{(k)}_{\text{neigh}} \mathbf{m}^{(k-1)}_{\mathcal{N}(u)} + \mathbf{b}^{(k)} \right)
+\end{aligned}\]</span></p>
+</section>
+<section id="graph-level-formulation" class="level3">
+<h3 class="anchored" data-anchor-id="graph-level-formulation">Graph-Level Formulation</h3>
+<p>In matrix notation, the graph-level formulation is: <span class="math display">\[H^{(k)} = \sigma \left( AH^{(k-1)} \mathbf{W}^{(k)}_{\text{neigh}} + H^{(k-1)} \mathbf{W}^{(k)}_{\text{self}} \right)\]</span> where <span class="math inline">\(A\)</span> is the adjacency matrix and <span class="math inline">\(H^{(k)}\)</span> is the matrix of hidden embeddings at layer <span class="math inline">\(k\)</span>. By adding self-loops (i.e., considering <span class="math inline">\(\mathcal{N}(u) \cup \{u\}\)</span>), we can replace <span class="math inline">\(\mathbf{W}^{(k)}_{\text{self}}\)</span> by modifying the aggregation: <span class="math display">\[H^{(k)} = \sigma \left( (A + I)H^{(k-1)} \mathbf{W}^{(k)} \right)\]</span> In any case, the <span class="math inline">\(\text{AGGREGATE}\)</span> function is essentially a summation (<span class="math inline">\(\sum\)</span>).</p>
+</section>
+</section>
+<section id="neighborhood-normalization" class="level2">
+<h2 class="anchored" data-anchor-id="neighborhood-normalization">Neighborhood Normalization</h2>
+<p>To improve aggregation, especially when dealing with nodes with varying degrees, neighborhood normalization can be used.</p>
+<section id="average-aggregation" class="level3">
+<h3 class="anchored" data-anchor-id="average-aggregation">Average Aggregation</h3>
+<p>Instead of simple summation, average aggregation normalizes by the degree of the node: <span class="math display">\[\mathbf{m}^{(k-1)}_{\mathcal{N}(u)} = \frac{\sum_{v \in \mathcal{N}(u)} \mathbf{h}^{(k-1)}_v}{|\mathcal{N}(u)|}\]</span></p>
+</section>
+<section id="symmetric-normalization" class="level3">
+<h3 class="anchored" data-anchor-id="symmetric-normalization">Symmetric Normalization</h3>
+<p>Symmetric normalization accounts for degree differences between nodes <span class="math inline">\(u\)</span> and <span class="math inline">\(v\)</span>: <span class="math display">\[\mathbf{m}^{(k-1)}_{\mathcal{N}(u)} = \sum_{v \in \mathcal{N}(u)} \frac{\mathbf{h}^{(k-1)}_v}{\sqrt{|\mathcal{N}(u)| |\mathcal{N}(v)|}}\]</span></p>
+</section>
+<section id="graph-convolutional-networks-gcn-example" class="level3">
+<h3 class="anchored" data-anchor-id="graph-convolutional-networks-gcn-example">Graph Convolutional Networks (GCN) Example</h3>
+<div class="example">
+<p><strong>Example 12</strong> (Graph Convolutional Networks (GCNs)). <em>Graph Convolutional Networks (GCNs) use symmetric normalization and self-loops:</em></p>
+<div class="tcolorbox">
+<p><em><span class="math display">\[\mathbf{h}^{(k)}_u = \sigma \left( \mathbf{W}^{(k)} \sum_{v \in \mathcal{N}(u) \cup \{u\}} \frac{\mathbf{h}^{(k-1)}_v}{\sqrt{|\mathcal{N}(u)| |\mathcal{N}(v)|}} \right)\]</span></em></p>
+</div>
+<p><em>Here, <span class="math inline">\(|\mathcal{N}(v)|\)</span> should be interpreted as <span class="math inline">\(|\mathcal{N}(v) \cup \{v\}|\)</span> when <span class="math inline">\(v=u\)</span>.</em></p>
+</div>
+</section>
+</section>
+<section id="set-aggregators" class="level2">
+<h2 class="anchored" data-anchor-id="set-aggregators">Set Aggregators</h2>
+<p>The neighborhood aggregation is fundamentally a set function, operating on the set of neighbor embeddings <span class="math inline">\(\{ \mathbf{h}^{(k)}_v, \forall v \in \mathcal{N}(u) \}\)</span>. Aggregation functions must be permutation invariant.</p>
+<section id="set-pooling" class="level3">
+<h3 class="anchored" data-anchor-id="set-pooling">Set Pooling</h3>
+<p>Set pooling replaces simple summation with more complex functions, often using MLPs: <span class="math display">\[\mathbf{m}^{(k-1)}_{\mathcal{N}(u)} = \text{MLP}_\theta \left( \sum_{v \in \mathcal{N}(u)} \text{MLP}_\phi(\mathbf{h}^{(k-1)}_v) \right)\]</span> This adds extra layers and allows for more complex aggregation patterns, acting as a universal function approximator. Heuristic max/min/mean operations can also be used.</p>
+</section>
+<section id="janossy-pooling" class="level3">
+<h3 class="anchored" data-anchor-id="janossy-pooling">Janossy Pooling</h3>
+<p>Janossy pooling is another set aggregation approach. It addresses permutation invariance by using permutation-sensitive functions combined with averaging over permutations: <span class="math display">\[\mathbf{m}^{(k-1)}_{\mathcal{N}(u)} = \text{MLP}_\theta \left( \frac{1}{|\Pi|} \sum_{\pi \in \Pi} \rho_\phi(\mathbf{h}^{(k-1)}_{\pi_1}, \mathbf{h}^{(k-1)}_{\pi_2}, ..., \mathbf{h}^{(k-1)}_{\pi_{|\mathcal{N}(u)|}}) \right)\]</span> where <span class="math inline">\(\Pi\)</span> is the collection of permutations of neighbors and <span class="math inline">\(\rho_\phi\)</span> is a permutation-sensitive function (e.g., an MLP). In practice, approximations are used to handle the computational cost of summing over all permutations, such as sampling permutations or using canonical orderings.</p>
+<div class="tcolorbox">
+<p>The time complexity of a single message passing step (i.e., updating the embedding of a single node) is typically <span class="math inline">\(O(|\mathcal{N}(u)| d^{(k)} d^{(k-1)})\)</span>, where <span class="math inline">\(|\mathcal{N}(u)|\)</span> is the degree of node <span class="math inline">\(u\)</span>, and <span class="math inline">\(d^{(k)}\)</span> and <span class="math inline">\(d^{(k-1)}\)</span> are the dimensions of the embeddings at layers <span class="math inline">\(k\)</span> and <span class="math inline">\(k-1\)</span>, respectively. This complexity arises from the matrix multiplications involved in the <span class="math inline">\(\text{UPDATE}\)</span> and <span class="math inline">\(\text{AGGREGATE}\)</span> functions.</p>
+<p>The space complexity for storing the embeddings at each layer is <span class="math inline">\(O(|\mathcal{V}| d^{(k)})\)</span>, where <span class="math inline">\(|\mathcal{V}|\)</span> is the number of nodes in the graph. The space complexity for storing the weight matrices is <span class="math inline">\(O(L d^2)\)</span>, where <span class="math inline">\(L\)</span> is the number of layers and <span class="math inline">\(d\)</span> is the maximum embedding dimension across all layers.</p>
+</div>
+</section>
+</section>
+</section>
+<section id="conclusion" class="level1">
+<h1>Conclusion</h1>
+<p>In this lecture, we transitioned from traditional graph analysis to graph representation learning, highlighting the limitations of hand-engineered features and introducing the encoder-decoder framework for learning node embeddings. We explored shallow embedding approaches and their limitations, which motivated the need for more powerful models like Graph Neural Networks (GNNs). We delved into the GNN formalism, focusing on neural message passing, its ingredients, and mathematical formulation. We discussed different implementations of <span class="math inline">\(\text{AGGREGATE}\)</span> and <span class="math inline">\(\text{UPDATE}\)</span> functions, including normalization techniques and set aggregators.</p>
+<p>Key takeaways include the importance of learning representations directly from graph structure and node features, the power of message passing in GNNs, and the flexibility offered by different aggregation and update mechanisms.</p>
+<p>Further topics to explore include different GNN architectures, applications of GNNs in various domains, and advanced techniques for training and scaling GNNs. Consider how the concepts discussed in this lecture can be applied to real-world graph datasets and the challenges that might arise.</p>
+
+
+<!-- -->
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+  const viewSource = window.document.getElementById('quarto-view-source') ||
+                     window.document.getElementById('quarto-code-tools-source');
+  if (viewSource) {
+    const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+    viewSource.addEventListener("click", function(e) {
+      if (sourceUrl) {
+        // rstudio viewer pane
+        if (/\bcapabilities=\b/.test(window.location)) {
+          window.open(sourceUrl);
+        } else {
+          window.location.href = sourceUrl;
+        }
+      } else {
+        const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+        modal.show();
+      }
+      return false;
+    });
+  }
+  function toggleCodeHandler(show) {
+    return function(e) {
+      const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+      for (let i=0; i<detailsSrc.length; i++) {
+        const details = detailsSrc[i].parentElement;
+        if (show) {
+          details.open = true;
+        } else {
+          details.removeAttribute("open");
+        }
+      }
+      const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+      const fromCls = show ? "hidden" : "unhidden";
+      const toCls = show ? "unhidden" : "hidden";
+      for (let i=0; i<cellCodeDivs.length; i++) {
+        const codeDiv = cellCodeDivs[i];
+        if (codeDiv.classList.contains(fromCls)) {
+          codeDiv.classList.remove(fromCls);
+          codeDiv.classList.add(toCls);
+        } 
+      }
+      return false;
+    }
+  }
+  const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+  if (hideAllCode) {
+    hideAllCode.addEventListener("click", toggleCodeHandler(false));
+  }
+  const showAllCode = window.document.getElementById("quarto-show-all-code");
+  if (showAllCode) {
+    showAllCode.addEventListener("click", toggleCodeHandler(true));
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("git@github\.com-TheGhoul21:TheGhoul21\/FNN-2024-2025\.git");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="sourceCode" id="cb1" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Lecture Notes on Graph Representation Learning"</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="an">author:</span><span class="co"> "Your Name"</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="an">date:</span><span class="co"> "2025-02-01"</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co">  html:</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co">    toc: true  # Table of Contents</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co">    toc-depth: 2</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co">    code-tools: true</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co">    theme: cosmo  # Or "journal" for Distill-like minimalism</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="fu"># Introduction</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>This lecture transitions from traditional graph analysis methods to</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>modern graph representation learning techniques. Traditional approaches</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>often depend on hand-engineered features, which are inflexible and</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>necessitate substantial manual effort. We will examine the limitations</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>of these traditional methods and introduce graph representation learning</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>as a powerful alternative. The central idea is to automatically learn</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>node embeddings that capture the structural information of a graph. We</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>will discuss the encoder-decoder framework for learning these</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>embeddings, beginning with shallow embedding methods and progressing</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>towards more complex Graph Neural Networks (GNNs). Key concepts include</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>latent spaces, neighborhood aggregation, message passing, and different</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>types of aggregation and update functions used in GNNs.</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="fu"># Traditional Graph Analysis</span></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="fu">## Limitations of Hand-Engineered Features</span></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>Traditional graph analysis often relies on hand-engineered features,</span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>such as node and graph-level statistics. These approaches are limited</span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>because they require carefully designed, specific statistics and</span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>measures. Designing these features is a time-consuming and expensive</span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>process.</span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a><span class="fu">## Inflexibility and Lack of Adaptability</span></span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>Hand-engineered features are inflexible and cannot adapt or learn from</span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>data dynamically. Once designed, they remain static and may not</span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>generalize well to new data or different graph structures.</span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a><span class="fu">## Example: Spectral Methods</span></span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a>Spectral methods, briefly mentioned earlier, exemplify traditional</span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a>approaches that often rely on hand-engineered features. While powerful,</span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a>they can be limited by their reliance on fixed feature representations.</span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a><span class="fu"># Graph Representation Learning</span></span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a>To overcome the limitations of traditional methods, we introduce graph</span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a>representation learning. This approach aims to learn representations</span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a>that automatically encode the structural information of the graph,</span>
+<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a>moving from static, hand-engineered features to dynamic, learning-based</span>
+<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a>approaches.</span>
+<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a><span class="fu">## Learning Embeddings</span></span>
+<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a>In graph representation learning, we learn vectors of features and</span>
+<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a>adjust their coordinates in a meaningful latent space. This involves</span>
+<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a>embedding nodes into a vector space where the geometry of the space</span>
+<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a>reflects the graph structure.</span>
+<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a><span class="fu">## Encoding and Decoding Neighborhoods</span></span>
+<span id="cb1-66"><a href="#cb1-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-67"><a href="#cb1-67" aria-hidden="true" tabindex="-1"></a>A crucial concept in graph representation learning is encoding and</span>
+<span id="cb1-68"><a href="#cb1-68" aria-hidden="true" tabindex="-1"></a>decoding neighborhoods. We aim to embed graph nodes into a latent space</span>
+<span id="cb1-69"><a href="#cb1-69" aria-hidden="true" tabindex="-1"></a>by considering their neighborhoods.</span>
+<span id="cb1-70"><a href="#cb1-70" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-71"><a href="#cb1-71" aria-hidden="true" tabindex="-1"></a><span class="fu">## Latent Space</span></span>
+<span id="cb1-72"><a href="#cb1-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-73"><a href="#cb1-73" aria-hidden="true" tabindex="-1"></a>We embed nodes and their neighborhoods into a *latent space*. This space</span>
+<span id="cb1-74"><a href="#cb1-74" aria-hidden="true" tabindex="-1"></a>is designed to capture the essential structural information of the graph</span>
+<span id="cb1-75"><a href="#cb1-75" aria-hidden="true" tabindex="-1"></a>in a compressed form. As illustrated in Figure 3.1 (Not provided, detail</span>
+<span id="cb1-76"><a href="#cb1-76" aria-hidden="true" tabindex="-1"></a>missing: Figure 3.1 not in transcription), we map nodes from the</span>
+<span id="cb1-77"><a href="#cb1-77" aria-hidden="true" tabindex="-1"></a>original network into this embedding space.</span>
+<span id="cb1-78"><a href="#cb1-78" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-79"><a href="#cb1-79" aria-hidden="true" tabindex="-1"></a><span class="fu">### Low-Dimensionality</span></span>
+<span id="cb1-80"><a href="#cb1-80" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-81"><a href="#cb1-81" aria-hidden="true" tabindex="-1"></a>The latent space must be low-dimensional to simplify and compress the</span>
+<span id="cb1-82"><a href="#cb1-82" aria-hidden="true" tabindex="-1"></a>information, retaining only the essential structural aspects of the</span>
+<span id="cb1-83"><a href="#cb1-83" aria-hidden="true" tabindex="-1"></a>graph.</span>
+<span id="cb1-84"><a href="#cb1-84" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-85"><a href="#cb1-85" aria-hidden="true" tabindex="-1"></a><span class="fu">## Desiderata for Latent Space</span></span>
+<span id="cb1-86"><a href="#cb1-86" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-87"><a href="#cb1-87" aria-hidden="true" tabindex="-1"></a>The desired properties for a latent space are:</span>
+<span id="cb1-88"><a href="#cb1-88" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-89"><a href="#cb1-89" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>Significant and interesting properties of nodes and their</span>
+<span id="cb1-90"><a href="#cb1-90" aria-hidden="true" tabindex="-1"></a>    neighborhoods should be transformed into geometric or vectorial</span>
+<span id="cb1-91"><a href="#cb1-91" aria-hidden="true" tabindex="-1"></a>    properties in this space.</span>
+<span id="cb1-92"><a href="#cb1-92" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-93"><a href="#cb1-93" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>The latent space must be as low-dimensional as possible, providing a</span>
+<span id="cb1-94"><a href="#cb1-94" aria-hidden="true" tabindex="-1"></a>    distilled and efficient representation.</span>
+<span id="cb1-95"><a href="#cb1-95" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-96"><a href="#cb1-96" aria-hidden="true" tabindex="-1"></a><span class="fu">## Encoder-Decoder Framework</span></span>
+<span id="cb1-97"><a href="#cb1-97" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-98"><a href="#cb1-98" aria-hidden="true" tabindex="-1"></a>We organize our discussion of node embeddings based on the</span>
+<span id="cb1-99"><a href="#cb1-99" aria-hidden="true" tabindex="-1"></a>encoder-decoder framework. This approach is a recurring theme in graph</span>
+<span id="cb1-100"><a href="#cb1-100" aria-hidden="true" tabindex="-1"></a>representation learning. As shown in Figure 3.2 (Not provided, detail</span>
+<span id="cb1-101"><a href="#cb1-101" aria-hidden="true" tabindex="-1"></a>missing: Figure 3.2 not in transcription), the encoder maps nodes to a</span>
+<span id="cb1-102"><a href="#cb1-102" aria-hidden="true" tabindex="-1"></a>low-dimensional embedding, and the decoder reconstructs the local</span>
+<span id="cb1-103"><a href="#cb1-103" aria-hidden="true" tabindex="-1"></a>neighborhood information from these embeddings.</span>
+<span id="cb1-104"><a href="#cb1-104" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-105"><a href="#cb1-105" aria-hidden="true" tabindex="-1"></a><span class="fu">### Encoding Step</span></span>
+<span id="cb1-106"><a href="#cb1-106" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-107"><a href="#cb1-107" aria-hidden="true" tabindex="-1"></a>::: definition</span>
+<span id="cb1-108"><a href="#cb1-108" aria-hidden="true" tabindex="-1"></a>**Definition 1** (Encoder). *The encoder, denoted as $\ENC$, takes a</span>
+<span id="cb1-109"><a href="#cb1-109" aria-hidden="true" tabindex="-1"></a>node $u$ and maps it to a low-dimensional embedding</span>
+<span id="cb1-110"><a href="#cb1-110" aria-hidden="true" tabindex="-1"></a>$\mathbf{z}_u \in \mathbb{R}^d$. For shallow embedding approaches, this</span>
+<span id="cb1-111"><a href="#cb1-111" aria-hidden="true" tabindex="-1"></a>mapping is often a direct mapping. Mathematically,</span>
+<span id="cb1-112"><a href="#cb1-112" aria-hidden="true" tabindex="-1"></a>$\ENC : \mathcal{V} \rightarrow \mathbb{R}^d$.*</span>
+<span id="cb1-113"><a href="#cb1-113" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-114"><a href="#cb1-114" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-115"><a href="#cb1-115" aria-hidden="true" tabindex="-1"></a><span class="fu">### Decoding Step</span></span>
+<span id="cb1-116"><a href="#cb1-116" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-117"><a href="#cb1-117" aria-hidden="true" tabindex="-1"></a>::: definition</span>
+<span id="cb1-118"><a href="#cb1-118" aria-hidden="true" tabindex="-1"></a>**Definition 2** (Decoder). *The decoder, denoted as $\DEC$, takes an</span>
+<span id="cb1-119"><a href="#cb1-119" aria-hidden="true" tabindex="-1"></a>embedding $\mathbf{z}_u$ (and potentially $\mathbf{z}_v$) and</span>
+<span id="cb1-120"><a href="#cb1-120" aria-hidden="true" tabindex="-1"></a>reconstructs the local neighborhood information of node $u$. For</span>
+<span id="cb1-121"><a href="#cb1-121" aria-hidden="true" tabindex="-1"></a>pairwise decoders, $\DEC$ takes two embeddings $\mathbf{z}_u$ and</span>
+<span id="cb1-122"><a href="#cb1-122" aria-hidden="true" tabindex="-1"></a>$\mathbf{z}_v$ and outputs a real number that approximates the</span>
+<span id="cb1-123"><a href="#cb1-123" aria-hidden="true" tabindex="-1"></a>similarity $S_{u,v}$ between nodes $u$ and $v$. Mathematically,</span>
+<span id="cb1-124"><a href="#cb1-124" aria-hidden="true" tabindex="-1"></a>$\DEC(\ENC(u), \ENC(v)) = \DEC(\mathbf{z}_u, \mathbf{z}_v) \approx S_{u,v}$.</span>
+<span id="cb1-125"><a href="#cb1-125" aria-hidden="true" tabindex="-1"></a>We focus on reconstructing the local neighborhood, not the entire graph</span>
+<span id="cb1-126"><a href="#cb1-126" aria-hidden="true" tabindex="-1"></a>structure at once.*</span>
+<span id="cb1-127"><a href="#cb1-127" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-128"><a href="#cb1-128" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-129"><a href="#cb1-129" aria-hidden="true" tabindex="-1"></a><span class="fu">## Shallow Embedding Approaches</span></span>
+<span id="cb1-130"><a href="#cb1-130" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-131"><a href="#cb1-131" aria-hidden="true" tabindex="-1"></a>Shallow embedding approaches use a direct mapping as the encoder. The</span>
+<span id="cb1-132"><a href="#cb1-132" aria-hidden="true" tabindex="-1"></a>embedding $\mathbf{z}_u$ is a $d$-dimensional vector in $\mathbb{R}^d$.</span>
+<span id="cb1-133"><a href="#cb1-133" aria-hidden="true" tabindex="-1"></a>Let $Z \in \mathbb{R}^{|\mathcal{V}| \times d}$ be the matrix of</span>
+<span id="cb1-134"><a href="#cb1-134" aria-hidden="true" tabindex="-1"></a>embeddings for all nodes.</span>
+<span id="cb1-135"><a href="#cb1-135" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-136"><a href="#cb1-136" aria-hidden="true" tabindex="-1"></a><span class="fu">### Encoder: Direct Mapping</span></span>
+<span id="cb1-137"><a href="#cb1-137" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-138"><a href="#cb1-138" aria-hidden="true" tabindex="-1"></a>In shallow embedding, the encoder $\ENC(u)$ is a direct mapping to</span>
+<span id="cb1-139"><a href="#cb1-139" aria-hidden="true" tabindex="-1"></a>$\mathbb{R}^d$, using the node itself as the argument without complex</span>
+<span id="cb1-140"><a href="#cb1-140" aria-hidden="true" tabindex="-1"></a>transformations or node features.</span>
+<span id="cb1-141"><a href="#cb1-141" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-142"><a href="#cb1-142" aria-hidden="true" tabindex="-1"></a><span class="fu">### Pairwise Decoder</span></span>
+<span id="cb1-143"><a href="#cb1-143" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-144"><a href="#cb1-144" aria-hidden="true" tabindex="-1"></a>The decoder $\DEC$ predicts relationships or similarities between pairs</span>
+<span id="cb1-145"><a href="#cb1-145" aria-hidden="true" tabindex="-1"></a>of nodes based on their embeddings. It is a pairwise decoder that</span>
+<span id="cb1-146"><a href="#cb1-146" aria-hidden="true" tabindex="-1"></a>operates on pairs of embeddings $\mathbf{z}_u$ and $\mathbf{z}_v$,</span>
+<span id="cb1-147"><a href="#cb1-147" aria-hidden="true" tabindex="-1"></a>mapping them to a similarity measure $S_{u,v}$.</span>
+<span id="cb1-148"><a href="#cb1-148" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-149"><a href="#cb1-149" aria-hidden="true" tabindex="-1"></a><span class="fu">### Loss Function</span></span>
+<span id="cb1-150"><a href="#cb1-150" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-151"><a href="#cb1-151" aria-hidden="true" tabindex="-1"></a>To learn the parameters of the encoder and decoder, we define a loss</span>
+<span id="cb1-152"><a href="#cb1-152" aria-hidden="true" tabindex="-1"></a>function $\mathcal{L}$. This function measures the discrepancy between</span>
+<span id="cb1-153"><a href="#cb1-153" aria-hidden="true" tabindex="-1"></a>the decoder output and the actual similarity measure.</span>
+<span id="cb1-154"><a href="#cb1-154" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-155"><a href="#cb1-155" aria-hidden="true" tabindex="-1"></a><span class="fu">#### Empirical Reconstruction Loss</span></span>
+<span id="cb1-156"><a href="#cb1-156" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-157"><a href="#cb1-157" aria-hidden="true" tabindex="-1"></a>::::: definition</span>
+<span id="cb1-158"><a href="#cb1-158" aria-hidden="true" tabindex="-1"></a>**Definition 3** (Empirical Reconstruction Loss). *The loss function</span>
+<span id="cb1-159"><a href="#cb1-159" aria-hidden="true" tabindex="-1"></a>$\mathcal{L}$ is defined as the sum over pairs of nodes $(u, v)$ in a</span>
+<span id="cb1-160"><a href="#cb1-160" aria-hidden="true" tabindex="-1"></a>training set $D$:*</span>
+<span id="cb1-161"><a href="#cb1-161" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-162"><a href="#cb1-162" aria-hidden="true" tabindex="-1"></a>::: tcolorbox</span>
+<span id="cb1-163"><a href="#cb1-163" aria-hidden="true" tabindex="-1"></a>*$$\mathcal{L} = \sum_{(u,v) \in D} \ell(\DEC(\mathbf{z}_u, \mathbf{z}_v), S_{u,v})$$*</span>
+<span id="cb1-164"><a href="#cb1-164" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-165"><a href="#cb1-165" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-166"><a href="#cb1-166" aria-hidden="true" tabindex="-1"></a>*where $\ell$ is a loss function (e.g., mean-squared error or</span>
+<span id="cb1-167"><a href="#cb1-167" aria-hidden="true" tabindex="-1"></a>cross-entropy), and $D$ is the training set. The goal is to minimize</span>
+<span id="cb1-168"><a href="#cb1-168" aria-hidden="true" tabindex="-1"></a>this Empirical Reconstruction Loss (ERM) to find optimal encoder and</span>
+<span id="cb1-169"><a href="#cb1-169" aria-hidden="true" tabindex="-1"></a>decoder parameters.*</span>
+<span id="cb1-170"><a href="#cb1-170" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-171"><a href="#cb1-171" aria-hidden="true" tabindex="-1"></a>::: tcolorbox</span>
+<span id="cb1-172"><a href="#cb1-172" aria-hidden="true" tabindex="-1"></a>*$$\text{ERM}(S) \in \text{argmin}_{h \in \mathcal{H}} \mathcal{L}_S(h)$$*</span>
+<span id="cb1-173"><a href="#cb1-173" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-174"><a href="#cb1-174" aria-hidden="true" tabindex="-1"></a>:::::</span>
+<span id="cb1-175"><a href="#cb1-175" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-176"><a href="#cb1-176" aria-hidden="true" tabindex="-1"></a>Table 3.1 (Not provided, detail missing: Table 3.1 not in transcription)</span>
+<span id="cb1-177"><a href="#cb1-177" aria-hidden="true" tabindex="-1"></a>summarizes well-known shallow embedding algorithms, which differ in</span>
+<span id="cb1-178"><a href="#cb1-178" aria-hidden="true" tabindex="-1"></a>their choices of decoder, similarity measure, and loss function.</span>
+<span id="cb1-179"><a href="#cb1-179" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-180"><a href="#cb1-180" aria-hidden="true" tabindex="-1"></a><span class="fu">## Factorization-Based Approaches</span></span>
+<span id="cb1-181"><a href="#cb1-181" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-182"><a href="#cb1-182" aria-hidden="true" tabindex="-1"></a>Factorization-based approaches view the encoder-decoder framework from</span>
+<span id="cb1-183"><a href="#cb1-183" aria-hidden="true" tabindex="-1"></a>the perspective of matrix factorization. The challenge of decoding local</span>
+<span id="cb1-184"><a href="#cb1-184" aria-hidden="true" tabindex="-1"></a>neighborhood structure is related to reconstructing entries in a</span>
+<span id="cb1-185"><a href="#cb1-185" aria-hidden="true" tabindex="-1"></a>node-node similarity matrix $S$, which generalizes the adjacency matrix.</span>
+<span id="cb1-186"><a href="#cb1-186" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-187"><a href="#cb1-187" aria-hidden="true" tabindex="-1"></a><span class="fu">### Matrix Factorization</span></span>
+<span id="cb1-188"><a href="#cb1-188" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-189"><a href="#cb1-189" aria-hidden="true" tabindex="-1"></a>Matrix factorization is used to learn a low-dimensional approximation of</span>
+<span id="cb1-190"><a href="#cb1-190" aria-hidden="true" tabindex="-1"></a>the similarity matrix $S$.</span>
+<span id="cb1-191"><a href="#cb1-191" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-192"><a href="#cb1-192" aria-hidden="true" tabindex="-1"></a><span class="fu">### Euclidean Distance Decoder</span></span>
+<span id="cb1-193"><a href="#cb1-193" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-194"><a href="#cb1-194" aria-hidden="true" tabindex="-1"></a>::::: example</span>
+<span id="cb1-195"><a href="#cb1-195" aria-hidden="true" tabindex="-1"></a>**Example 4** (Euclidean Distance Decoder). *A common decoder is the</span>
+<span id="cb1-196"><a href="#cb1-196" aria-hidden="true" tabindex="-1"></a>squared Euclidean distance:*</span>
+<span id="cb1-197"><a href="#cb1-197" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-198"><a href="#cb1-198" aria-hidden="true" tabindex="-1"></a>::: tcolorbox</span>
+<span id="cb1-199"><a href="#cb1-199" aria-hidden="true" tabindex="-1"></a>*$$\DEC(\mathbf{z}_u, \mathbf{z}_v) = ||\mathbf{z}_u - \mathbf{z}_v||^2$$*</span>
+<span id="cb1-200"><a href="#cb1-200" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-201"><a href="#cb1-201" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-202"><a href="#cb1-202" aria-hidden="true" tabindex="-1"></a>*The loss function in this case is:*</span>
+<span id="cb1-203"><a href="#cb1-203" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-204"><a href="#cb1-204" aria-hidden="true" tabindex="-1"></a>::: tcolorbox</span>
+<span id="cb1-205"><a href="#cb1-205" aria-hidden="true" tabindex="-1"></a>*$$\mathcal{L} = \sum_{(u,v) \in D} \DEC(\mathbf{z}_u, \mathbf{z}_v) \cdot S_{u,v}$$*</span>
+<span id="cb1-206"><a href="#cb1-206" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-207"><a href="#cb1-207" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-208"><a href="#cb1-208" aria-hidden="true" tabindex="-1"></a>*Minimizing this loss aims to bring embeddings of similar nodes closer</span>
+<span id="cb1-209"><a href="#cb1-209" aria-hidden="true" tabindex="-1"></a>in Euclidean space. If $S$ satisfies Laplacian matrix properties,</span>
+<span id="cb1-210"><a href="#cb1-210" aria-hidden="true" tabindex="-1"></a>minimizing this loss is equivalent to spectral clustering.*</span>
+<span id="cb1-211"><a href="#cb1-211" aria-hidden="true" tabindex="-1"></a>:::::</span>
+<span id="cb1-212"><a href="#cb1-212" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-213"><a href="#cb1-213" aria-hidden="true" tabindex="-1"></a><span class="fu">### Inner Product Decoder</span></span>
+<span id="cb1-214"><a href="#cb1-214" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-215"><a href="#cb1-215" aria-hidden="true" tabindex="-1"></a>::::: example</span>
+<span id="cb1-216"><a href="#cb1-216" aria-hidden="true" tabindex="-1"></a>**Example 5** (Inner Product Decoder). *An alternative decoder is the</span>
+<span id="cb1-217"><a href="#cb1-217" aria-hidden="true" tabindex="-1"></a>inner product:*</span>
+<span id="cb1-218"><a href="#cb1-218" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-219"><a href="#cb1-219" aria-hidden="true" tabindex="-1"></a>::: tcolorbox</span>
+<span id="cb1-220"><a href="#cb1-220" aria-hidden="true" tabindex="-1"></a>*$$\DEC(\mathbf{z}_u, \mathbf{z}_v) = \mathbf{z}_u^T \mathbf{z}_v$$*</span>
+<span id="cb1-221"><a href="#cb1-221" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-222"><a href="#cb1-222" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-223"><a href="#cb1-223" aria-hidden="true" tabindex="-1"></a>*The loss function becomes:*</span>
+<span id="cb1-224"><a href="#cb1-224" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-225"><a href="#cb1-225" aria-hidden="true" tabindex="-1"></a>::: tcolorbox</span>
+<span id="cb1-226"><a href="#cb1-226" aria-hidden="true" tabindex="-1"></a>*$$\mathcal{L} = \sum_{(u,v) \in D} ||\DEC(\mathbf{z}_u, \mathbf{z}_v) - S_{u,v}||^2$$*</span>
+<span id="cb1-227"><a href="#cb1-227" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-228"><a href="#cb1-228" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-229"><a href="#cb1-229" aria-hidden="true" tabindex="-1"></a>*The inner product decoder focuses on the alignment of embedding</span>
+<span id="cb1-230"><a href="#cb1-230" aria-hidden="true" tabindex="-1"></a>vectors. Different similarity measures, such as the adjacency matrix $A$</span>
+<span id="cb1-231"><a href="#cb1-231" aria-hidden="true" tabindex="-1"></a>or powers of $A$ (e.g., $A^k$), lead to different loss functions.*</span>
+<span id="cb1-232"><a href="#cb1-232" aria-hidden="true" tabindex="-1"></a>:::::</span>
+<span id="cb1-233"><a href="#cb1-233" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-234"><a href="#cb1-234" aria-hidden="true" tabindex="-1"></a><span class="fu">### Connection to Spectral Methods</span></span>
+<span id="cb1-235"><a href="#cb1-235" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-236"><a href="#cb1-236" aria-hidden="true" tabindex="-1"></a>::: remark</span>
+<span id="cb1-237"><a href="#cb1-237" aria-hidden="true" tabindex="-1"></a>**Remark 6**. *If $S$ is constructed to satisfy Laplacian matrix</span>
+<span id="cb1-238"><a href="#cb1-238" aria-hidden="true" tabindex="-1"></a>properties, minimizing the loss with a Euclidean distance decoder is</span>
+<span id="cb1-239"><a href="#cb1-239" aria-hidden="true" tabindex="-1"></a>identical to spectral clustering solutions. The optimal solution is</span>
+<span id="cb1-240"><a href="#cb1-240" aria-hidden="true" tabindex="-1"></a>given by the $d$ smallest eigenvectors of the Laplacian (excluding the</span>
+<span id="cb1-241"><a href="#cb1-241" aria-hidden="true" tabindex="-1"></a>eigenvector of all ones).*</span>
+<span id="cb1-242"><a href="#cb1-242" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-243"><a href="#cb1-243" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-244"><a href="#cb1-244" aria-hidden="true" tabindex="-1"></a><span class="fu">### Singular Value Decomposition (SVD)</span></span>
+<span id="cb1-245"><a href="#cb1-245" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-246"><a href="#cb1-246" aria-hidden="true" tabindex="-1"></a>:::: remark</span>
+<span id="cb1-247"><a href="#cb1-247" aria-hidden="true" tabindex="-1"></a>**Remark 7**. *Minimization of the loss function in factorization-based</span>
+<span id="cb1-248"><a href="#cb1-248" aria-hidden="true" tabindex="-1"></a>approaches is often done using Singular Value Decomposition (SVD). By</span>
+<span id="cb1-249"><a href="#cb1-249" aria-hidden="true" tabindex="-1"></a>stacking node embeddings into a matrix</span>
+<span id="cb1-250"><a href="#cb1-250" aria-hidden="true" tabindex="-1"></a>$Z \in \mathbb{R}^{|\mathcal{V}|\times d}$, the reconstruction objective</span>
+<span id="cb1-251"><a href="#cb1-251" aria-hidden="true" tabindex="-1"></a>can be written as:*</span>
+<span id="cb1-252"><a href="#cb1-252" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-253"><a href="#cb1-253" aria-hidden="true" tabindex="-1"></a>::: tcolorbox</span>
+<span id="cb1-254"><a href="#cb1-254" aria-hidden="true" tabindex="-1"></a>*$$\mathcal{L} \approx ||ZZ^T - S||^2_F$$*</span>
+<span id="cb1-255"><a href="#cb1-255" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-256"><a href="#cb1-256" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-257"><a href="#cb1-257" aria-hidden="true" tabindex="-1"></a>*This corresponds to a low-dimensional factorization of the similarity</span>
+<span id="cb1-258"><a href="#cb1-258" aria-hidden="true" tabindex="-1"></a>matrix $S$. SVD provides a way to find a low-rank approximation of $S$.*</span>
+<span id="cb1-259"><a href="#cb1-259" aria-hidden="true" tabindex="-1"></a>::::</span>
+<span id="cb1-260"><a href="#cb1-260" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-261"><a href="#cb1-261" aria-hidden="true" tabindex="-1"></a><span class="fu">## Stochastic Decoders and Random Walks</span></span>
+<span id="cb1-262"><a href="#cb1-262" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-263"><a href="#cb1-263" aria-hidden="true" tabindex="-1"></a>When a deterministic similarity measure $S_{u,v}$ is not available,</span>
+<span id="cb1-264"><a href="#cb1-264" aria-hidden="true" tabindex="-1"></a>stochastic decoders can be used. These approaches optimize embeddings to</span>
+<span id="cb1-265"><a href="#cb1-265" aria-hidden="true" tabindex="-1"></a>encode the statistics of random walks.</span>
+<span id="cb1-266"><a href="#cb1-266" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-267"><a href="#cb1-267" aria-hidden="true" tabindex="-1"></a><span class="fu">### Probability of Visiting Nodes</span></span>
+<span id="cb1-268"><a href="#cb1-268" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-269"><a href="#cb1-269" aria-hidden="true" tabindex="-1"></a>:::: example</span>
+<span id="cb1-270"><a href="#cb1-270" aria-hidden="true" tabindex="-1"></a>**Example 8** (Stochastic Decoder). *Consider a stochastic decoder based</span>
+<span id="cb1-271"><a href="#cb1-271" aria-hidden="true" tabindex="-1"></a>on the probability of visiting node $v$ starting from node $u$ in a</span>
+<span id="cb1-272"><a href="#cb1-272" aria-hidden="true" tabindex="-1"></a>random walk of length $T$, denoted as $p_{G,T}(v|u)$. A possible decoder</span>
+<span id="cb1-273"><a href="#cb1-273" aria-hidden="true" tabindex="-1"></a>is:*</span>
+<span id="cb1-274"><a href="#cb1-274" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-275"><a href="#cb1-275" aria-hidden="true" tabindex="-1"></a>::: tcolorbox</span>
+<span id="cb1-276"><a href="#cb1-276" aria-hidden="true" tabindex="-1"></a>*$$\DEC(\mathbf{z}_u, \mathbf{z}_v) \approx \frac{\exp(\mathbf{z}_u^T \mathbf{z}_v)}{\sum_{k \in \mathcal{V}} \exp(\mathbf{z}_u^T \mathbf{z}_k)} \approx p_{G,T}(v|u)$$*</span>
+<span id="cb1-277"><a href="#cb1-277" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-278"><a href="#cb1-278" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-279"><a href="#cb1-279" aria-hidden="true" tabindex="-1"></a>*This decoder is stochastic and asymmetric, capturing directed</span>
+<span id="cb1-280"><a href="#cb1-280" aria-hidden="true" tabindex="-1"></a>relationships in graphs.*</span>
+<span id="cb1-281"><a href="#cb1-281" aria-hidden="true" tabindex="-1"></a>::::</span>
+<span id="cb1-282"><a href="#cb1-282" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-283"><a href="#cb1-283" aria-hidden="true" tabindex="-1"></a><span class="fu">### Negative Log-Likelihood Loss</span></span>
+<span id="cb1-284"><a href="#cb1-284" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-285"><a href="#cb1-285" aria-hidden="true" tabindex="-1"></a>:::: example</span>
+<span id="cb1-286"><a href="#cb1-286" aria-hidden="true" tabindex="-1"></a>**Example 9** (Negative Log-Likelihood Loss). *A common loss function</span>
+<span id="cb1-287"><a href="#cb1-287" aria-hidden="true" tabindex="-1"></a>for stochastic decoders is the negative log-likelihood:*</span>
+<span id="cb1-288"><a href="#cb1-288" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-289"><a href="#cb1-289" aria-hidden="true" tabindex="-1"></a>::: tcolorbox</span>
+<span id="cb1-290"><a href="#cb1-290" aria-hidden="true" tabindex="-1"></a>*$$\mathcal{L} = \sum_{(u,v) \in D} -\log(\DEC(\mathbf{z}_u, \mathbf{z}_v))$$*</span>
+<span id="cb1-291"><a href="#cb1-291" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-292"><a href="#cb1-292" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-293"><a href="#cb1-293" aria-hidden="true" tabindex="-1"></a>*Here, $D$ is the training set of random walks, generated by sampling</span>
+<span id="cb1-294"><a href="#cb1-294" aria-hidden="true" tabindex="-1"></a>random walks starting from each node.*</span>
+<span id="cb1-295"><a href="#cb1-295" aria-hidden="true" tabindex="-1"></a>::::</span>
+<span id="cb1-296"><a href="#cb1-296" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-297"><a href="#cb1-297" aria-hidden="true" tabindex="-1"></a><span class="fu">### Computational Challenges</span></span>
+<span id="cb1-298"><a href="#cb1-298" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-299"><a href="#cb1-299" aria-hidden="true" tabindex="-1"></a>::: remark</span>
+<span id="cb1-300"><a href="#cb1-300" aria-hidden="true" tabindex="-1"></a>**Remark 10**. *Evaluating the denominator</span>
+<span id="cb1-301"><a href="#cb1-301" aria-hidden="true" tabindex="-1"></a>$\sum_{v' \in \mathcal{V}} \exp(\mathbf{z}_u^T \mathbf{z}_{v'})$ in the</span>
+<span id="cb1-302"><a href="#cb1-302" aria-hidden="true" tabindex="-1"></a>decoder has a computational cost of $O(|\mathcal{V}|)$, leading to a</span>
+<span id="cb1-303"><a href="#cb1-303" aria-hidden="true" tabindex="-1"></a>high training cost, also $O(|\mathcal{V}|)$. Techniques like negative</span>
+<span id="cb1-304"><a href="#cb1-304" aria-hidden="true" tabindex="-1"></a>sampling are used to address this computational bottleneck.*</span>
+<span id="cb1-305"><a href="#cb1-305" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-306"><a href="#cb1-306" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-307"><a href="#cb1-307" aria-hidden="true" tabindex="-1"></a><span class="fu">## Limitations of Shallow Embeddings</span></span>
+<span id="cb1-308"><a href="#cb1-308" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-309"><a href="#cb1-309" aria-hidden="true" tabindex="-1"></a>Shallow embedding methods have several limitations:</span>
+<span id="cb1-310"><a href="#cb1-310" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-311"><a href="#cb1-311" aria-hidden="true" tabindex="-1"></a><span class="fu">### Lack of Parameter Sharing</span></span>
+<span id="cb1-312"><a href="#cb1-312" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-313"><a href="#cb1-313" aria-hidden="true" tabindex="-1"></a>Shallow embeddings do not share parameters between nodes in the encoder.</span>
+<span id="cb1-314"><a href="#cb1-314" aria-hidden="true" tabindex="-1"></a>Each node has a unique embedding vector optimized independently. This is</span>
+<span id="cb1-315"><a href="#cb1-315" aria-hidden="true" tabindex="-1"></a>statistically and computationally inefficient, especially for large</span>
+<span id="cb1-316"><a href="#cb1-316" aria-hidden="true" tabindex="-1"></a>graphs where the number of parameters grows as $O(|\mathcal{V}|)$.</span>
+<span id="cb1-317"><a href="#cb1-317" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-318"><a href="#cb1-318" aria-hidden="true" tabindex="-1"></a><span class="fu">### Ignoring Node Features</span></span>
+<span id="cb1-319"><a href="#cb1-319" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-320"><a href="#cb1-320" aria-hidden="true" tabindex="-1"></a>Shallow embedding approaches do not leverage node features in the</span>
+<span id="cb1-321"><a href="#cb1-321" aria-hidden="true" tabindex="-1"></a>encoder. Many real-world graphs have rich node features that could be</span>
+<span id="cb1-322"><a href="#cb1-322" aria-hidden="true" tabindex="-1"></a>informative for encoding.</span>
+<span id="cb1-323"><a href="#cb1-323" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-324"><a href="#cb1-324" aria-hidden="true" tabindex="-1"></a><span class="fu">### Transductive Nature</span></span>
+<span id="cb1-325"><a href="#cb1-325" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-326"><a href="#cb1-326" aria-hidden="true" tabindex="-1"></a>Shallow embedding methods are inherently transductive. They can only</span>
+<span id="cb1-327"><a href="#cb1-327" aria-hidden="true" tabindex="-1"></a>generate embeddings for nodes present during training. Generalizing to</span>
+<span id="cb1-328"><a href="#cb1-328" aria-hidden="true" tabindex="-1"></a>new, unseen nodes is not possible without additional optimizations. This</span>
+<span id="cb1-329"><a href="#cb1-329" aria-hidden="true" tabindex="-1"></a>limits their applicability in inductive settings.</span>
+<span id="cb1-330"><a href="#cb1-330" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-331"><a href="#cb1-331" aria-hidden="true" tabindex="-1"></a><span class="fu"># Graph Neural Networks (GNNs)</span></span>
+<span id="cb1-332"><a href="#cb1-332" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-333"><a href="#cb1-333" aria-hidden="true" tabindex="-1"></a>To overcome the limitations of shallow embeddings, we move to more</span>
+<span id="cb1-334"><a href="#cb1-334" aria-hidden="true" tabindex="-1"></a>complex encoder models, specifically Graph Neural Networks (GNNs). GNNs</span>
+<span id="cb1-335"><a href="#cb1-335" aria-hidden="true" tabindex="-1"></a>provide a general framework for defining deep neural networks on graph</span>
+<span id="cb1-336"><a href="#cb1-336" aria-hidden="true" tabindex="-1"></a>data.</span>
+<span id="cb1-337"><a href="#cb1-337" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-338"><a href="#cb1-338" aria-hidden="true" tabindex="-1"></a><span class="fu">## Moving Beyond Shallow Embeddings</span></span>
+<span id="cb1-339"><a href="#cb1-339" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-340"><a href="#cb1-340" aria-hidden="true" tabindex="-1"></a>GNNs address the limitations of shallow embeddings by generating node</span>
+<span id="cb1-341"><a href="#cb1-341" aria-hidden="true" tabindex="-1"></a>representations that depend on the graph structure and node features.</span>
+<span id="cb1-342"><a href="#cb1-342" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-343"><a href="#cb1-343" aria-hidden="true" tabindex="-1"></a><span class="fu">## GNN Formalism</span></span>
+<span id="cb1-344"><a href="#cb1-344" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-345"><a href="#cb1-345" aria-hidden="true" tabindex="-1"></a>The key idea of GNNs is to learn node representations that are functions</span>
+<span id="cb1-346"><a href="#cb1-346" aria-hidden="true" tabindex="-1"></a>of both the graph structure and node features. This is achieved through</span>
+<span id="cb1-347"><a href="#cb1-347" aria-hidden="true" tabindex="-1"></a>neural message passing.</span>
+<span id="cb1-348"><a href="#cb1-348" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-349"><a href="#cb1-349" aria-hidden="true" tabindex="-1"></a><span class="fu">## Challenges with CNNs and RNNs on Graphs</span></span>
+<span id="cb1-350"><a href="#cb1-350" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-351"><a href="#cb1-351" aria-hidden="true" tabindex="-1"></a>Convolutional Neural Networks (CNNs) and Recurrent Neural Networks</span>
+<span id="cb1-352"><a href="#cb1-352" aria-hidden="true" tabindex="-1"></a>(RNNs), while powerful, are not directly applicable to general graphs.</span>
+<span id="cb1-353"><a href="#cb1-353" aria-hidden="true" tabindex="-1"></a>CNNs are designed for grids, and RNNs for sequences. Applying them</span>
+<span id="cb1-354"><a href="#cb1-354" aria-hidden="true" tabindex="-1"></a>directly to graphs is problematic because of the irregular structure of</span>
+<span id="cb1-355"><a href="#cb1-355" aria-hidden="true" tabindex="-1"></a>graphs compared to grids or sequences. A naive approach to linearize the</span>
+<span id="cb1-356"><a href="#cb1-356" aria-hidden="true" tabindex="-1"></a>graph and use Multilayer Perceptrons (MLPs) is order-dependent.</span>
+<span id="cb1-357"><a href="#cb1-357" aria-hidden="true" tabindex="-1"></a>Representing a graph using adjacency matrices</span>
+<span id="cb1-358"><a href="#cb1-358" aria-hidden="true" tabindex="-1"></a>$A_1, A_2, ..., A_{|\mathcal{V}|}$ and feeding them into an MLP,</span>
+<span id="cb1-359"><a href="#cb1-359" aria-hidden="true" tabindex="-1"></a>$\mathbf{z}_G = \text{MLP}(A_1 \oplus A_2 \oplus ... \oplus A_{|\mathcal{V}|})$,</span>
+<span id="cb1-360"><a href="#cb1-360" aria-hidden="true" tabindex="-1"></a>depends on the node ordering, which is undesirable.</span>
+<span id="cb1-361"><a href="#cb1-361" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-362"><a href="#cb1-362" aria-hidden="true" tabindex="-1"></a>We need permutation invariant or equivariant functions for graph</span>
+<span id="cb1-363"><a href="#cb1-363" aria-hidden="true" tabindex="-1"></a>representations.</span>
+<span id="cb1-364"><a href="#cb1-364" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-365"><a href="#cb1-365" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Permutation Invariance: $f(PAP^T) = f(A)$</span>
+<span id="cb1-366"><a href="#cb1-366" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-367"><a href="#cb1-367" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Permutation Equivariance: $f(PAP^T) = Pf(A)$</span>
+<span id="cb1-368"><a href="#cb1-368" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-369"><a href="#cb1-369" aria-hidden="true" tabindex="-1"></a>where $P$ is a permutation matrix applied to the adjacency matrix $A$.</span>
+<span id="cb1-370"><a href="#cb1-370" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-371"><a href="#cb1-371" aria-hidden="true" tabindex="-1"></a><span class="fu">## Neural Message Passing</span></span>
+<span id="cb1-372"><a href="#cb1-372" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-373"><a href="#cb1-373" aria-hidden="true" tabindex="-1"></a>Neural Message Passing is a framework for performing computations</span>
+<span id="cb1-374"><a href="#cb1-374" aria-hidden="true" tabindex="-1"></a>directly on the graph structure, forming the foundation of GNNs.</span>
+<span id="cb1-375"><a href="#cb1-375" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-376"><a href="#cb1-376" aria-hidden="true" tabindex="-1"></a><span class="fu">### Convolution on Manifolds</span></span>
+<span id="cb1-377"><a href="#cb1-377" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-378"><a href="#cb1-378" aria-hidden="true" tabindex="-1"></a>GNNs can be viewed as a form of convolution on topological spaces with</span>
+<span id="cb1-379"><a href="#cb1-379" aria-hidden="true" tabindex="-1"></a>weights, homeomorphic to Euclidean spaces. This perspective connects</span>
+<span id="cb1-380"><a href="#cb1-380" aria-hidden="true" tabindex="-1"></a>GNNs to geometric deep learning.</span>
+<span id="cb1-381"><a href="#cb1-381" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-382"><a href="#cb1-382" aria-hidden="true" tabindex="-1"></a><span class="fu">### Differentiable Belief Propagation</span></span>
+<span id="cb1-383"><a href="#cb1-383" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-384"><a href="#cb1-384" aria-hidden="true" tabindex="-1"></a>GNNs can also be seen as differentiable variants of belief propagation</span>
+<span id="cb1-385"><a href="#cb1-385" aria-hidden="true" tabindex="-1"></a>algorithms, highlighting their connection to probabilistic graphical</span>
+<span id="cb1-386"><a href="#cb1-386" aria-hidden="true" tabindex="-1"></a>models.</span>
+<span id="cb1-387"><a href="#cb1-387" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-388"><a href="#cb1-388" aria-hidden="true" tabindex="-1"></a><span class="fu">### Connection to the Weisfeiler-Lehman Test</span></span>
+<span id="cb1-389"><a href="#cb1-389" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-390"><a href="#cb1-390" aria-hidden="true" tabindex="-1"></a>GNNs have connections to the Weisfeiler-Lehman (WL) graph isomorphism</span>
+<span id="cb1-391"><a href="#cb1-391" aria-hidden="true" tabindex="-1"></a>test, which is crucial for understanding their representational power.</span>
+<span id="cb1-392"><a href="#cb1-392" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-393"><a href="#cb1-393" aria-hidden="true" tabindex="-1"></a><span class="fu">## Ingredients of Message Passing</span></span>
+<span id="cb1-394"><a href="#cb1-394" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-395"><a href="#cb1-395" aria-hidden="true" tabindex="-1"></a>The core ingredients of the message passing framework are:</span>
+<span id="cb1-396"><a href="#cb1-396" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-397"><a href="#cb1-397" aria-hidden="true" tabindex="-1"></a><span class="fu">### Iterations (Layers)</span></span>
+<span id="cb1-398"><a href="#cb1-398" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-399"><a href="#cb1-399" aria-hidden="true" tabindex="-1"></a>GNNs operate in layers, similar to deep neural networks.</span>
+<span id="cb1-400"><a href="#cb1-400" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-401"><a href="#cb1-401" aria-hidden="true" tabindex="-1"></a><span class="fu">### Hidden Embeddings</span></span>
+<span id="cb1-402"><a href="#cb1-402" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-403"><a href="#cb1-403" aria-hidden="true" tabindex="-1"></a>Each node $u$ has a hidden embedding $\mathbf{h}^{(k)}_u$ at the $k$-th</span>
+<span id="cb1-404"><a href="#cb1-404" aria-hidden="true" tabindex="-1"></a>iteration (layer).</span>
+<span id="cb1-405"><a href="#cb1-405" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-406"><a href="#cb1-406" aria-hidden="true" tabindex="-1"></a><span class="fu">### Messages</span></span>
+<span id="cb1-407"><a href="#cb1-407" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-408"><a href="#cb1-408" aria-hidden="true" tabindex="-1"></a>Nodes exchange messages with their neighbors.</span>
+<span id="cb1-409"><a href="#cb1-409" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-410"><a href="#cb1-410" aria-hidden="true" tabindex="-1"></a><span class="fu">### AGGREGATE and UPDATE Functions</span></span>
+<span id="cb1-411"><a href="#cb1-411" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-412"><a href="#cb1-412" aria-hidden="true" tabindex="-1"></a>Two key functions in each layer are:</span>
+<span id="cb1-413"><a href="#cb1-413" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-414"><a href="#cb1-414" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>$\text{AGGREGATE}^{(k)}$: Aggregates messages from neighbors.</span>
+<span id="cb1-415"><a href="#cb1-415" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-416"><a href="#cb1-416" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>$\text{UPDATE}^{(k)}$: Updates a node's embedding based on the</span>
+<span id="cb1-417"><a href="#cb1-417" aria-hidden="true" tabindex="-1"></a>    aggregated message.</span>
+<span id="cb1-418"><a href="#cb1-418" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-419"><a href="#cb1-419" aria-hidden="true" tabindex="-1"></a>These functions are differentiable, allowing GNN training via</span>
+<span id="cb1-420"><a href="#cb1-420" aria-hidden="true" tabindex="-1"></a>backpropagation. Figure 5.1 (Not provided, detail missing: Figure 5.1</span>
+<span id="cb1-421"><a href="#cb1-421" aria-hidden="true" tabindex="-1"></a>not in transcription) illustrates how a node aggregates messages from</span>
+<span id="cb1-422"><a href="#cb1-422" aria-hidden="true" tabindex="-1"></a>its local neighborhood.</span>
+<span id="cb1-423"><a href="#cb1-423" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-424"><a href="#cb1-424" aria-hidden="true" tabindex="-1"></a><span class="fu">## Mathematical Formulation of Message Passing</span></span>
+<span id="cb1-425"><a href="#cb1-425" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-426"><a href="#cb1-426" aria-hidden="true" tabindex="-1"></a>::::: theorem</span>
+<span id="cb1-427"><a href="#cb1-427" aria-hidden="true" tabindex="-1"></a>**Theorem 11** (Message Passing Process). *The message passing process</span>
+<span id="cb1-428"><a href="#cb1-428" aria-hidden="true" tabindex="-1"></a>can be mathematically formulated as:*</span>
+<span id="cb1-429"><a href="#cb1-429" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-430"><a href="#cb1-430" aria-hidden="true" tabindex="-1"></a>::: tcolorbox</span>
+<span id="cb1-431"><a href="#cb1-431" aria-hidden="true" tabindex="-1"></a>*$$\mathbf{h}^{(k+1)}_u = \text{UPDATE}^{(k)} \left( \mathbf{h}^{(k)}_u, \text{AGGREGATE}^{(k)} \left( \{ \mathbf{h}^{(k)}_v, \forall v \in \mathcal{N}(u) \} \right) \right)$$*</span>
+<span id="cb1-432"><a href="#cb1-432" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-433"><a href="#cb1-433" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-434"><a href="#cb1-434" aria-hidden="true" tabindex="-1"></a>*Let</span>
+<span id="cb1-435"><a href="#cb1-435" aria-hidden="true" tabindex="-1"></a>$\mathbf{m}^{(k)}_{\mathcal{N}(u)} = \text{AGGREGATE}^{(k)} \left( <span class="sc">\{</span> \mathbf{h}^{(k)}_v, \forall v \in \mathcal{N}(u) <span class="sc">\}</span> \right)$</span>
+<span id="cb1-436"><a href="#cb1-436" aria-hidden="true" tabindex="-1"></a>be the aggregated message. Then,*</span>
+<span id="cb1-437"><a href="#cb1-437" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-438"><a href="#cb1-438" aria-hidden="true" tabindex="-1"></a>::: tcolorbox</span>
+<span id="cb1-439"><a href="#cb1-439" aria-hidden="true" tabindex="-1"></a>*$$\mathbf{h}^{(k+1)}_u = \text{UPDATE}^{(k)} \left( \mathbf{h}^{(k)}_u, \mathbf{m}^{(k)}_{\mathcal{N}(u)} \right)$$*</span>
+<span id="cb1-440"><a href="#cb1-440" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-441"><a href="#cb1-441" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-442"><a href="#cb1-442" aria-hidden="true" tabindex="-1"></a>*Starting with input representations at layer $k=0$, after $K$</span>
+<span id="cb1-443"><a href="#cb1-443" aria-hidden="true" tabindex="-1"></a>iterations, we obtain the final node embeddings:</span>
+<span id="cb1-444"><a href="#cb1-444" aria-hidden="true" tabindex="-1"></a>$\mathbf{z}_u = \mathbf{h}^{(K)}_u, \forall u \in \mathcal{V}$. GNNs</span>
+<span id="cb1-445"><a href="#cb1-445" aria-hidden="true" tabindex="-1"></a>defined this way are permutation equivariant because the</span>
+<span id="cb1-446"><a href="#cb1-446" aria-hidden="true" tabindex="-1"></a>$\text{AGGREGATE}$ function operates on a set of neighbors.*</span>
+<span id="cb1-447"><a href="#cb1-447" aria-hidden="true" tabindex="-1"></a>:::::</span>
+<span id="cb1-448"><a href="#cb1-448" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-449"><a href="#cb1-449" aria-hidden="true" tabindex="-1"></a><span class="fu">## Node Features</span></span>
+<span id="cb1-450"><a href="#cb1-450" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-451"><a href="#cb1-451" aria-hidden="true" tabindex="-1"></a>Unlike shallow embedding methods, GNNs typically require node features</span>
+<span id="cb1-452"><a href="#cb1-452" aria-hidden="true" tabindex="-1"></a>$\mathbf{x}_u, \forall u \in \mathcal{V}$ as input.</span>
+<span id="cb1-453"><a href="#cb1-453" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-454"><a href="#cb1-454" aria-hidden="true" tabindex="-1"></a><span class="fu">### Options When Node Features Are Unavailable</span></span>
+<span id="cb1-455"><a href="#cb1-455" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-456"><a href="#cb1-456" aria-hidden="true" tabindex="-1"></a>If node features are not available, options include:</span>
+<span id="cb1-457"><a href="#cb1-457" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-458"><a href="#cb1-458" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>Using node statistics (e.g., from Section 2.1, detail missing:</span>
+<span id="cb1-459"><a href="#cb1-459" aria-hidden="true" tabindex="-1"></a>    Section 2.1 not in transcription) to define features.</span>
+<span id="cb1-460"><a href="#cb1-460" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-461"><a href="#cb1-461" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>Using identity features: associating each node with a one-hot</span>
+<span id="cb1-462"><a href="#cb1-462" aria-hidden="true" tabindex="-1"></a>    indicator feature. However, using identity features makes the model</span>
+<span id="cb1-463"><a href="#cb1-463" aria-hidden="true" tabindex="-1"></a>    transductive.</span>
+<span id="cb1-464"><a href="#cb1-464" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-465"><a href="#cb1-465" aria-hidden="true" tabindex="-1"></a><span class="fu">## Types of Information Passed</span></span>
+<span id="cb1-466"><a href="#cb1-466" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-467"><a href="#cb1-467" aria-hidden="true" tabindex="-1"></a>Two main types of information are passed in messages:</span>
+<span id="cb1-468"><a href="#cb1-468" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-469"><a href="#cb1-469" aria-hidden="true" tabindex="-1"></a><span class="fu">### Structural Information</span></span>
+<span id="cb1-470"><a href="#cb1-470" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-471"><a href="#cb1-471" aria-hidden="true" tabindex="-1"></a>Graph topological information is inherently passed through the message</span>
+<span id="cb1-472"><a href="#cb1-472" aria-hidden="true" tabindex="-1"></a>aggregation process.</span>
+<span id="cb1-473"><a href="#cb1-473" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-474"><a href="#cb1-474" aria-hidden="true" tabindex="-1"></a><span class="fu">### Feature-Based Information</span></span>
+<span id="cb1-475"><a href="#cb1-475" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-476"><a href="#cb1-476" aria-hidden="true" tabindex="-1"></a>Feature information is also aggregated from the neighborhoods. After $k$</span>
+<span id="cb1-477"><a href="#cb1-477" aria-hidden="true" tabindex="-1"></a>iterations, embeddings encode information about features in the $k$-hop</span>
+<span id="cb1-478"><a href="#cb1-478" aria-hidden="true" tabindex="-1"></a>neighborhood. This is analogous to convolutional kernels in CNNs, but</span>
+<span id="cb1-479"><a href="#cb1-479" aria-hidden="true" tabindex="-1"></a>GNNs aggregate information based on graph neighborhoods instead of</span>
+<span id="cb1-480"><a href="#cb1-480" aria-hidden="true" tabindex="-1"></a>spatial patches.</span>
+<span id="cb1-481"><a href="#cb1-481" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-482"><a href="#cb1-482" aria-hidden="true" tabindex="-1"></a><span class="fu">## Implementation of AGGREGATE and UPDATE</span></span>
+<span id="cb1-483"><a href="#cb1-483" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-484"><a href="#cb1-484" aria-hidden="true" tabindex="-1"></a>Common choices for implementing $\text{AGGREGATE}$ and $\text{UPDATE}$</span>
+<span id="cb1-485"><a href="#cb1-485" aria-hidden="true" tabindex="-1"></a>functions include vector/matrix operations.</span>
+<span id="cb1-486"><a href="#cb1-486" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-487"><a href="#cb1-487" aria-hidden="true" tabindex="-1"></a><span class="fu">### Vector/Matrix Operations</span></span>
+<span id="cb1-488"><a href="#cb1-488" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-489"><a href="#cb1-489" aria-hidden="true" tabindex="-1"></a>:::: algorithm</span>
+<span id="cb1-490"><a href="#cb1-490" aria-hidden="true" tabindex="-1"></a>A common formulation is:</span>
+<span id="cb1-491"><a href="#cb1-491" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-492"><a href="#cb1-492" aria-hidden="true" tabindex="-1"></a>::: tcolorbox</span>
+<span id="cb1-493"><a href="#cb1-493" aria-hidden="true" tabindex="-1"></a>$$\mathbf{h}^{(k)}_u = \sigma \left( \mathbf{W}^{(k)}_{\text{self}} \mathbf{h}^{(k-1)}_u + \mathbf{W}^{(k)}_{\text{neigh}} \sum_{v \in \mathcal{N}(u)} \mathbf{h}^{(k-1)}_v + \mathbf{b}^{(k)} \right)$$</span>
+<span id="cb1-494"><a href="#cb1-494" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-495"><a href="#cb1-495" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-496"><a href="#cb1-496" aria-hidden="true" tabindex="-1"></a>where</span>
+<span id="cb1-497"><a href="#cb1-497" aria-hidden="true" tabindex="-1"></a>$\mathbf{W}^{(k)}_{\text{self}}, \mathbf{W}^{(k)}_{\text{neigh}} \in \mathbb{R}^{d^{(k)} \times d^{(k-1)}}$</span>
+<span id="cb1-498"><a href="#cb1-498" aria-hidden="true" tabindex="-1"></a>are weight matrices, $\mathbf{b}^{(k)}$ is a bias vector, and $\sigma$</span>
+<span id="cb1-499"><a href="#cb1-499" aria-hidden="true" tabindex="-1"></a>is a non-linear activation function. This is a node-based formulation</span>
+<span id="cb1-500"><a href="#cb1-500" aria-hidden="true" tabindex="-1"></a>using an Elman-style update.</span>
+<span id="cb1-501"><a href="#cb1-501" aria-hidden="true" tabindex="-1"></a>::::</span>
+<span id="cb1-502"><a href="#cb1-502" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-503"><a href="#cb1-503" aria-hidden="true" tabindex="-1"></a><span class="fu">### Elman-Style Update</span></span>
+<span id="cb1-504"><a href="#cb1-504" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-505"><a href="#cb1-505" aria-hidden="true" tabindex="-1"></a>This update is similar to those used in MLPs, involving linear</span>
+<span id="cb1-506"><a href="#cb1-506" aria-hidden="true" tabindex="-1"></a>transformations and non-linear activation. We can express it using</span>
+<span id="cb1-507"><a href="#cb1-507" aria-hidden="true" tabindex="-1"></a>explicit message aggregation: $$\begin{aligned}</span>
+<span id="cb1-508"><a href="#cb1-508" aria-hidden="true" tabindex="-1"></a>    \mathbf{m}^{(k-1)}_{\mathcal{N}(u)} &amp;= \sum_{v \in \mathcal{N}(u)} \mathbf{h}^{(k-1)}_v <span class="sc">\\</span></span>
+<span id="cb1-509"><a href="#cb1-509" aria-hidden="true" tabindex="-1"></a>    \mathbf{h}^{(k)}_u &amp;= \sigma \left( \mathbf{W}^{(k)}_{\text{self}} \mathbf{h}^{(k-1)}_u + \mathbf{W}^{(k)}_{\text{neigh}} \mathbf{m}^{(k-1)}_{\mathcal{N}(u)} + \mathbf{b}^{(k)} \right)</span>
+<span id="cb1-510"><a href="#cb1-510" aria-hidden="true" tabindex="-1"></a>\end{aligned}$$</span>
+<span id="cb1-511"><a href="#cb1-511" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-512"><a href="#cb1-512" aria-hidden="true" tabindex="-1"></a><span class="fu">### Graph-Level Formulation</span></span>
+<span id="cb1-513"><a href="#cb1-513" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-514"><a href="#cb1-514" aria-hidden="true" tabindex="-1"></a>In matrix notation, the graph-level formulation is:</span>
+<span id="cb1-515"><a href="#cb1-515" aria-hidden="true" tabindex="-1"></a>$$H^{(k)} = \sigma \left( AH^{(k-1)} \mathbf{W}^{(k)}_{\text{neigh}} + H^{(k-1)} \mathbf{W}^{(k)}_{\text{self}} \right)$$</span>
+<span id="cb1-516"><a href="#cb1-516" aria-hidden="true" tabindex="-1"></a>where $A$ is the adjacency matrix and $H^{(k)}$ is the matrix of hidden</span>
+<span id="cb1-517"><a href="#cb1-517" aria-hidden="true" tabindex="-1"></a>embeddings at layer $k$. By adding self-loops (i.e., considering</span>
+<span id="cb1-518"><a href="#cb1-518" aria-hidden="true" tabindex="-1"></a>$\mathcal{N}(u) \cup <span class="sc">\{</span>u<span class="sc">\}</span>$), we can replace</span>
+<span id="cb1-519"><a href="#cb1-519" aria-hidden="true" tabindex="-1"></a>$\mathbf{W}^{(k)}_{\text{self}}$ by modifying the aggregation:</span>
+<span id="cb1-520"><a href="#cb1-520" aria-hidden="true" tabindex="-1"></a>$$H^{(k)} = \sigma \left( (A + I)H^{(k-1)} \mathbf{W}^{(k)} \right)$$ In</span>
+<span id="cb1-521"><a href="#cb1-521" aria-hidden="true" tabindex="-1"></a>any case, the $\text{AGGREGATE}$ function is essentially a summation</span>
+<span id="cb1-522"><a href="#cb1-522" aria-hidden="true" tabindex="-1"></a>($\sum$).</span>
+<span id="cb1-523"><a href="#cb1-523" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-524"><a href="#cb1-524" aria-hidden="true" tabindex="-1"></a><span class="fu">## Neighborhood Normalization</span></span>
+<span id="cb1-525"><a href="#cb1-525" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-526"><a href="#cb1-526" aria-hidden="true" tabindex="-1"></a>To improve aggregation, especially when dealing with nodes with varying</span>
+<span id="cb1-527"><a href="#cb1-527" aria-hidden="true" tabindex="-1"></a>degrees, neighborhood normalization can be used.</span>
+<span id="cb1-528"><a href="#cb1-528" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-529"><a href="#cb1-529" aria-hidden="true" tabindex="-1"></a><span class="fu">### Average Aggregation</span></span>
+<span id="cb1-530"><a href="#cb1-530" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-531"><a href="#cb1-531" aria-hidden="true" tabindex="-1"></a>Instead of simple summation, average aggregation normalizes by the</span>
+<span id="cb1-532"><a href="#cb1-532" aria-hidden="true" tabindex="-1"></a>degree of the node:</span>
+<span id="cb1-533"><a href="#cb1-533" aria-hidden="true" tabindex="-1"></a>$$\mathbf{m}^{(k-1)}_{\mathcal{N}(u)} = \frac{\sum_{v \in \mathcal{N}(u)} \mathbf{h}^{(k-1)}_v}{|\mathcal{N}(u)|}$$</span>
+<span id="cb1-534"><a href="#cb1-534" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-535"><a href="#cb1-535" aria-hidden="true" tabindex="-1"></a><span class="fu">### Symmetric Normalization</span></span>
+<span id="cb1-536"><a href="#cb1-536" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-537"><a href="#cb1-537" aria-hidden="true" tabindex="-1"></a>Symmetric normalization accounts for degree differences between nodes</span>
+<span id="cb1-538"><a href="#cb1-538" aria-hidden="true" tabindex="-1"></a>$u$ and $v$:</span>
+<span id="cb1-539"><a href="#cb1-539" aria-hidden="true" tabindex="-1"></a>$$\mathbf{m}^{(k-1)}_{\mathcal{N}(u)} = \sum_{v \in \mathcal{N}(u)} \frac{\mathbf{h}^{(k-1)}_v}{\sqrt{|\mathcal{N}(u)| |\mathcal{N}(v)|}}$$</span>
+<span id="cb1-540"><a href="#cb1-540" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-541"><a href="#cb1-541" aria-hidden="true" tabindex="-1"></a><span class="fu">### Graph Convolutional Networks (GCN) Example</span></span>
+<span id="cb1-542"><a href="#cb1-542" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-543"><a href="#cb1-543" aria-hidden="true" tabindex="-1"></a>:::: example</span>
+<span id="cb1-544"><a href="#cb1-544" aria-hidden="true" tabindex="-1"></a>**Example 12** (Graph Convolutional Networks (GCNs)). *Graph</span>
+<span id="cb1-545"><a href="#cb1-545" aria-hidden="true" tabindex="-1"></a>Convolutional Networks (GCNs) use symmetric normalization and</span>
+<span id="cb1-546"><a href="#cb1-546" aria-hidden="true" tabindex="-1"></a>self-loops:*</span>
+<span id="cb1-547"><a href="#cb1-547" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-548"><a href="#cb1-548" aria-hidden="true" tabindex="-1"></a>::: tcolorbox</span>
+<span id="cb1-549"><a href="#cb1-549" aria-hidden="true" tabindex="-1"></a>*$$\mathbf{h}^{(k)}_u = \sigma \left( \mathbf{W}^{(k)} \sum_{v \in \mathcal{N}(u) \cup \{u\}} \frac{\mathbf{h}^{(k-1)}_v}{\sqrt{|\mathcal{N}(u)| |\mathcal{N}(v)|}} \right)$$*</span>
+<span id="cb1-550"><a href="#cb1-550" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-551"><a href="#cb1-551" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-552"><a href="#cb1-552" aria-hidden="true" tabindex="-1"></a>*Here, $|\mathcal{N}(v)|$ should be interpreted as</span>
+<span id="cb1-553"><a href="#cb1-553" aria-hidden="true" tabindex="-1"></a>$|\mathcal{N}(v) \cup <span class="sc">\{</span>v<span class="sc">\}</span>|$ when $v=u$.*</span>
+<span id="cb1-554"><a href="#cb1-554" aria-hidden="true" tabindex="-1"></a>::::</span>
+<span id="cb1-555"><a href="#cb1-555" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-556"><a href="#cb1-556" aria-hidden="true" tabindex="-1"></a><span class="fu">## Set Aggregators</span></span>
+<span id="cb1-557"><a href="#cb1-557" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-558"><a href="#cb1-558" aria-hidden="true" tabindex="-1"></a>The neighborhood aggregation is fundamentally a set function, operating</span>
+<span id="cb1-559"><a href="#cb1-559" aria-hidden="true" tabindex="-1"></a>on the set of neighbor embeddings</span>
+<span id="cb1-560"><a href="#cb1-560" aria-hidden="true" tabindex="-1"></a>$<span class="sc">\{</span> \mathbf{h}^{(k)}_v, \forall v \in \mathcal{N}(u) <span class="sc">\}</span>$. Aggregation</span>
+<span id="cb1-561"><a href="#cb1-561" aria-hidden="true" tabindex="-1"></a>functions must be permutation invariant.</span>
+<span id="cb1-562"><a href="#cb1-562" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-563"><a href="#cb1-563" aria-hidden="true" tabindex="-1"></a><span class="fu">### Set Pooling</span></span>
+<span id="cb1-564"><a href="#cb1-564" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-565"><a href="#cb1-565" aria-hidden="true" tabindex="-1"></a>Set pooling replaces simple summation with more complex functions, often</span>
+<span id="cb1-566"><a href="#cb1-566" aria-hidden="true" tabindex="-1"></a>using MLPs:</span>
+<span id="cb1-567"><a href="#cb1-567" aria-hidden="true" tabindex="-1"></a>$$\mathbf{m}^{(k-1)}_{\mathcal{N}(u)} = \text{MLP}_\theta \left( \sum_{v \in \mathcal{N}(u)} \text{MLP}_\phi(\mathbf{h}^{(k-1)}_v) \right)$$</span>
+<span id="cb1-568"><a href="#cb1-568" aria-hidden="true" tabindex="-1"></a>This adds extra layers and allows for more complex aggregation patterns,</span>
+<span id="cb1-569"><a href="#cb1-569" aria-hidden="true" tabindex="-1"></a>acting as a universal function approximator. Heuristic max/min/mean</span>
+<span id="cb1-570"><a href="#cb1-570" aria-hidden="true" tabindex="-1"></a>operations can also be used.</span>
+<span id="cb1-571"><a href="#cb1-571" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-572"><a href="#cb1-572" aria-hidden="true" tabindex="-1"></a><span class="fu">### Janossy Pooling</span></span>
+<span id="cb1-573"><a href="#cb1-573" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-574"><a href="#cb1-574" aria-hidden="true" tabindex="-1"></a>Janossy pooling is another set aggregation approach. It addresses</span>
+<span id="cb1-575"><a href="#cb1-575" aria-hidden="true" tabindex="-1"></a>permutation invariance by using permutation-sensitive functions combined</span>
+<span id="cb1-576"><a href="#cb1-576" aria-hidden="true" tabindex="-1"></a>with averaging over permutations:</span>
+<span id="cb1-577"><a href="#cb1-577" aria-hidden="true" tabindex="-1"></a>$$\mathbf{m}^{(k-1)}_{\mathcal{N}(u)} = \text{MLP}_\theta \left( \frac{1}{|\Pi|} \sum_{\pi \in \Pi} \rho_\phi(\mathbf{h}^{(k-1)}_{\pi_1}, \mathbf{h}^{(k-1)}_{\pi_2}, ..., \mathbf{h}^{(k-1)}_{\pi_{|\mathcal{N}(u)|}}) \right)$$</span>
+<span id="cb1-578"><a href="#cb1-578" aria-hidden="true" tabindex="-1"></a>where $\Pi$ is the collection of permutations of neighbors and</span>
+<span id="cb1-579"><a href="#cb1-579" aria-hidden="true" tabindex="-1"></a>$\rho_\phi$ is a permutation-sensitive function (e.g., an MLP). In</span>
+<span id="cb1-580"><a href="#cb1-580" aria-hidden="true" tabindex="-1"></a>practice, approximations are used to handle the computational cost of</span>
+<span id="cb1-581"><a href="#cb1-581" aria-hidden="true" tabindex="-1"></a>summing over all permutations, such as sampling permutations or using</span>
+<span id="cb1-582"><a href="#cb1-582" aria-hidden="true" tabindex="-1"></a>canonical orderings.</span>
+<span id="cb1-583"><a href="#cb1-583" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-584"><a href="#cb1-584" aria-hidden="true" tabindex="-1"></a>::: tcolorbox</span>
+<span id="cb1-585"><a href="#cb1-585" aria-hidden="true" tabindex="-1"></a>The time complexity of a single message passing step (i.e., updating the</span>
+<span id="cb1-586"><a href="#cb1-586" aria-hidden="true" tabindex="-1"></a>embedding of a single node) is typically</span>
+<span id="cb1-587"><a href="#cb1-587" aria-hidden="true" tabindex="-1"></a>$O(|\mathcal{N}(u)| d^{(k)} d^{(k-1)})$, where $|\mathcal{N}(u)|$ is the</span>
+<span id="cb1-588"><a href="#cb1-588" aria-hidden="true" tabindex="-1"></a>degree of node $u$, and $d^{(k)}$ and $d^{(k-1)}$ are the dimensions of</span>
+<span id="cb1-589"><a href="#cb1-589" aria-hidden="true" tabindex="-1"></a>the embeddings at layers $k$ and $k-1$, respectively. This complexity</span>
+<span id="cb1-590"><a href="#cb1-590" aria-hidden="true" tabindex="-1"></a>arises from the matrix multiplications involved in the $\text{UPDATE}$</span>
+<span id="cb1-591"><a href="#cb1-591" aria-hidden="true" tabindex="-1"></a>and $\text{AGGREGATE}$ functions.</span>
+<span id="cb1-592"><a href="#cb1-592" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-593"><a href="#cb1-593" aria-hidden="true" tabindex="-1"></a>The space complexity for storing the embeddings at each layer is</span>
+<span id="cb1-594"><a href="#cb1-594" aria-hidden="true" tabindex="-1"></a>$O(|\mathcal{V}| d^{(k)})$, where $|\mathcal{V}|$ is the number of nodes</span>
+<span id="cb1-595"><a href="#cb1-595" aria-hidden="true" tabindex="-1"></a>in the graph. The space complexity for storing the weight matrices is</span>
+<span id="cb1-596"><a href="#cb1-596" aria-hidden="true" tabindex="-1"></a>$O(L d^2)$, where $L$ is the number of layers and $d$ is the maximum</span>
+<span id="cb1-597"><a href="#cb1-597" aria-hidden="true" tabindex="-1"></a>embedding dimension across all layers.</span>
+<span id="cb1-598"><a href="#cb1-598" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-599"><a href="#cb1-599" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-600"><a href="#cb1-600" aria-hidden="true" tabindex="-1"></a><span class="fu"># Conclusion</span></span>
+<span id="cb1-601"><a href="#cb1-601" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-602"><a href="#cb1-602" aria-hidden="true" tabindex="-1"></a>In this lecture, we transitioned from traditional graph analysis to</span>
+<span id="cb1-603"><a href="#cb1-603" aria-hidden="true" tabindex="-1"></a>graph representation learning, highlighting the limitations of</span>
+<span id="cb1-604"><a href="#cb1-604" aria-hidden="true" tabindex="-1"></a>hand-engineered features and introducing the encoder-decoder framework</span>
+<span id="cb1-605"><a href="#cb1-605" aria-hidden="true" tabindex="-1"></a>for learning node embeddings. We explored shallow embedding approaches</span>
+<span id="cb1-606"><a href="#cb1-606" aria-hidden="true" tabindex="-1"></a>and their limitations, which motivated the need for more powerful models</span>
+<span id="cb1-607"><a href="#cb1-607" aria-hidden="true" tabindex="-1"></a>like Graph Neural Networks (GNNs). We delved into the GNN formalism,</span>
+<span id="cb1-608"><a href="#cb1-608" aria-hidden="true" tabindex="-1"></a>focusing on neural message passing, its ingredients, and mathematical</span>
+<span id="cb1-609"><a href="#cb1-609" aria-hidden="true" tabindex="-1"></a>formulation. We discussed different implementations of</span>
+<span id="cb1-610"><a href="#cb1-610" aria-hidden="true" tabindex="-1"></a>$\text{AGGREGATE}$ and $\text{UPDATE}$ functions, including</span>
+<span id="cb1-611"><a href="#cb1-611" aria-hidden="true" tabindex="-1"></a>normalization techniques and set aggregators.</span>
+<span id="cb1-612"><a href="#cb1-612" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-613"><a href="#cb1-613" aria-hidden="true" tabindex="-1"></a>Key takeaways include the importance of learning representations</span>
+<span id="cb1-614"><a href="#cb1-614" aria-hidden="true" tabindex="-1"></a>directly from graph structure and node features, the power of message</span>
+<span id="cb1-615"><a href="#cb1-615" aria-hidden="true" tabindex="-1"></a>passing in GNNs, and the flexibility offered by different aggregation</span>
+<span id="cb1-616"><a href="#cb1-616" aria-hidden="true" tabindex="-1"></a>and update mechanisms.</span>
+<span id="cb1-617"><a href="#cb1-617" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-618"><a href="#cb1-618" aria-hidden="true" tabindex="-1"></a>Further topics to explore include different GNN architectures,</span>
+<span id="cb1-619"><a href="#cb1-619" aria-hidden="true" tabindex="-1"></a>applications of GNNs in various domains, and advanced techniques for</span>
+<span id="cb1-620"><a href="#cb1-620" aria-hidden="true" tabindex="-1"></a>training and scaling GNNs. Consider how the concepts discussed in this</span>
+<span id="cb1-621"><a href="#cb1-621" aria-hidden="true" tabindex="-1"></a>lecture can be applied to real-world graph datasets and the challenges</span>
+<span id="cb1-622"><a href="#cb1-622" aria-hidden="true" tabindex="-1"></a>that might arise.</span></code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></pre></div>
+</div></div></div></div></div>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

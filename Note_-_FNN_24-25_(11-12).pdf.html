@@ -207,6 +207,21 @@ window.Quarto = {
             Lecture Notes on Word Embeddings and Recurrent Neural Networks
             </a>
           </li>
+          <li>
+            <a class="dropdown-item quarto-navbar-tools-item" href="./Note_-_FNN_24-25_(19-20).pdf.html">
+            Lecture Notes on Sequence-to-Sequence Learning and Transformers
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item quarto-navbar-tools-item" href="./Note_-_FNN_24-25_(21-22).pdf.html">
+            Deep Reinforcement Learning: Foundations and Frontiers
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item quarto-navbar-tools-item" href="./Note_-_FNN_24-25_(23-24)_.pdf.html">
+            Lecture Notes on Graph Representation Learning
+            </a>
+          </li>
       </ul>
     </div>
 </div>
@@ -310,7 +325,7 @@ window.Quarto = {
 <p>Multilayer Perceptrons (MLPs) possess several key characteristics that distinguish them from simpler neural network models and enable them to learn complex patterns and solve non-linearly separable problems:</p>
 <section id="nonlinear-and-differentiable-activation-functions" class="level3">
 <h3 class="anchored" data-anchor-id="nonlinear-and-differentiable-activation-functions">Nonlinear and Differentiable Activation Functions</h3>
-<p>Each neuron in an MLP employs a **nonlinear activation function**, denoted as <span class="math inline">\(\phiAct(\cdot)\)</span>. This nonlinearity is crucial for the network to learn complex relationships in data. For the backpropagation algorithm to be applicable, this activation function must also be **differentiable**, allowing us to compute gradients essential for updating the network’s weights during training.</p>
+<p>Each neuron in an MLP employs a **nonlinear activation function**, denoted as <span class="math inline">\(\varphi(\cdot)\)</span>. This nonlinearity is crucial for the network to learn complex relationships in data. For the backpropagation algorithm to be applicable, this activation function must also be **differentiable**, allowing us to compute gradients essential for updating the network’s weights during training.</p>
 </section>
 <section id="hidden-layers" class="level3">
 <h3 class="anchored" data-anchor-id="hidden-layers">Hidden Layers</h3>
@@ -426,13 +441,13 @@ window.Quarto = {
 </section>
 <section id="nonlinear-activation-function" class="level4">
 <h4 class="anchored" data-anchor-id="nonlinear-activation-function">Nonlinear Activation Function</h4>
-<p>The induced local field <span class="math inline">\(v_j(n)\)</span> is then passed through a **nonlinear activation function**, <span class="math inline">\(\phiAct(\cdot)\)</span>. This function introduces nonlinearity into the neuron’s response.</p>
+<p>The induced local field <span class="math inline">\(v_j(n)\)</span> is then passed through a **nonlinear activation function**, <span class="math inline">\(\varphi(\cdot)\)</span>. This function introduces nonlinearity into the neuron’s response.</p>
 </section>
 <section id="function-signal" class="level4">
 <h4 class="anchored" data-anchor-id="function-signal">Function Signal</h4>
 <div class="tcolorbox">
 <p>The output of the activation function is the **function signal** or output of neuron <span class="math inline">\(j\)</span>, <span class="math inline">\(y_j(n)\)</span>: <span class="math display">\[\label{eq:function_signal}
-    y_j(n) = \phiAct(v_j(n))\]</span></p>
+    y_j(n) = \varphi(v_j(n))\]</span></p>
 </div>
 </section>
 <section id="error-of-the-j-th-neuron" class="level4">
@@ -471,11 +486,11 @@ window.Quarto = {
 <ul>
 <li><p><span class="math inline">\(\frac{\partial \mathcal{E}(n)}{\partial e_j(n)} = \frac{\partial}{\partial e_j(n)} \left( \frac{1}{2} e_j^2(n) \right) = e_j(n)\)</span></p></li>
 <li><p><span class="math inline">\(\frac{\partial e_j(n)}{\partial y_j(n)} = \frac{\partial}{\partial y_j(n)} (d_j(n) - y_j(n)) = -1\)</span></p></li>
-<li><p><span class="math inline">\(\frac{\partial y_j(n)}{\partial v_j(n)} = \frac{\partial}{\partial v_j(n)} \phiAct(v_j(n)) = \phiAct'(v_j(n))\)</span></p></li>
+<li><p><span class="math inline">\(\frac{\partial y_j(n)}{\partial v_j(n)} = \frac{\partial}{\partial v_j(n)} \varphi(v_j(n)) = \varphi'(v_j(n))\)</span></p></li>
 <li><p><span class="math inline">\(\frac{\partial v_j(n)}{\partial w_{ji}(n)} = \frac{\partial}{\partial w_{ji}(n)} \left( \sum_{k=0}^{m} w_{jk}(n) y_k(n) \right) = y_i(n)\)</span></p></li>
 </ul>
 <p>Substituting these terms back into the chain rule expression, we get: <span class="math display">\[\label{eq:sensitivity_factor_final}
-    \frac{\partial \mathcal{E}(n)}{\partial w_{ji}(n)} = -e_j(n) \cdot \phiAct'(v_j(n)) \cdot y_i(n)\]</span> This equation gives the variation of the error relative to the weight <span class="math inline">\(w_{ji}(n)\)</span>.</p>
+    \frac{\partial \mathcal{E}(n)}{\partial w_{ji}(n)} = -e_j(n) \cdot \varphi'(v_j(n)) \cdot y_i(n)\]</span> This equation gives the variation of the error relative to the weight <span class="math inline">\(w_{ji}(n)\)</span>.</p>
 </div>
 </section>
 </section>
@@ -488,10 +503,10 @@ window.Quarto = {
 <p>The **local gradient** for neuron <span class="math inline">\(j\)</span>, denoted as <span class="math inline">\(\delta_j(n)\)</span>, is defined as: <span class="math display">\[\label{eq:local_gradient_def}
     \delta_j(n) = - \frac{\partial \mathcal{E}(n)}{\partial v_j(n)}\]</span> Using the chain rule, we can express <span class="math inline">\(\delta_j(n)\)</span> in terms of previously calculated derivatives: <span class="math display">\[\begin{aligned}
     \delta_j(n) &amp;= - \frac{\partial \mathcal{E}(n)}{\partial e_j(n)} \cdot \frac{\partial e_j(n)}{\partial y_j(n)} \cdot \frac{\partial y_j(n)}{\partial v_j(n)} \\
-    &amp;= - e_j(n) \cdot (-1) \cdot \phiAct'(v_j(n)) \\
-    &amp;= e_j(n) \cdot \phiAct'(v_j(n))
+    &amp;= - e_j(n) \cdot (-1) \cdot \varphi'(v_j(n)) \\
+    &amp;= e_j(n) \cdot \varphi'(v_j(n))
 \end{aligned}\]</span> Thus, <span class="math display">\[\label{eq:local_gradient_def_val}
-    \delta_j(n) = e_j(n) \phiAct'(v_j(n))\]</span></p>
+    \delta_j(n) = e_j(n) \varphi'(v_j(n))\]</span></p>
 </div>
 </section>
 <section id="interpretation-error-responsibility-of-neuron-j" class="level3">
@@ -550,13 +565,13 @@ window.Quarto = {
 <p>The method for computing the local gradient <span class="math inline">\(\delta_j(n)\)</span> differs depending on whether neuron <span class="math inline">\(j\)</span> is an output node or a hidden node.</p>
 <section id="output-node-direct-calculation" class="level3">
 <h3 class="anchored" data-anchor-id="output-node-direct-calculation">Output Node: Direct Calculation</h3>
-<p>For an **output node** <span class="math inline">\(j\)</span>, the local gradient <span class="math inline">\(\delta_j(n)\)</span> is calculated directly using the error signal <span class="math inline">\(e_j(n)\)</span> and the derivative of the activation function: <span class="math display">\[\delta_j(n) = e_j(n) \phiAct'(v_j(n)) = (d_j(n) - y_j(n)) \phiAct'(v_j(n))\]</span></p>
+<p>For an **output node** <span class="math inline">\(j\)</span>, the local gradient <span class="math inline">\(\delta_j(n)\)</span> is calculated directly using the error signal <span class="math inline">\(e_j(n)\)</span> and the derivative of the activation function: <span class="math display">\[\delta_j(n) = e_j(n) \varphi'(v_j(n)) = (d_j(n) - y_j(n)) \varphi'(v_j(n))\]</span></p>
 </section>
 <section id="hidden-node-recursive-calculation" class="level3">
 <h3 class="anchored" data-anchor-id="hidden-node-recursive-calculation">Hidden Node: Recursive Calculation</h3>
 <p>For a **hidden node** <span class="math inline">\(j\)</span>, the local gradient <span class="math inline">\(\delta_j(n)\)</span> is computed recursively based on the local gradients of the neurons in the next layer (closer to the output). The error signal is effectively propagated backwards. To derive this recursive formula, consider the error <span class="math inline">\(\mathcal{E}(n)\)</span> as a function of the output of neuron <span class="math inline">\(j\)</span>, <span class="math inline">\(y_j(n)\)</span>. Changes in <span class="math inline">\(y_j(n)\)</span> affect the induced local fields <span class="math inline">\(v_k(n)\)</span> and consequently the errors <span class="math inline">\(e_k(n)\)</span> of all neurons <span class="math inline">\(k\)</span> in the next layer that receive input from neuron <span class="math inline">\(j\)</span>. Using the chain rule again, we can express <span class="math inline">\(\frac{\partial \mathcal{E}(n)}{\partial v_j(n)}\)</span> in terms of the derivatives in the next layer.</p>
 <p>Consider neuron <span class="math inline">\(j\)</span> in layer <span class="math inline">\(l\)</span>. The local gradient <span class="math inline">\(\delta_j^{(l)}(n)\)</span> is given by: <span class="math display">\[\label{eq:hidden_delta}
-    \delta_j^{(l)}(n) = \phiAct'(v_j^{(l)}(n)) \sum_{k} \delta_k^{(l+1)}(n) w_{kj}^{(l+1)}(n)\]</span> where the sum is over all neurons <span class="math inline">\(k\)</span> in the next layer (<span class="math inline">\(l+1\)</span>) that receive input from neuron <span class="math inline">\(j\)</span> in layer <span class="math inline">\(l\)</span>, and <span class="math inline">\(w_{kj}^{(l+1)}(n)\)</span> are the weights connecting neuron <span class="math inline">\(j\)</span> in layer <span class="math inline">\(l\)</span> to neuron <span class="math inline">\(k\)</span> in layer <span class="math inline">\(l+1\)</span>. This recursive formula shows that the local gradient at a hidden layer depends on the local gradients computed for the next layer and the weights connecting these layers.</p>
+    \delta_j^{(l)}(n) = \varphi'(v_j^{(l)}(n)) \sum_{k} \delta_k^{(l+1)}(n) w_{kj}^{(l+1)}(n)\]</span> where the sum is over all neurons <span class="math inline">\(k\)</span> in the next layer (<span class="math inline">\(l+1\)</span>) that receive input from neuron <span class="math inline">\(j\)</span> in layer <span class="math inline">\(l\)</span>, and <span class="math inline">\(w_{kj}^{(l+1)}(n)\)</span> are the weights connecting neuron <span class="math inline">\(j\)</span> in layer <span class="math inline">\(l\)</span> to neuron <span class="math inline">\(k\)</span> in layer <span class="math inline">\(l+1\)</span>. This recursive formula shows that the local gradient at a hidden layer depends on the local gradients computed for the next layer and the weights connecting these layers.</p>
 </section>
 </section>
 <section id="backpropagation-signal-flow-and-mathematical-foundations" class="level2">
@@ -592,11 +607,11 @@ window.Quarto = {
 <p>Using the layer notation, we can formally define the local gradients for the output and hidden layers.</p>
 <section id="output-layer" class="level3">
 <h3 class="anchored" data-anchor-id="output-layer">Output Layer</h3>
-<p>For the output layer <span class="math inline">\(L\)</span>, the local gradient for the <span class="math inline">\(j\)</span>-th neuron is: <span class="math display">\[\delta_j^{(L)}(n) = e_j^{(L)}(n) \phiAct'(v_j^{(L)}(n)) = (d_j(n) - y_j^{(L)}(n)) \phiAct'(v_j^{(L)}(n))\]</span></p>
+<p>For the output layer <span class="math inline">\(L\)</span>, the local gradient for the <span class="math inline">\(j\)</span>-th neuron is: <span class="math display">\[\delta_j^{(L)}(n) = e_j^{(L)}(n) \varphi'(v_j^{(L)}(n)) = (d_j(n) - y_j^{(L)}(n)) \varphi'(v_j^{(L)}(n))\]</span></p>
 </section>
 <section id="hidden-layer" class="level3">
 <h3 class="anchored" data-anchor-id="hidden-layer">Hidden Layer</h3>
-<p>For a hidden layer <span class="math inline">\(l &lt; L\)</span>, the local gradient for the <span class="math inline">\(j\)</span>-th neuron is calculated recursively: <span class="math display">\[\delta_j^{(l)}(n) = \phiAct'(v_j^{(l)}(n)) \sum_{k} \delta_k^{(l+1)}(n) w_{kj}^{(l+1)}(n)\]</span> where the sum is over all neurons <span class="math inline">\(k\)</span> in the next layer <span class="math inline">\(l+1\)</span>.</p>
+<p>For a hidden layer <span class="math inline">\(l &lt; L\)</span>, the local gradient for the <span class="math inline">\(j\)</span>-th neuron is calculated recursively: <span class="math display">\[\delta_j^{(l)}(n) = \varphi'(v_j^{(l)}(n)) \sum_{k} \delta_k^{(l+1)}(n) w_{kj}^{(l+1)}(n)\]</span> where the sum is over all neurons <span class="math inline">\(k\)</span> in the next layer <span class="math inline">\(l+1\)</span>.</p>
 </section>
 </section>
 <section id="practical-delta-rule-momentum" class="level2">
@@ -632,7 +647,7 @@ window.Quarto = {
 <p>In the **forward pass**, input signals are propagated through the network layer by layer. For each layer <span class="math inline">\(l\)</span>:</p>
 <ol type="1">
 <li><p>Calculate the induced local fields <span class="math inline">\(v_j^{(l)}(n)\)</span> for all neurons <span class="math inline">\(j\)</span> in layer <span class="math inline">\(l\)</span>.</p></li>
-<li><p>Calculate the outputs <span class="math inline">\(y_j^{(l)}(n) = \phiAct(v_j^{(l)}(n))\)</span> for all neurons <span class="math inline">\(j\)</span> in layer <span class="math inline">\(l\)</span>.</p></li>
+<li><p>Calculate the outputs <span class="math inline">\(y_j^{(l)}(n) = \varphi(v_j^{(l)}(n))\)</span> for all neurons <span class="math inline">\(j\)</span> in layer <span class="math inline">\(l\)</span>.</p></li>
 </ol>
 <p>This process continues until the output layer <span class="math inline">\(L\)</span> is reached, producing the network outputs <span class="math inline">\(y_j^{(L)}(n)\)</span>. The errors <span class="math inline">\(e_j^{(L)}(n) = d_j(n) - y_j^{(L)}(n)\)</span> are then calculated at the output layer.</p>
 </section>
@@ -640,8 +655,8 @@ window.Quarto = {
 <h3 class="anchored" data-anchor-id="backward-pass">Backward Pass</h3>
 <p>In the **backward pass**, error signals are propagated backwards from the output layer to the input layer. For each layer <span class="math inline">\(l\)</span>, starting from the output layer <span class="math inline">\(L\)</span> down to the first hidden layer:</p>
 <ol type="1">
-<li><p>For the output layer <span class="math inline">\(L\)</span>, calculate the local gradients <span class="math inline">\(\delta_j^{(L)}(n) = e_j^{(L)}(n) \phiAct'(v_j^{(L)}(n))\)</span>.</p></li>
-<li><p>For hidden layers <span class="math inline">\(l &lt; L\)</span>, calculate the local gradients recursively using <span class="math inline">\(\delta_j^{(l)}(n) = \phiAct'(v_j^{(l)}(n)) \sum_{k} \delta_k^{(l+1)}(n) w_{kj}^{(l+1)}(n)\)</span>.</p></li>
+<li><p>For the output layer <span class="math inline">\(L\)</span>, calculate the local gradients <span class="math inline">\(\delta_j^{(L)}(n) = e_j^{(L)}(n) \varphi'(v_j^{(L)}(n))\)</span>.</p></li>
+<li><p>For hidden layers <span class="math inline">\(l &lt; L\)</span>, calculate the local gradients recursively using <span class="math inline">\(\delta_j^{(l)}(n) = \varphi'(v_j^{(l)}(n)) \sum_{k} \delta_k^{(l+1)}(n) w_{kj}^{(l+1)}(n)\)</span>.</p></li>
 <li><p>Update the weights using the delta rule (possibly with momentum): <span class="math inline">\(\Delta w_{ji}^{(l)}(n) = \alpha \Delta w_{ji}^{(l)}(n-1) + \eta \delta_j^{(l)}(n) y_i^{(l-1)}(n)\)</span>.</p></li>
 </ol>
 <p>This completes one iteration of backpropagation for a single training sample.</p>
@@ -1330,7 +1345,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a><span class="fu">### Nonlinear and Differentiable Activation Functions</span></span>
 <span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>Each neuron in an MLP employs a <span class="sc">\*\*</span>nonlinear activation function<span class="sc">\*\*</span>,</span>
-<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>denoted as $\phiAct(\cdot)$. This nonlinearity is crucial for the</span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>denoted as $\varphi(\cdot)$. This nonlinearity is crucial for the</span>
 <span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>network to learn complex relationships in data. For the backpropagation</span>
 <span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>algorithm to be applicable, this activation function must also be</span>
 <span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a><span class="sc">\*\*</span>differentiable<span class="sc">\*\*</span>, allowing us to compute gradients essential for</span>
@@ -1534,7 +1549,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb1-240"><a href="#cb1-240" aria-hidden="true" tabindex="-1"></a><span class="fu">#### Nonlinear Activation Function</span></span>
 <span id="cb1-241"><a href="#cb1-241" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-242"><a href="#cb1-242" aria-hidden="true" tabindex="-1"></a>The induced local field $v_j(n)$ is then passed through a <span class="sc">\*\*</span>nonlinear</span>
-<span id="cb1-243"><a href="#cb1-243" aria-hidden="true" tabindex="-1"></a>activation function<span class="sc">\*\*</span>, $\phiAct(\cdot)$. This function introduces</span>
+<span id="cb1-243"><a href="#cb1-243" aria-hidden="true" tabindex="-1"></a>activation function<span class="sc">\*\*</span>, $\varphi(\cdot)$. This function introduces</span>
 <span id="cb1-244"><a href="#cb1-244" aria-hidden="true" tabindex="-1"></a>nonlinearity into the neuron's response.</span>
 <span id="cb1-245"><a href="#cb1-245" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-246"><a href="#cb1-246" aria-hidden="true" tabindex="-1"></a><span class="fu">#### Function Signal</span></span>
@@ -1542,7 +1557,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb1-248"><a href="#cb1-248" aria-hidden="true" tabindex="-1"></a>::: tcolorbox</span>
 <span id="cb1-249"><a href="#cb1-249" aria-hidden="true" tabindex="-1"></a>The output of the activation function is the <span class="sc">\*\*</span>function signal<span class="sc">\*\*</span> or</span>
 <span id="cb1-250"><a href="#cb1-250" aria-hidden="true" tabindex="-1"></a>output of neuron $j$, $y_j(n)$: $$\label{eq:function_signal}</span>
-<span id="cb1-251"><a href="#cb1-251" aria-hidden="true" tabindex="-1"></a>    y_j(n) = \phiAct(v_j(n))$$</span>
+<span id="cb1-251"><a href="#cb1-251" aria-hidden="true" tabindex="-1"></a>    y_j(n) = \varphi(v_j(n))$$</span>
 <span id="cb1-252"><a href="#cb1-252" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb1-253"><a href="#cb1-253" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-254"><a href="#cb1-254" aria-hidden="true" tabindex="-1"></a><span class="fu">#### Error of the j-th Neuron</span></span>
@@ -1603,13 +1618,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb1-309"><a href="#cb1-309" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-310"><a href="#cb1-310" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>$\frac{\partial e_j(n)}{\partial y_j(n)} = \frac{\partial}{\partial y_j(n)} (d_j(n) - y_j(n)) = -1$</span>
 <span id="cb1-311"><a href="#cb1-311" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-312"><a href="#cb1-312" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>$\frac{\partial y_j(n)}{\partial v_j(n)} = \frac{\partial}{\partial v_j(n)} \phiAct(v_j(n)) = \phiAct'(v_j(n))$</span>
+<span id="cb1-312"><a href="#cb1-312" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>$\frac{\partial y_j(n)}{\partial v_j(n)} = \frac{\partial}{\partial v_j(n)} \varphi(v_j(n)) = \varphi'(v_j(n))$</span>
 <span id="cb1-313"><a href="#cb1-313" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-314"><a href="#cb1-314" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>$\frac{\partial v_j(n)}{\partial w_{ji}(n)} = \frac{\partial}{\partial w_{ji}(n)} \left( \sum_{k=0}^{m} w_{jk}(n) y_k(n) \right) = y_i(n)$</span>
 <span id="cb1-315"><a href="#cb1-315" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-316"><a href="#cb1-316" aria-hidden="true" tabindex="-1"></a>Substituting these terms back into the chain rule expression, we get:</span>
 <span id="cb1-317"><a href="#cb1-317" aria-hidden="true" tabindex="-1"></a>$$\label{eq:sensitivity_factor_final}</span>
-<span id="cb1-318"><a href="#cb1-318" aria-hidden="true" tabindex="-1"></a>    \frac{\partial \mathcal{E}(n)}{\partial w_{ji}(n)} = -e_j(n) \cdot \phiAct'(v_j(n)) \cdot y_i(n)$$</span>
+<span id="cb1-318"><a href="#cb1-318" aria-hidden="true" tabindex="-1"></a>    \frac{\partial \mathcal{E}(n)}{\partial w_{ji}(n)} = -e_j(n) \cdot \varphi'(v_j(n)) \cdot y_i(n)$$</span>
 <span id="cb1-319"><a href="#cb1-319" aria-hidden="true" tabindex="-1"></a>This equation gives the variation of the error relative to the weight</span>
 <span id="cb1-320"><a href="#cb1-320" aria-hidden="true" tabindex="-1"></a>$w_{ji}(n)$.</span>
 <span id="cb1-321"><a href="#cb1-321" aria-hidden="true" tabindex="-1"></a>:::</span>
@@ -1625,10 +1640,10 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb1-331"><a href="#cb1-331" aria-hidden="true" tabindex="-1"></a>Using the chain rule, we can express $\delta_j(n)$ in terms of</span>
 <span id="cb1-332"><a href="#cb1-332" aria-hidden="true" tabindex="-1"></a>previously calculated derivatives: $$\begin{aligned}</span>
 <span id="cb1-333"><a href="#cb1-333" aria-hidden="true" tabindex="-1"></a>    \delta_j(n) &amp;= - \frac{\partial \mathcal{E}(n)}{\partial e_j(n)} \cdot \frac{\partial e_j(n)}{\partial y_j(n)} \cdot \frac{\partial y_j(n)}{\partial v_j(n)} <span class="sc">\\</span></span>
-<span id="cb1-334"><a href="#cb1-334" aria-hidden="true" tabindex="-1"></a>    &amp;= - e_j(n) \cdot (-1) \cdot \phiAct'(v_j(n)) <span class="sc">\\</span></span>
-<span id="cb1-335"><a href="#cb1-335" aria-hidden="true" tabindex="-1"></a>    &amp;= e_j(n) \cdot \phiAct'(v_j(n))</span>
+<span id="cb1-334"><a href="#cb1-334" aria-hidden="true" tabindex="-1"></a>    &amp;= - e_j(n) \cdot (-1) \cdot \varphi'(v_j(n)) <span class="sc">\\</span></span>
+<span id="cb1-335"><a href="#cb1-335" aria-hidden="true" tabindex="-1"></a>    &amp;= e_j(n) \cdot \varphi'(v_j(n))</span>
 <span id="cb1-336"><a href="#cb1-336" aria-hidden="true" tabindex="-1"></a>\end{aligned}$$ Thus, $$\label{eq:local_gradient_def_val}</span>
-<span id="cb1-337"><a href="#cb1-337" aria-hidden="true" tabindex="-1"></a>    \delta_j(n) = e_j(n) \phiAct'(v_j(n))$$</span>
+<span id="cb1-337"><a href="#cb1-337" aria-hidden="true" tabindex="-1"></a>    \delta_j(n) = e_j(n) \varphi'(v_j(n))$$</span>
 <span id="cb1-338"><a href="#cb1-338" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb1-339"><a href="#cb1-339" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-340"><a href="#cb1-340" aria-hidden="true" tabindex="-1"></a><span class="fu">### Interpretation: Error Responsibility of Neuron j</span></span>
@@ -1723,7 +1738,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb1-429"><a href="#cb1-429" aria-hidden="true" tabindex="-1"></a>For an <span class="sc">\*\*</span>output node<span class="sc">\*\*</span> $j$, the local gradient $\delta_j(n)$ is</span>
 <span id="cb1-430"><a href="#cb1-430" aria-hidden="true" tabindex="-1"></a>calculated directly using the error signal $e_j(n)$ and the derivative</span>
 <span id="cb1-431"><a href="#cb1-431" aria-hidden="true" tabindex="-1"></a>of the activation function:</span>
-<span id="cb1-432"><a href="#cb1-432" aria-hidden="true" tabindex="-1"></a>$$\delta_j(n) = e_j(n) \phiAct'(v_j(n)) = (d_j(n) - y_j(n)) \phiAct'(v_j(n))$$</span>
+<span id="cb1-432"><a href="#cb1-432" aria-hidden="true" tabindex="-1"></a>$$\delta_j(n) = e_j(n) \varphi'(v_j(n)) = (d_j(n) - y_j(n)) \varphi'(v_j(n))$$</span>
 <span id="cb1-433"><a href="#cb1-433" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-434"><a href="#cb1-434" aria-hidden="true" tabindex="-1"></a><span class="fu">### Hidden Node: Recursive Calculation</span></span>
 <span id="cb1-435"><a href="#cb1-435" aria-hidden="true" tabindex="-1"></a></span>
@@ -1740,7 +1755,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb1-446"><a href="#cb1-446" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-447"><a href="#cb1-447" aria-hidden="true" tabindex="-1"></a>Consider neuron $j$ in layer $l$. The local gradient $\delta_j^{(l)}(n)$</span>
 <span id="cb1-448"><a href="#cb1-448" aria-hidden="true" tabindex="-1"></a>is given by: $$\label{eq:hidden_delta}</span>
-<span id="cb1-449"><a href="#cb1-449" aria-hidden="true" tabindex="-1"></a>    \delta_j^{(l)}(n) = \phiAct'(v_j^{(l)}(n)) \sum_{k} \delta_k^{(l+1)}(n) w_{kj}^{(l+1)}(n)$$</span>
+<span id="cb1-449"><a href="#cb1-449" aria-hidden="true" tabindex="-1"></a>    \delta_j^{(l)}(n) = \varphi'(v_j^{(l)}(n)) \sum_{k} \delta_k^{(l+1)}(n) w_{kj}^{(l+1)}(n)$$</span>
 <span id="cb1-450"><a href="#cb1-450" aria-hidden="true" tabindex="-1"></a>where the sum is over all neurons $k$ in the next layer ($l+1$) that</span>
 <span id="cb1-451"><a href="#cb1-451" aria-hidden="true" tabindex="-1"></a>receive input from neuron $j$ in layer $l$, and $w_{kj}^{(l+1)}(n)$ are</span>
 <span id="cb1-452"><a href="#cb1-452" aria-hidden="true" tabindex="-1"></a>the weights connecting neuron $j$ in layer $l$ to neuron $k$ in layer</span>
@@ -1804,13 +1819,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb1-510"><a href="#cb1-510" aria-hidden="true" tabindex="-1"></a><span class="fu">### Output Layer</span></span>
 <span id="cb1-511"><a href="#cb1-511" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-512"><a href="#cb1-512" aria-hidden="true" tabindex="-1"></a>For the output layer $L$, the local gradient for the $j$-th neuron is:</span>
-<span id="cb1-513"><a href="#cb1-513" aria-hidden="true" tabindex="-1"></a>$$\delta_j^{(L)}(n) = e_j^{(L)}(n) \phiAct'(v_j^{(L)}(n)) = (d_j(n) - y_j^{(L)}(n)) \phiAct'(v_j^{(L)}(n))$$</span>
+<span id="cb1-513"><a href="#cb1-513" aria-hidden="true" tabindex="-1"></a>$$\delta_j^{(L)}(n) = e_j^{(L)}(n) \varphi'(v_j^{(L)}(n)) = (d_j(n) - y_j^{(L)}(n)) \varphi'(v_j^{(L)}(n))$$</span>
 <span id="cb1-514"><a href="#cb1-514" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-515"><a href="#cb1-515" aria-hidden="true" tabindex="-1"></a><span class="fu">### Hidden Layer</span></span>
 <span id="cb1-516"><a href="#cb1-516" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-517"><a href="#cb1-517" aria-hidden="true" tabindex="-1"></a>For a hidden layer $l &lt; L$, the local gradient for the $j$-th neuron is</span>
 <span id="cb1-518"><a href="#cb1-518" aria-hidden="true" tabindex="-1"></a>calculated recursively:</span>
-<span id="cb1-519"><a href="#cb1-519" aria-hidden="true" tabindex="-1"></a>$$\delta_j^{(l)}(n) = \phiAct'(v_j^{(l)}(n)) \sum_{k} \delta_k^{(l+1)}(n) w_{kj}^{(l+1)}(n)$$</span>
+<span id="cb1-519"><a href="#cb1-519" aria-hidden="true" tabindex="-1"></a>$$\delta_j^{(l)}(n) = \varphi'(v_j^{(l)}(n)) \sum_{k} \delta_k^{(l+1)}(n) w_{kj}^{(l+1)}(n)$$</span>
 <span id="cb1-520"><a href="#cb1-520" aria-hidden="true" tabindex="-1"></a>where the sum is over all neurons $k$ in the next layer $l+1$.</span>
 <span id="cb1-521"><a href="#cb1-521" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-522"><a href="#cb1-522" aria-hidden="true" tabindex="-1"></a><span class="fu">## Practical Delta Rule: Momentum</span></span>
@@ -1876,7 +1891,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb1-582"><a href="#cb1-582" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>Calculate the induced local fields $v_j^{(l)}(n)$ for all neurons</span>
 <span id="cb1-583"><a href="#cb1-583" aria-hidden="true" tabindex="-1"></a>    $j$ in layer $l$.</span>
 <span id="cb1-584"><a href="#cb1-584" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-585"><a href="#cb1-585" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>Calculate the outputs $y_j^{(l)}(n) = \phiAct(v_j^{(l)}(n))$ for all</span>
+<span id="cb1-585"><a href="#cb1-585" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>Calculate the outputs $y_j^{(l)}(n) = \varphi(v_j^{(l)}(n))$ for all</span>
 <span id="cb1-586"><a href="#cb1-586" aria-hidden="true" tabindex="-1"></a>    neurons $j$ in layer $l$.</span>
 <span id="cb1-587"><a href="#cb1-587" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-588"><a href="#cb1-588" aria-hidden="true" tabindex="-1"></a>This process continues until the output layer $L$ is reached, producing</span>
@@ -1891,11 +1906,11 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb1-597"><a href="#cb1-597" aria-hidden="true" tabindex="-1"></a>from the output layer $L$ down to the first hidden layer:</span>
 <span id="cb1-598"><a href="#cb1-598" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-599"><a href="#cb1-599" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>For the output layer $L$, calculate the local gradients</span>
-<span id="cb1-600"><a href="#cb1-600" aria-hidden="true" tabindex="-1"></a>    $\delta_j^{(L)}(n) = e_j^{(L)}(n) \phiAct'(v_j^{(L)}(n))$.</span>
+<span id="cb1-600"><a href="#cb1-600" aria-hidden="true" tabindex="-1"></a>    $\delta_j^{(L)}(n) = e_j^{(L)}(n) \varphi'(v_j^{(L)}(n))$.</span>
 <span id="cb1-601"><a href="#cb1-601" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-602"><a href="#cb1-602" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>For hidden layers $l &lt; L$, calculate the local gradients recursively</span>
 <span id="cb1-603"><a href="#cb1-603" aria-hidden="true" tabindex="-1"></a>    using</span>
-<span id="cb1-604"><a href="#cb1-604" aria-hidden="true" tabindex="-1"></a>    $\delta_j^{(l)}(n) = \phiAct'(v_j^{(l)}(n)) \sum_{k} \delta_k^{(l+1)}(n) w_{kj}^{(l+1)}(n)$.</span>
+<span id="cb1-604"><a href="#cb1-604" aria-hidden="true" tabindex="-1"></a>    $\delta_j^{(l)}(n) = \varphi'(v_j^{(l)}(n)) \sum_{k} \delta_k^{(l+1)}(n) w_{kj}^{(l+1)}(n)$.</span>
 <span id="cb1-605"><a href="#cb1-605" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-606"><a href="#cb1-606" aria-hidden="true" tabindex="-1"></a><span class="ss">3.  </span>Update the weights using the delta rule (possibly with momentum):</span>
 <span id="cb1-607"><a href="#cb1-607" aria-hidden="true" tabindex="-1"></a>    $\Delta w_{ji}^{(l)}(n) = \alpha \Delta w_{ji}^{(l)}(n-1) + \eta \delta_j^{(l)}(n) y_i^{(l-1)}(n)$.</span>
